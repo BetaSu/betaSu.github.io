@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -83,26 +83,39 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="angular-自定义模板取得控制器中数据的方法"><a href="#angular-自定义模板取得控制器中数据的方法" class="headerlink" title="angular 自定义模板取得控制器中数据的方法"></a>angular 自定义模板取得控制器中数据的方法</h1><h2 id="这是一个问题"><a href="#这是一个问题" class="headerlink" title="这是一个问题"></a>这是一个问题</h2><pre><code>我们知道$scope作用域中可以定义值、变量、方法。而我们子定义模板中link方法的形参只能取得模板所在作用域的值、变量、方法。我们如何在模板中取得模板所在控制器作用域中的数据呢。
+        <h2 id="这是一个问题"><a href="#这是一个问题" class="headerlink" title="这是一个问题"></a>这是一个问题</h2><pre><code>我们知道$scope作用域中可以定义值、变量、方法。而我们子定义模板中link方法的形参只能取得模板所在作用域的值、变量、方法。我们如何在模板中取得模板所在控制器作用域中的数据呢。
 </code></pre><h2 id="数据大不同"><a href="#数据大不同" class="headerlink" title="数据大不同"></a>数据大不同</h2><ul>
 <li>数据可以分为固定的值、变量、方法。这三者的获取方法是不同的。</li>
 </ul>
 <h2 id="固定值的获取-代码提供"><a href="#固定值的获取-代码提供" class="headerlink" title="固定值的获取,代码提供"></a>固定值的获取,代码提供</h2><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html &gt;</div><div class="line">&lt;html lang=&quot;en&quot; ng-app=&quot;myApp&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;scope 取得控制器作用域中的值&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;div ng-controller=&quot;myCtrl&quot;&gt;</div><div class="line">    myCtrl:&lt;input type=&quot;text&quot; ng-model=&quot;name&quot;&gt;</div><div class="line">    my-dir:&lt;my-dir name=&quot;&#123;&#123;name&#125;&#125;&quot;&gt;&lt;/my-dir&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script src=&quot;angular.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">    myApp.controller(&apos;myCtrl&apos;,[&apos;$scope&apos;,function  ($scope) &#123;</div><div class="line">        $scope.name=&apos;珠峰培训&apos;;</div><div class="line">    &#125;])</div><div class="line">    myApp.directive(&apos;myDir&apos;,function () &#123;</div><div class="line">        return &#123;</div><div class="line">            template:&apos;&lt;input type=&quot;text&quot; ng-model=&quot;name1&quot;&gt;&apos;,</div><div class="line">            scope:&#123;</div><div class="line">                name1:&apos;@name&apos;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
-
-1.第一步 定义name属性，取得上级控制器作用域中的name值
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">my-dir:&lt;my-dir name=&quot;&#123;&#123;name&#125;&#125;&quot;&gt;&lt;/my-dir&gt;</div></pre></td></tr></table></figure>
-
-2.第二步 模板scope对象中定义name1属性，其中@name等于上一级取得的name值。这样模板中name1属性就取得了上级控制器作用域中的name属性
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scope:&#123;</div><div class="line">              name1:&apos;@name&apos;</div><div class="line">          &#125;</div></pre></td></tr></table></figure>
-
-3.第三步 将第二步保存的name1赋给模板DOM中
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">template:&apos;&lt;input type=&quot;text&quot; ng-model=&quot;name1&quot;&gt;&apos;,</div></pre></td></tr></table></figure>
-</code></pre><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><pre><code>-{{name}}中保存的是name变量的值，是一个固定的值，无法做到双向绑定
+</code></pre><ol>
+<li><p>定义name属性，取得上级控制器作用域中的name值</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">my-dir:&lt;my-dir name=&quot;&#123;&#123;name&#125;&#125;&quot;&gt;&lt;/my-dir&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>模板scope对象中定义name1属性，其中@name等于上一级取得的name值。这样模板中name1属性就取得了上级控制器作用域中的name属性</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scope:&#123;</div><div class="line">              name1:&apos;@name&apos;</div><div class="line">          &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>将第二步保存的name1赋给模板DOM中</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">template:&apos;&lt;input type=&quot;text&quot; ng-model=&quot;name1&quot;&gt;&apos;,</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>##自定义模板取得控制器中变量的方法</p>
+<ol>
+<li>将上面第一步中    name=”“ 改为name=”name”，使得取得的是变量</li>
+<li>将上面第二步中 name1:’@name’ 改为 name:’=name’,取得第一步取得的值</li>
+</ol>
+<p>##自定义模板取得控制器中方法的方法</p>
+<ol>
+<li>将上面第一步中    name=”“ 改为name=”name”，使得取得的是变量</li>
+<li>将上面第二步中 name1:’@name’ 改为 name:’=name’,取得第一步取得的值</li>
+</ol>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><pre><code>- name=&quot;{{name}}&quot;中{{name}}保存的是name变量的值，是一个固定的值，无法做到双向绑定
+- name=&quot;name&quot; 中&quot;name&quot; 保存的是指向控制器中$scope.name，不是固定的，可以双向绑定
 </code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/24/angular 自定义模板取得控制器中数据的方法/" data-id="cis77s3j30000sk5qnb5a9k5n" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/24/angular 自定义模板取得控制器中数据的方法/" data-id="cis77u85k0000v45qt4awyqxe" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -158,7 +171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/23/angular ng-model实现/" data-id="cis77s3jn0003sk5qfdefyqyr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/23/angular ng-model实现/" data-id="cis77u8660003v45q5327xv7j" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -198,7 +211,7 @@
 <li><p>templateUrl:引入一个外部模板</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">templateUrl:&apos;url.html&apos;</div></pre></td></tr></table></figure>
 </li>
-<li><p>scope:boolean  定义该模板是否产生自己的作用域</p>
+<li><p>scope:boolean或对象  定义该模板是否产生自己的作用域，如果不定义则为false。如果没有形成自己的作用域，该模板的作用域为父级作用域</p>
 </li>
 <li>replace:boolean  定义该模板是否替换原有DOM结构</li>
 <li><p>restrict:’ECMA’ 定义模板可以使用的方式</p>
@@ -229,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/21/myblog/" data-id="cis77s3jd0002sk5q4qekfpft" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/21/myblog/" data-id="cis77u8620002v45q41m4p5k8" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -274,7 +287,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis77s3j30001sk5q0rlv4uwv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis77u85w0001v45qyhpw2lks" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -309,7 +322,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -342,7 +355,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2016 BetaSu<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
