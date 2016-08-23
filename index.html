@@ -64,7 +64,7 @@
     <article id="post-myblog" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/08/21/myblog/" class="article-date">
-  <time datetime="2016-08-21T02:11:10.000Z" itemprop="datePublished">2016-08-21</time>
+  <time datetime="2016-08-21T02:11:10.885Z" itemprop="datePublished">2016-08-21</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/21/myblog/">myblog</a>
+      <a class="article-title" href="/2016/08/21/myblog/">angular 自定义指令的配置方法</a>
     </h1>
   
 
@@ -83,12 +83,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="git"><a href="#git" class="headerlink" title="git"></a>git</h2><p>-非常好用啊<br>-可以帮我们搭建博客<br>-一篇md就是一篇文章</p>
-
+        <h2 id="angular-自定义指令的配置方法"><a href="#angular-自定义指令的配置方法" class="headerlink" title="angular 自定义指令的配置方法"></a>angular 自定义指令的配置方法</h2><h3 id="配置选项功能简介"><a href="#配置选项功能简介" class="headerlink" title="配置选项功能简介"></a>配置选项功能简介</h3><ol>
+<li>template:产生一个模板</li>
+<li>templateUrl:引入一个外部模板</li>
+<li>scope:boolean，是否产生自己的作用域</li>
+<li>replace:boolean，是否替换原有DOM结构</li>
+<li>restrict:’ECMA’ 指定模板能使用的方式</li>
+</ol>
+<h3 id="配置选项-代码展示"><a href="#配置选项-代码展示" class="headerlink" title="配置选项 代码展示"></a>配置选项 代码展示</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"> var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">    myApp.directive(&apos;zfpx&apos;,function  () &#123;</div><div class="line">        //定义一个指令,命名是驼峰命名法，使用时用-分割，将大写转为小写</div><div class="line">        return &#123;</div><div class="line">            //返回值是对象</div><div class="line">            //定义一个模板</div><div class="line">//            template:&apos;&lt;p&gt;珠峰培训&lt;span ng-transclude&gt;&lt;/span&gt;&lt;/p&gt;&apos;,</div><div class="line">            //引入外界模板</div><div class="line">            templateUrl:&apos;url.html&apos;,</div><div class="line">            //替换原有标签</div><div class="line">            replace:true,</div><div class="line">            //定义指令可以用的位置,默认：&apos;EA&apos;</div><div class="line">                //E:element 用于元素标签</div><div class="line">                //C:class 用于样式类名</div><div class="line">                //M:comment 用于注释</div><div class="line">                //A:attribute 用于属性名</div><div class="line">            restrict:&apos;ECMA&apos;,</div><div class="line">            //保存原有标签里的内容,和ng-transclude结合使用</div><div class="line">//            原有标签里的内容添加到 &lt;span ng-transclude&gt;&lt;/span&gt;中</div><div class="line">//            ng-transclude会形成作用域</div><div class="line">            transclude:true,</div><div class="line">//            会形成自己作用域</div><div class="line">            scope:true</div><div class="line">	  &#125;</div><div class="line"></div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/21/myblog/" data-id="cis3za9h400002k5q4w4dg6hf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/21/myblog/" data-id="cis72x50q00009s5qt91fsw45" class="article-share-link">Share</a>
       
       
     </footer>
@@ -133,7 +139,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis3za9hc00012k5qaws2h664" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis72x51l00019s5q80wge1e3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -173,7 +179,7 @@
       <ul>
         
           <li>
-            <a href="/2016/08/21/myblog/">myblog</a>
+            <a href="/2016/08/21/myblog/">angular 自定义指令的配置方法</a>
           </li>
         
           <li>
@@ -192,7 +198,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2016 John Doe<br>
+      &copy; 2016 BetaSu<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
