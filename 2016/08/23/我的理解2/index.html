@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>angular————方法 | 卡卡卡颂的blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="方法
+
+方法包括内置方法、模块的方法
+
+常见内置方法
+
+
+大小写转换
+12angular.uppercase(str)angular.lowercase(str)
+
+全等比较    相当于js中的===  坑：NaN===NaN //true
+1angular.equals(value1,value2)
+
+JSON转换
+12angular.toJson()  //相当于JSON.stringif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="angular————方法">
+<meta property="og:url" content="http://yoursite.com/2016/08/23/我的理解2/index.html">
+<meta property="og:site_name" content="卡卡卡颂的blog">
+<meta property="og:description" content="方法
+
+方法包括内置方法、模块的方法
+
+常见内置方法
+
+
+大小写转换
+12angular.uppercase(str)angular.lowercase(str)
+
+全等比较    相当于js中的===  坑：NaN===NaN //true
+1angular.equals(value1,value2)
+
+JSON转换
+12angular.toJson()  //相当于JSON.stringif">
+<meta property="og:updated_time" content="2016-08-23T14:57:41.647Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="angular————方法">
+<meta name="twitter:description" content="方法
+
+方法包括内置方法、模块的方法
+
+常见内置方法
+
+
+大小写转换
+12angular.uppercase(str)angular.lowercase(str)
+
+全等比较    相当于js中的===  坑：NaN===NaN //true
+1angular.equals(value1,value2)
+
+JSON转换
+12angular.toJson()  //相当于JSON.stringif">
+  
+    <link rel="alternate" href="/atom.xml" title="卡卡卡颂的blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">卡卡卡颂的blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-我的理解2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/23/我的理解2/" class="article-date">
+  <time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      angular————方法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>方法</p>
+<ul>
+<li><p>方法包括内置方法、模块的方法</p>
+<ul>
+<li>常见内置方法</li>
+</ul>
+<ol>
+<li><p>大小写转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.uppercase(str)</div><div class="line">angular.lowercase(str)</div></pre></td></tr></table></figure>
+</li>
+<li><p>全等比较    相当于js中的===  坑：NaN===NaN //true</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.equals(value1,value2)</div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.toJson()  //相当于JSON.stringify</div><div class="line">angular.fromJson()  //相当于JSON.parse</div></pre></td></tr></table></figure>
+</li>
+<li><p>把value2(或其后的参数)中的值添加到value1中，value1改变，其他值不变</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.extend(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>value1的值覆盖value2的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.copy(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>遍历 参数3 改变this的指向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.forEach(item,index,参数3)</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数1 改变this指向 参数2 函数体 参数3往后是传参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.bind()</div></pre></td></tr></table></figure>
+</li>
+<li><p>类型检测</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">angular.isArray();</div><div class="line">angular.isObject();</div><div class="line">angular.isNumber();</div></pre></td></tr></table></figure>
+</li>
+<li><p>原生对象转化为jQuery对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.element();</div></pre></td></tr></table></figure>
+</li>
+<li><p>生成模块 参数1 模块名称 参数2 依赖模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;name&apos;,[])</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>模块方法</p>
+<ul>
+<li>模块即angular调用module方法生成的模块</li>
+<li>模块拥有自己的作用域</li>
+<li>常见模块方法</li>
+</ul>
+<ol>
+<li>生成控制器  产生自己的作用域</li>
+</ol>
+<ul>
+<li>参数1 模块名</li>
+<li>参数2 数组 索引1为’$scope’ 索引2至n为导入的服务,最后一个索引为定义模块的函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.module(&apos;ctrl&apos;,[&apos;$scope&apos;,&apos;name&apos;,function (s,n) &#123;&#125;])</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
+<li>生成自定义过滤器 方法见过滤器篇</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/23/我的理解2/" data-id="cis7js31t0005rk5qjs8kukw4" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          angular 自定义指令取得控制器中数据的方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/23/我的理解3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">angular————过滤器</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/">angular 自定义指令取得控制器中数据的方法</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/我的理解2/">angular————方法</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/我的理解3/">angular————过滤器</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/angular知识总结/">angular————概论 指令 表达式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/angular ng-model实现/">angular ng-model双向绑定的自定义模板实现</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 BetaSu<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

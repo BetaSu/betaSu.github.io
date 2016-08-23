@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>angular————过滤器 | 卡卡卡颂的blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="过滤器
+
+过滤器的作用是输出经过过滤后的数据
+过滤器分为内置过滤器与自定义过滤器
+过滤器有3种使用方法
+
+在表达式中使用 其中|是分隔符 :后面进行传参
+1&amp;#123;&amp;#123;name|currency:&amp;apos;￥&amp;apos;&amp;#125;&amp;#125;
+
+控制器中注入$filter服务
+1234mod.controller(&amp;apos;ctrl&amp;apos;,function  ($scop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="angular————过滤器">
+<meta property="og:url" content="http://yoursite.com/2016/08/23/我的理解3/index.html">
+<meta property="og:site_name" content="卡卡卡颂的blog">
+<meta property="og:description" content="过滤器
+
+过滤器的作用是输出经过过滤后的数据
+过滤器分为内置过滤器与自定义过滤器
+过滤器有3种使用方法
+
+在表达式中使用 其中|是分隔符 :后面进行传参
+1&amp;#123;&amp;#123;name|currency:&amp;apos;￥&amp;apos;&amp;#125;&amp;#125;
+
+控制器中注入$filter服务
+1234mod.controller(&amp;apos;ctrl&amp;apos;,function  ($scop">
+<meta property="og:updated_time" content="2016-08-23T14:54:39.576Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="angular————过滤器">
+<meta name="twitter:description" content="过滤器
+
+过滤器的作用是输出经过过滤后的数据
+过滤器分为内置过滤器与自定义过滤器
+过滤器有3种使用方法
+
+在表达式中使用 其中|是分隔符 :后面进行传参
+1&amp;#123;&amp;#123;name|currency:&amp;apos;￥&amp;apos;&amp;#125;&amp;#125;
+
+控制器中注入$filter服务
+1234mod.controller(&amp;apos;ctrl&amp;apos;,function  ($scop">
+  
+    <link rel="alternate" href="/atom.xml" title="卡卡卡颂的blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">卡卡卡颂的blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-我的理解3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/23/我的理解3/" class="article-date">
+  <time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      angular————过滤器
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>过滤器</p>
+<ul>
+<li>过滤器的作用是输出经过过滤后的数据</li>
+<li>过滤器分为内置过滤器与自定义过滤器</li>
+<li><p>过滤器有3种使用方法</p>
+<ol>
+<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:&apos;￥&apos;&#125;&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>控制器中注入$filter服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,$filter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=$filter(&apos;uppercase&apos;)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,uppercaseFilter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>常见内置过滤器</p>
+<ol>
+<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
+</li>
+<li><p>uppercase lowercase 大小写过滤器</p>
+</li>
+<li><p>number 限制数字后面小数点位数</p>
+</li>
+<li><p>limitTo 用来限制字符串、数组的长度</p>
+</li>
+<li><p>json 把普通对象转换为JSON对象</p>
+</li>
+<li><p>date 转换时间格式</p>
+</li>
+<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
+<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
+</ol>
+</li>
+<li>如何生成自定义过滤器<ul>
+<li>参数1 过滤器的名字</li>
+<li>参数2 函数(定义过滤器的方法)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//返回前len项为大写的值的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">		// 参数1: input就是要使用该过滤器的数据</div><div class="line">		// 从第二个参数开始就是冒号后面传递的参数</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var a=input.slice(0,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		var b=input.slice(len);</div><div class="line">		return a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">//数组去重的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var newarr=[];</div><div class="line">		for (var i=0;i&lt;input.length;i++) &#123;</div><div class="line">			if (newarr.indexOf(input[i])===-1) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	return newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/23/我的理解3/" data-id="cis7ljtte0000jw5q07k081p6" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/23/我的理解2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          angular————方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/23/angular知识总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">angular————概论 指令 表达式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/">angular 自定义指令取得控制器中数据的方法</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/我的理解2/">angular————方法</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/我的理解3/">angular————过滤器</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/angular知识总结/">angular————概论 指令 表达式</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/angular ng-model实现/">angular ng-model双向绑定的自定义模板实现</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 BetaSu<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

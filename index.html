@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/">angular 自定义模板取得控制器中数据的方法</a>
+      <a class="article-title" href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/">angular 自定义指令取得控制器中数据的方法</a>
     </h1>
   
 
@@ -115,7 +115,278 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/24/angular 自定义模板取得控制器中数据的方法/" data-id="cis77u85k0000v45qt4awyqxe" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/08/24/angular 自定义模板取得控制器中数据的方法/" data-id="cis7js31e0001rk5qqjfr48kv" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-我的理解2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/23/我的理解2/" class="article-date">
+  <time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/23/我的理解2/">angular————方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>方法</p>
+<ul>
+<li><p>方法包括内置方法、模块的方法</p>
+<ul>
+<li>常见内置方法</li>
+</ul>
+<ol>
+<li><p>大小写转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.uppercase(str)</div><div class="line">angular.lowercase(str)</div></pre></td></tr></table></figure>
+</li>
+<li><p>全等比较    相当于js中的===  坑：NaN===NaN //true</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.equals(value1,value2)</div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.toJson()  //相当于JSON.stringify</div><div class="line">angular.fromJson()  //相当于JSON.parse</div></pre></td></tr></table></figure>
+</li>
+<li><p>把value2(或其后的参数)中的值添加到value1中，value1改变，其他值不变</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.extend(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>value1的值覆盖value2的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.copy(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>遍历 参数3 改变this的指向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.forEach(item,index,参数3)</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数1 改变this指向 参数2 函数体 参数3往后是传参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.bind()</div></pre></td></tr></table></figure>
+</li>
+<li><p>类型检测</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">angular.isArray();</div><div class="line">angular.isObject();</div><div class="line">angular.isNumber();</div></pre></td></tr></table></figure>
+</li>
+<li><p>原生对象转化为jQuery对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.element();</div></pre></td></tr></table></figure>
+</li>
+<li><p>生成模块 参数1 模块名称 参数2 依赖模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;name&apos;,[])</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>模块方法</p>
+<ul>
+<li>模块即angular调用module方法生成的模块</li>
+<li>模块拥有自己的作用域</li>
+<li>常见模块方法</li>
+</ul>
+<ol>
+<li>生成控制器  产生自己的作用域</li>
+</ol>
+<ul>
+<li>参数1 模块名</li>
+<li>参数2 数组 索引1为’$scope’ 索引2至n为导入的服务,最后一个索引为定义模块的函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.module(&apos;ctrl&apos;,[&apos;$scope&apos;,&apos;name&apos;,function (s,n) &#123;&#125;])</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
+<li>生成自定义过滤器 方法见过滤器篇</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/23/我的理解2/" data-id="cis7js31t0005rk5qjs8kukw4" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-我的理解3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/23/我的理解3/" class="article-date">
+  <time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/23/我的理解3/">angular————过滤器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>过滤器</p>
+<ul>
+<li>过滤器的作用是输出经过过滤后的数据</li>
+<li>过滤器分为内置过滤器与自定义过滤器</li>
+<li><p>过滤器有3种使用方法</p>
+<ol>
+<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:&apos;￥&apos;&#125;&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>控制器中注入$filter服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,$filter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=$filter(&apos;uppercase&apos;)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,uppercaseFilter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>常见内置过滤器</p>
+<ol>
+<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
+</li>
+<li><p>uppercase lowercase 大小写过滤器</p>
+</li>
+<li><p>number 限制数字后面小数点位数</p>
+</li>
+<li><p>limitTo 用来限制字符串、数组的长度</p>
+</li>
+<li><p>json 把普通对象转换为JSON对象</p>
+</li>
+<li><p>date 转换时间格式</p>
+</li>
+<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
+<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
+</ol>
+</li>
+<li>如何生成自定义过滤器<ul>
+<li>参数1 过滤器的名字</li>
+<li>参数2 函数(定义过滤器的方法)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//返回前len项为大写的值的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">		// 参数1: input就是要使用该过滤器的数据</div><div class="line">		// 从第二个参数开始就是冒号后面传递的参数</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var a=input.slice(0,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		var b=input.slice(len);</div><div class="line">		return a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">//数组去重的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var newarr=[];</div><div class="line">		for (var i=0;i&lt;input.length;i++) &#123;</div><div class="line">			if (newarr.indexOf(input[i])===-1) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	return newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/23/我的理解3/" data-id="cis7ljtte0000jw5q07k081p6" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-angular知识总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/23/angular知识总结/" class="article-date">
+  <time datetime="2016-08-23T13:03:01.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/23/angular知识总结/">angular————概论 指令 表达式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="AngularJs是什么"><a href="#AngularJs是什么" class="headerlink" title="AngularJs是什么"></a>AngularJs是什么</h2><ul>
+<li>AngularJs是一款MVVM结构的前端框架。他分为M-model（数据层），V-view（视图层），VM-viewModel（视图模型层）。其中V与VM实现了双向数据绑定（具体的实现方法是通过内部的$digest也就是脏值查询实现的）。VM与M实现数据的交互</li>
+</ul>
+<h2 id="AngularJs能做什么"><a href="#AngularJs能做什么" class="headerlink" title="AngularJs能做什么"></a>AngularJs能做什么</h2><ul>
+<li>AngularJs通过内部的各种功能实现了在不操作DOM树（当然内部封装指令时会调用DOM方法）的情况下根据需要实时渲染前端页面、与后端交互。并且实现了模块化。是一款在不断的使用中可以不断健壮的框架。</li>
+</ul>
+<h2 id="AngularJs怎么做"><a href="#AngularJs怎么做" class="headerlink" title="AngularJs怎么做"></a>AngularJs怎么做</h2><ul>
+<li><p>Angular通过各种内部的功能组合实现前端页面实时渲染。具体如下</p>
+<ol>
+<li><p>指令</p>
+<ul>
+<li>凡是以ng-或者data-ng-为前缀的都是angularJS的内置指令</li>
+<li>指令分为内置指令和自定义指令，自定义指令通过mod.directive()方法产生</li>
+<li><p>指令有4种调用方法，即“ECMA”。</p>
+<ul>
+<li><p>E-element 作为元素标签调用 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;abcd&gt;&lt;/abcd&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>C-class 作为类调用 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;abcd&quot;&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>M-comment 作为注释调用,指令内的replace:true，且注释前后有2个空格</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!-- directive:zfpx --&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>A-attribute 作为元素属性调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div abcd&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>ng-app </li>
+<li>ng-class</li>
+<li>ng-init</li>
+<li>ng-if </li>
+<li>ng-show </li>
+<li>ng-hide </li>
+<li>ng-include</li>
+<li>ng-model</li>
+<li>ng-repeat</li>
+<li>ng-style</li>
+<li>ng-src</li>
+<li>ng-href</li>
+<li>ng-change</li>
+<li>ng-model-options</li>
+</ol>
+</li>
+<li><p>表达式</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;&#125;&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>实现DOM中的数据与作用域$scope数据的绑定</li>
+<li>可以放文字，变量，运算符，其中变量可以存储字符串、数组、对象等</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/23/angular知识总结/" data-id="cis7js31k0002rk5qq0dtrucp" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -171,7 +442,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/23/angular ng-model实现/" data-id="cis77u8660003v45q5327xv7j" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/08/23/angular ng-model实现/" data-id="cis7js3160000rk5qaoaplkvd" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -242,7 +513,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/21/myblog/" data-id="cis77u8620002v45q41m4p5k8" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/08/21/myblog/" data-id="cis7js31q0004rk5qv9k4zp1e" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -287,7 +558,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis77u85w0001v45qyhpw2lks" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis7js31o0003rk5qq5qvs9th" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -327,19 +598,23 @@
       <ul>
         
           <li>
-            <a href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/">angular 自定义模板取得控制器中数据的方法</a>
+            <a href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/">angular 自定义指令取得控制器中数据的方法</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/我的理解2/">angular————方法</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/我的理解3/">angular————过滤器</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/23/angular知识总结/">angular————概论 指令 表达式</a>
           </li>
         
           <li>
             <a href="/2016/08/23/angular ng-model实现/">angular ng-model双向绑定的自定义模板实现</a>
-          </li>
-        
-          <li>
-            <a href="/2016/08/21/myblog/">angular 自定义指令的配置方法</a>
-          </li>
-        
-          <li>
-            <a href="/2016/08/21/hello-world/">Hello World</a>
           </li>
         
       </ul>
