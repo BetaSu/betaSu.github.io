@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-myblog" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-angular 自定义模板取得控制器中数据的方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/08/23/myblog/" class="article-date">
-  <time datetime="2016-08-23T02:55:10.000Z" itemprop="datePublished">2016-08-23</time>
+    <a href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/" class="article-date">
+  <time datetime="2016-08-24T08:20:10.000Z" itemprop="datePublished">2016-08-24</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/23/myblog/">angular 自定义指令的配置方法</a>
+      <a class="article-title" href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/">angular 自定义模板取得控制器中数据的方法</a>
     </h1>
   
 
@@ -83,46 +83,26 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="angular-自定义指令的配置方法"><a href="#angular-自定义指令的配置方法" class="headerlink" title="angular 自定义指令的配置方法"></a>angular 自定义指令的配置方法</h2><h3 id="自定义模板的作用"><a href="#自定义模板的作用" class="headerlink" title="自定义模板的作用"></a>自定义模板的作用</h3><p>封装好需要的方法方便使用</p>
-<h3 id="配置属性及用途简介"><a href="#配置属性及用途简介" class="headerlink" title="配置属性及用途简介"></a>配置属性及用途简介</h3><ol>
-<li><p>template:产生一个模板</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">template:&apos;&lt;p&gt;我的模板&lt;/p&gt;&apos;</div></pre></td></tr></table></figure>
-</li>
-<li><p>templateUrl:引入一个外部模板</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">templateUrl:&apos;url.html&apos;</div></pre></td></tr></table></figure>
-</li>
-<li><p>scope:boolean  定义该模板是否产生自己的作用域</p>
-</li>
-<li>replace:boolean  定义该模板是否替换原有DOM结构</li>
-<li><p>restrict:’ECMA’ 定义模板可以使用的方式</p>
-<ul>
-<li><p>E:element 作为元素标签调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;mytemplate&gt;&lt;/mytemplate&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>C：class 作为样式类名调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;mytemplate&quot;&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>M：comment 作为注释使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!-- directive:mytemplate --&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>A：attribute 作为属性名调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div mytemplate&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
-</li>
+        <h1 id="angular-自定义模板取得控制器中数据的方法"><a href="#angular-自定义模板取得控制器中数据的方法" class="headerlink" title="angular 自定义模板取得控制器中数据的方法"></a>angular 自定义模板取得控制器中数据的方法</h1><h2 id="这是一个问题"><a href="#这是一个问题" class="headerlink" title="这是一个问题"></a>这是一个问题</h2><pre><code>我们知道$scope作用域中可以定义值、变量、方法。而我们子定义模板中link方法的形参只能取得模板所在作用域的值、变量、方法。我们如何在模板中取得模板所在控制器作用域中的数据呢。
+</code></pre><h2 id="数据大不同"><a href="#数据大不同" class="headerlink" title="数据大不同"></a>数据大不同</h2><ul>
+<li>数据可以分为固定的值、变量、方法。这三者的获取方法是不同的。</li>
 </ul>
-</li>
-<li><p>transclude 保存原有标签内的内容，与ng-transclude联合使用 如：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;我是原始DOM结构&lt;span ng-transclude&gt;我是会保留下来的部分&lt;/span&gt;&lt;/p&gt;</div></pre></td></tr></table></figure>
-<p> 其中带有ng-transclude属性的span标签下的内容会保留<br> ps：ng-transclude会形成作用域</p>
-</li>
-<li><p>link 实现该模板作用域与模板属性、模板DOM元素间的链接，用以封装方法</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/*</div><div class="line">* @param scope 当前模板作用域，如果当前模板没有形成作用域，会直接找父级作用域</div><div class="line">* @param element 当前自定义指令所在的DOM元素，是一个jQ对象，angular内置轻量级jQ，也就是jqLite</div><div class="line">* @param attrs 自定义指令所在的DOM元素上的属性存储在attrs对象中</div><div class="line">*/</div><div class="line">link:function  (scope,element,attrs) &#123;      </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="配置选项-代码实例"><a href="#配置选项-代码实例" class="headerlink" title="配置选项 代码实例"></a>配置选项 代码实例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">   myApp.directive(&apos;mytemplate&apos;,function  () &#123;</div><div class="line">       //定义一个指令,命名是驼峰命名法，使用时用-分割，将大写转为小写</div><div class="line">       return &#123;</div><div class="line">           //返回值是对象</div><div class="line">           template:&apos;&lt;p&gt;我的模板&lt;span ng-transclude&gt;&lt;/span&gt;&lt;/p&gt;&apos;,</div><div class="line"></div><div class="line">           //或者引入外界模板</div><div class="line">           //templateUrl:&apos;url.html&apos;,</div><div class="line"></div><div class="line">           //替换掉原有DOM结构</div><div class="line">           replace:true,</div><div class="line"></div><div class="line">           //定义指令可以用的位置,默认：&apos;EA&apos;</div><div class="line">           restrict:&apos;ECMA&apos;,</div><div class="line"></div><div class="line">           //启用transclude</div><div class="line">           transclude:true,</div><div class="line"></div><div class="line">	//模板会形成自己作用域</div><div class="line">           scope:true,</div><div class="line"></div><div class="line">           link:function (scope,element,attrs) &#123;</div><div class="line">           	</div><div class="line">           &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">   &#125;)</div></pre></td></tr></table></figure>
+<h2 id="固定值的获取-代码提供"><a href="#固定值的获取-代码提供" class="headerlink" title="固定值的获取,代码提供"></a>固定值的获取,代码提供</h2><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html &gt;</div><div class="line">&lt;html lang=&quot;en&quot; ng-app=&quot;myApp&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;scope 取得控制器作用域中的值&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;div ng-controller=&quot;myCtrl&quot;&gt;</div><div class="line">    myCtrl:&lt;input type=&quot;text&quot; ng-model=&quot;name&quot;&gt;</div><div class="line">    my-dir:&lt;my-dir name=&quot;&#123;&#123;name&#125;&#125;&quot;&gt;&lt;/my-dir&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script src=&quot;angular.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">    myApp.controller(&apos;myCtrl&apos;,[&apos;$scope&apos;,function  ($scope) &#123;</div><div class="line">        $scope.name=&apos;珠峰培训&apos;;</div><div class="line">    &#125;])</div><div class="line">    myApp.directive(&apos;myDir&apos;,function () &#123;</div><div class="line">        return &#123;</div><div class="line">            template:&apos;&lt;input type=&quot;text&quot; ng-model=&quot;name1&quot;&gt;&apos;,</div><div class="line">            scope:&#123;</div><div class="line">                name1:&apos;@name&apos;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+
+1.第一步 定义name属性，取得上级控制器作用域中的name值
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">my-dir:&lt;my-dir name=&quot;&#123;&#123;name&#125;&#125;&quot;&gt;&lt;/my-dir&gt;</div></pre></td></tr></table></figure>
+
+2.第二步 模板scope对象中定义name1属性，其中@name等于上一级取得的name值。这样模板中name1属性就取得了上级控制器作用域中的name属性
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scope:&#123;</div><div class="line">              name1:&apos;@name&apos;</div><div class="line">          &#125;</div></pre></td></tr></table></figure>
+
+3.第三步 将第二步保存的name1赋给模板DOM中
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">template:&apos;&lt;input type=&quot;text&quot; ng-model=&quot;name1&quot;&gt;&apos;,</div></pre></td></tr></table></figure>
+</code></pre><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><pre><code>-{{name}}中保存的是name变量的值，是一个固定的值，无法做到双向绑定
+</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/23/myblog/" data-id="cis74ozsq0001005qv3rd41ni" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/08/24/angular 自定义模板取得控制器中数据的方法/" data-id="cis77s3j30000sk5qnb5a9k5n" class="article-share-link">Share</a>
       
       
     </footer>
@@ -178,7 +158,78 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/23/angular ng-model实现/" data-id="cis74ozsw0002005qgszedmn1" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/08/23/angular ng-model实现/" data-id="cis77s3jn0003sk5qfdefyqyr" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-myblog" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/21/myblog/" class="article-date">
+  <time datetime="2016-08-21T02:55:10.000Z" itemprop="datePublished">2016-08-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/21/myblog/">angular 自定义指令的配置方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="angular-自定义指令的配置方法"><a href="#angular-自定义指令的配置方法" class="headerlink" title="angular 自定义指令的配置方法"></a>angular 自定义指令的配置方法</h2><h3 id="自定义模板的作用"><a href="#自定义模板的作用" class="headerlink" title="自定义模板的作用"></a>自定义模板的作用</h3><p>封装好需要的方法方便使用</p>
+<h3 id="配置属性及用途简介"><a href="#配置属性及用途简介" class="headerlink" title="配置属性及用途简介"></a>配置属性及用途简介</h3><ol>
+<li><p>template:产生一个模板</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">template:&apos;&lt;p&gt;我的模板&lt;/p&gt;&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>templateUrl:引入一个外部模板</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">templateUrl:&apos;url.html&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>scope:boolean  定义该模板是否产生自己的作用域</p>
+</li>
+<li>replace:boolean  定义该模板是否替换原有DOM结构</li>
+<li><p>restrict:’ECMA’ 定义模板可以使用的方式</p>
+<ul>
+<li><p>E:element 作为元素标签调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;mytemplate&gt;&lt;/mytemplate&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>C：class 作为样式类名调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;mytemplate&quot;&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>M：comment 作为注释使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!-- directive:mytemplate --&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>A：attribute 作为属性名调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div mytemplate&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>transclude 保存原有标签内的内容，与ng-transclude联合使用 如：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;我是原始DOM结构&lt;span ng-transclude&gt;我是会保留下来的部分&lt;/span&gt;&lt;/p&gt;</div></pre></td></tr></table></figure>
+<p> 其中带有ng-transclude属性的span标签下的内容会保留<br> ps：ng-transclude会形成作用域</p>
+</li>
+<li><p>link 实现该模板作用域与模板属性、模板DOM元素间的链接，用以封装方法</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/*</div><div class="line">* @param scope 当前模板作用域，如果当前模板没有形成作用域，会直接找父级作用域</div><div class="line">* @param element 当前自定义指令所在的DOM元素，是一个jQ对象，angular内置轻量级jQ，也就是jqLite</div><div class="line">* @param attrs 自定义指令所在的DOM元素上的属性存储在attrs对象中</div><div class="line">*/</div><div class="line">link:function  (scope,element,attrs) &#123;      </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="配置选项-代码实例"><a href="#配置选项-代码实例" class="headerlink" title="配置选项 代码实例"></a>配置选项 代码实例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">   myApp.directive(&apos;mytemplate&apos;,function  () &#123;</div><div class="line">       //定义一个指令,命名是驼峰命名法，使用时用-分割，将大写转为小写</div><div class="line">       return &#123;</div><div class="line">           //返回值是对象</div><div class="line">           template:&apos;&lt;p&gt;我的模板&lt;span ng-transclude&gt;&lt;/span&gt;&lt;/p&gt;&apos;,</div><div class="line"></div><div class="line">           //或者引入外界模板</div><div class="line">           //templateUrl:&apos;url.html&apos;,</div><div class="line"></div><div class="line">           //替换掉原有DOM结构</div><div class="line">           replace:true,</div><div class="line"></div><div class="line">           //定义指令可以用的位置,默认：&apos;EA&apos;</div><div class="line">           restrict:&apos;ECMA&apos;,</div><div class="line"></div><div class="line">           //启用transclude</div><div class="line">           transclude:true,</div><div class="line"></div><div class="line">	//模板会形成自己作用域</div><div class="line">           scope:true,</div><div class="line"></div><div class="line">           link:function (scope,element,attrs) &#123;</div><div class="line">           	</div><div class="line">           &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">   &#125;)</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/21/myblog/" data-id="cis77s3jd0002sk5q4qekfpft" class="article-share-link">Share</a>
       
       
     </footer>
@@ -223,7 +274,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis74ozsg0000005qe8mlsx3p" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis77s3j30001sk5q0rlv4uwv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -258,16 +309,20 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2016/08/23/myblog/">angular 自定义指令的配置方法</a>
+            <a href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/">angular 自定义模板取得控制器中数据的方法</a>
           </li>
         
           <li>
             <a href="/2016/08/23/angular ng-model实现/">angular ng-model双向绑定的自定义模板实现</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/21/myblog/">angular 自定义指令的配置方法</a>
           </li>
         
           <li>
@@ -287,7 +342,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2016 BetaSu<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
