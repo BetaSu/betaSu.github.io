@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -122,7 +122,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/23/myblog/" data-id="cis74m7cj0000u85qg9f9hprt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/23/myblog/" data-id="cis74ozsq0001005qv3rd41ni" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -154,28 +154,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="angular-ng-model双向绑定的自定义模板实现"><a href="#angular-ng-model双向绑定的自定义模板实现" class="headerlink" title="angular ng-model双向绑定的自定义模板实现"></a>angular ng-model双向绑定的自定义模板实现</h2><h2 id="流程："><a href="#流程：" class="headerlink" title="流程："></a>流程：</h2><pre><code>1.定义模块
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var myApp=angular.module(&apos;myApp&apos;,[]);</div></pre></td></tr></table></figure>
-
-2.调用directive 自定义模板方法
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">myApp.directive(&apos;myModel&apos;,function () &#123;</div><div class="line">	return &#123;</div><div class="line">		link:function (scope,element,attrs) &#123;</div><div class="line"></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-
-3. link内部实现，第一步拿到input的内容，因为element是jQ对象，
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">element.val()</div></pre></td></tr></table></figure>
-
-4.link内部实现，第二步拿到my-model对应的变量名
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">attrs[&apos;my-model&apos;]</div></pre></td></tr></table></figure>
-
-5.link内部实现，在scope上定义对象
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scope[attrs[&apos;my-model&apos;]]=element.val();</div></pre></td></tr></table></figure>
-
-6.强制刷新，实现数据双向绑定
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scope.$apply();</div></pre></td></tr></table></figure>
-</code></pre><h3 id="完整实现代码"><a href="#完整实现代码" class="headerlink" title="完整实现代码:"></a>完整实现代码:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot; ng-app=&quot;myApp&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;ng-model双向绑定的自定义模板实现&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;input type=&quot;text&quot; my-model=&quot;value&quot;&gt;&#123;&#123;value&#125;&#125;</div><div class="line">&lt;script src=&quot;angular.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">    myApp.directive(&apos;myModel&apos;,function  () &#123;</div><div class="line">        return &#123;</div><div class="line">            link:function  (scope,element,attrs) &#123;</div><div class="line">                element.on(&apos;keyup&apos;,function  () &#123;</div><div class="line">                    scope[attrs[&apos;myModel&apos;]]=element.val();</div><div class="line">                    scope.$apply();</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+        <h2 id="angular-ng-model双向绑定的自定义模板实现"><a href="#angular-ng-model双向绑定的自定义模板实现" class="headerlink" title="angular ng-model双向绑定的自定义模板实现"></a>angular ng-model双向绑定的自定义模板实现</h2><h2 id="流程："><a href="#流程：" class="headerlink" title="流程："></a>流程：</h2><ol>
+<li><p>定义模块</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var myApp=angular.module(&apos;myApp&apos;,[]);</div></pre></td></tr></table></figure>
+</li>
+<li><p>调用directive 自定义模板方法</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">myApp.directive(&apos;myModel&apos;,function () &#123;</div><div class="line">	return &#123;</div><div class="line">		link:function (scope,element,attrs) &#123;</div><div class="line"></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>link内部实现，第一步拿到input的内容，因为element是jQ对象，</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">element.val()</div></pre></td></tr></table></figure>
+</li>
+<li><p>link内部实现，第二步拿到my-model对应的变量名</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">attrs[&apos;my-model&apos;]</div></pre></td></tr></table></figure>
+</li>
+<li><p>link内部实现，在scope上定义对象</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scope[attrs[&apos;my-model&apos;]]=element.val();</div></pre></td></tr></table></figure>
+</li>
+<li><p>强制刷新，实现数据双向绑定</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scope.$apply();</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="完整实现代码"><a href="#完整实现代码" class="headerlink" title="完整实现代码:"></a>完整实现代码:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot; ng-app=&quot;myApp&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;ng-model双向绑定的自定义模板实现&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;input type=&quot;text&quot; my-model=&quot;value&quot;&gt;&#123;&#123;value&#125;&#125;</div><div class="line">&lt;script src=&quot;angular.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">    myApp.directive(&apos;myModel&apos;,function  () &#123;</div><div class="line">        return &#123;</div><div class="line">            link:function  (scope,element,attrs) &#123;</div><div class="line">                element.on(&apos;keyup&apos;,function  () &#123;</div><div class="line">                    scope[attrs[&apos;myModel&apos;]]=element.val();</div><div class="line">                    scope.$apply();</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/23/angular ng-model实现/" data-id="cis74m7d30002u85q5je1qwvw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/23/angular ng-model实现/" data-id="cis74ozsw0002005qgszedmn1" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -220,7 +223,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis74m7cv0001u85qm40c3pue" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/21/hello-world/" data-id="cis74ozsg0000005qe8mlsx3p" class="article-share-link">Partager</a>
       
       
     </footer>
@@ -255,7 +258,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -284,7 +287,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2016 BetaSu<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
