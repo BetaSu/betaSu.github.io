@@ -191,6 +191,88 @@
 
       <div class="body-wrap">
   
+    <article id="post-angular-服务" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/25/angular-服务/" class="article-date">
+  	<time datetime="2016-08-25T01:13:15.000Z" itemprop="datePublished">2016-08-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/25/angular-服务/">angular--服务</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="什么是服务"><a href="#什么是服务" class="headerlink" title="什么是服务"></a>什么是服务</h2><ul>
+<li>服务是公用的方法，可以把控制器中相同的部分抽取出来封装成一个服务，需要的时候注入控制器。</li>
+</ul>
+<h2 id="服务的分类"><a href="#服务的分类" class="headerlink" title="服务的分类"></a>服务的分类</h2><ul>
+<li>服务分为内置服务与自定义服务</li>
+</ul>
+<h2 id="常见内置服务"><a href="#常见内置服务" class="headerlink" title="常见内置服务"></a>常见内置服务</h2><ol>
+<li><p>$http服务用来向后台请求数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;m&apos;,[]);</div><div class="line">mod.controller(&apos;myCtrl&apos;,function  ($scope,$http) &#123;</div><div class="line">	// 注入http服务</div><div class="line">		// $http用来向后台请求数据</div><div class="line">		$http(&#123;</div><div class="line">			url:&apos;http.json&apos;,</div><div class="line">			method:&apos;GET&apos;,</div><div class="line">			params:&#123;data:&apos;aaaa&apos;&#125; //只是对于GET请求使用，在问号后面传递参数</div><div class="line"></div><div class="line">		//method:&apos;POST&apos;,</div><div class="line">		//data:&#123;&#125;</div><div class="line">		&#125;).success(function  (data,status,headers,config) &#123;</div><div class="line">			// 当成功时执行success方法中的回调函数</div><div class="line">				// data 请求回来的数据</div><div class="line">				// status 状态码</div><div class="line">				// headers是一个方法，执行时可看到头部信息</div><div class="line">				// config 配置信息，包含以上三者</div><div class="line">				console.log(data,status,headers,config);</div><div class="line">		&#125;).error(function  (err) &#123;</div><div class="line">			// 当失败时执行error中的回调函数</div><div class="line">			// err错误信息</div><div class="line">		&#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//$http返回的是一个promise (用来解决异步)</div><div class="line">// 封装的简便方法</div><div class="line">// $http.get()  $http.delete()</div><div class="line">	// 参数1 路径字符串 参数2 config 对象，放配置内容</div><div class="line">// $http.post()  $http.put()</div><div class="line">	// 参数1 路径字符串 参数2 请求体data  参数3 config</div><div class="line">// $http.jsonp() (实现跨域请求,其回调函数名 JSON_CALLBACK)</div><div class="line">	// 参数 请求路径</div></pre></td></tr></table></figure>
+</li>
+<li><p>\$interval与$timeout 设定计时器，不同于原生计时器在于其可触发脏值查询</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var newMod=angular.module(&apos;newm&apos;,[]);</div><div class="line">newMod.controller(&apos;ctrl&apos;,function  ($scope,$interval,$timeout) &#123;</div><div class="line">	$scope.age=8;</div><div class="line">	$interval(function  () &#123;&#125;)</div><div class="line">	$scope.fn=function  () &#123;</div><div class="line">		$timeout.cancel(timer);</div><div class="line">		var timer=$timeout(fn,1000);</div><div class="line">	 // 未完</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="五种自定义服务"><a href="#五种自定义服务" class="headerlink" title="五种自定义服务"></a>五种自定义服务</h2><ol>
+<li><p>provider是最全面的自定义服务，注入的是服务实例上$get方法的返回值，可以暴露方法作为API，模块的config方法接受服务名+Provider参数，该参数是服务的一个实例，可以对暴露的API进行配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">var myModule = angular.module(&apos;myModule&apos;, []);</div><div class="line"></div><div class="line">//配置名为myPro的服务</div><div class="line">myModule.provider(&apos;myPro&apos;,function  () &#123;</div><div class="line">    var currency=&apos;$&apos;;</div><div class="line">    this.setCurrency=function  (a) &#123;</div><div class="line">        currency=a;</div><div class="line">    &#125;;</div><div class="line">    this.$get=function  () &#123;</div><div class="line"></div><div class="line">        return &#123;</div><div class="line">            &apos;+&apos;:function  (a,b) &#123;</div><div class="line">                return currency+(Number(a)+Number(b));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//    配置函数，对服务暴露出来的接口进行配置,函数中传递的参数是</div><div class="line">//    服务名+provider</div><div class="line">//    myProvider是my服务的实例</div><div class="line">myModule.config(function  (myProProvider) &#123;</div><div class="line">    myProProvider.setCurrency(&apos;￥&apos;);</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//    注入自定义服务</div><div class="line">myModule.controller(&apos;myCtrl&apos;,[&apos;$scope&apos;,&apos;myPro&apos;,function  ($scope,myPro) &#123;</div><div class="line">    //注入的是服务的实例$get方法的返回值</div><div class="line">    $scope.result=myPro[&apos;+&apos;](1,2);</div><div class="line">&#125;])</div></pre></td></tr></table></figure>
+</li>
+<li><p>factory  最常用定义服务的方法.内部封装的也是provider,函数定义部分只要返回值,不能调用config配置函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">var myModule = angular.module(&apos;myModule&apos;, []);</div><div class="line"></div><div class="line">//    注入自定义服务 注入的是factory返回值</div><div class="line">myModule.factory(&apos;myPro&apos;,function  () &#123;</div><div class="line">    return &#123;</div><div class="line">        &apos;+&apos;:function  (a,b) &#123;</div><div class="line">            return (Number(a)+Number(b));</div><div class="line">        &#125;,</div><div class="line">        &apos;-&apos;:function  (a,b) &#123;</div><div class="line">            return (a-b);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;)</div><div class="line"></div><div class="line">myModule.controller(&apos;myCtrl&apos;,[&apos;$scope&apos;,&apos;myPro&apos;,function  ($scope,myPro) &#123;</div><div class="line">    $scope.cal=function  () &#123;</div><div class="line">        $scope.result=myPro[$scope.val]($scope.one,$scope.two);</div><div class="line">    &#125;</div><div class="line">&#125;])</div></pre></td></tr></table></figure>
+</li>
+<li><p>service  相当于原生js中的构造函数,向控制器注入服务的时候，注入的是该方法的一个实例,不能调用配置函数config</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">var myModule = angular.module(&apos;myModule&apos;, []);</div><div class="line"></div><div class="line">myModule.controller(&apos;myCtrl&apos;,[&apos;$scope&apos;,&apos;myPro&apos;,function  ($scope,myPro) &#123;</div><div class="line"></div><div class="line">    $scope.result=myPro[&apos;*&apos;](3,5);</div><div class="line">&#125;])</div><div class="line"></div><div class="line"></div><div class="line">myModule.service(&apos;myPro&apos;,function  () &#123;</div><div class="line">        this[&apos;+&apos;]=function  (a,b) &#123;</div><div class="line">            return (Number(a)+Number(b));</div><div class="line">        &#125;;</div><div class="line">        //ES6写法 箭头函数</div><div class="line">        this[&apos;*&apos;]=(a,b)=&gt;a*b;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>value用来定义变量，也可以作为服务注入到控制器中,不能在配置函数中调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var myModule = angular.module(&apos;myModule&apos;, []);</div><div class="line"></div><div class="line">//相当于把myPro赋值为&apos;123&apos;</div><div class="line">myModule.value(&apos;myPro&apos;,&apos;123&apos;);</div><div class="line"></div><div class="line">myModule.controller(&apos;myCtrl&apos;,[&apos;$scope&apos;,&apos;myPro&apos;,function  ($scope,myPro) &#123;</div><div class="line"></div><div class="line">    $scope.result=myPro;</div><div class="line">&#125;])</div></pre></td></tr></table></figure>
+</li>
+<li><p>constant  定义常量,用法同value.与value不同点在于可以注入到配置函数中</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-angular 自定义模板取得控制器中数据的方法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -246,6 +328,103 @@
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><pre><code>- name=&quot;{{name}}&quot;中{{name}}保存的是name变量的值，是一个固定的值，无法做到双向绑定
 - name=&quot;name&quot; 中&quot;name&quot; 保存的是指向控制器中$scope.name，不是固定的，可以双向绑定
 </code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-我的理解3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/23/我的理解3/" class="article-date">
+  	<time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/23/我的理解3/">angular————过滤器</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>过滤器</p>
+<ul>
+<li>过滤器的作用是输出经过过滤后的数据</li>
+<li>过滤器分为内置过滤器与自定义过滤器</li>
+<li><p>过滤器有3种使用方法</p>
+<ol>
+<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:&apos;￥&apos;&#125;&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>控制器中注入$filter服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,$filter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=$filter(&apos;uppercase&apos;)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,uppercaseFilter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>常见内置过滤器</p>
+<ol>
+<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
+</li>
+<li><p>uppercase lowercase 大小写过滤器</p>
+</li>
+<li><p>number 限制数字后面小数点位数</p>
+</li>
+<li><p>limitTo 用来限制字符串、数组的长度</p>
+</li>
+<li><p>json 把普通对象转换为JSON对象</p>
+</li>
+<li><p>date 转换时间格式</p>
+</li>
+<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
+<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
+</ol>
+</li>
+<li>如何生成自定义过滤器<ul>
+<li>参数1 过滤器的名字</li>
+<li>参数2 函数(定义过滤器的方法)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//返回前len项为大写的值的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">		// 参数1: input就是要使用该过滤器的数据</div><div class="line">		// 从第二个参数开始就是冒号后面传递的参数</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var a=input.slice(0,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		var b=input.slice(len);</div><div class="line">		return a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">//数组去重的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var newarr=[];</div><div class="line">		for (var i=0;i&lt;input.length;i++) &#123;</div><div class="line">			if (newarr.indexOf(input[i])===-1) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	return newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
       
     </div>
     
@@ -354,103 +533,6 @@
 <ol>
 <li>生成自定义过滤器 方法见过滤器篇</li>
 </ol>
-</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-我的理解3" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/23/我的理解3/" class="article-date">
-  	<time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/23/我的理解3/">angular————过滤器</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li><p>过滤器</p>
-<ul>
-<li>过滤器的作用是输出经过过滤后的数据</li>
-<li>过滤器分为内置过滤器与自定义过滤器</li>
-<li><p>过滤器有3种使用方法</p>
-<ol>
-<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:&apos;￥&apos;&#125;&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>控制器中注入$filter服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,$filter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=$filter(&apos;uppercase&apos;)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,uppercaseFilter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>常见内置过滤器</p>
-<ol>
-<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
-</li>
-<li><p>uppercase lowercase 大小写过滤器</p>
-</li>
-<li><p>number 限制数字后面小数点位数</p>
-</li>
-<li><p>limitTo 用来限制字符串、数组的长度</p>
-</li>
-<li><p>json 把普通对象转换为JSON对象</p>
-</li>
-<li><p>date 转换时间格式</p>
-</li>
-<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
-<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
-</ol>
-</li>
-<li>如何生成自定义过滤器<ul>
-<li>参数1 过滤器的名字</li>
-<li>参数2 函数(定义过滤器的方法)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//返回前len项为大写的值的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">		// 参数1: input就是要使用该过滤器的数据</div><div class="line">		// 从第二个参数开始就是冒号后面传递的参数</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var a=input.slice(0,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		var b=input.slice(len);</div><div class="line">		return a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">//数组去重的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var newarr=[];</div><div class="line">		for (var i=0;i&lt;input.length;i++) &#123;</div><div class="line">			if (newarr.indexOf(input[i])===-1) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	return newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ul>
 </li>
 </ul>
 </li>
