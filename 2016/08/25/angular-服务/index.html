@@ -14,7 +14,7 @@
 
 常见内置服务
 $http服务用来向后台请求数据
-1234567891011121314151617181920212223242526272829303132var mod=angular.module(&amp;apos;m&amp;apos;,[]);mod.co">
+12345678910111213141516171819202122232425262728293031323334var mod=angular.module(&amp;apos;m&amp;apos;,[]);mo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="angular--服务">
 <meta property="og:url" content="https://betasu.github.io/2016/08/25/angular-服务/index.html">
@@ -27,8 +27,8 @@ $http服务用来向后台请求数据
 
 常见内置服务
 $http服务用来向后台请求数据
-1234567891011121314151617181920212223242526272829303132var mod=angular.module(&amp;apos;m&amp;apos;,[]);mod.co">
-<meta property="og:updated_time" content="2016-08-25T02:00:58.305Z">
+12345678910111213141516171819202122232425262728293031323334var mod=angular.module(&amp;apos;m&amp;apos;,[]);mo">
+<meta property="og:updated_time" content="2016-08-30T02:52:50.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="angular--服务">
 <meta name="twitter:description" content="什么是服务
@@ -39,7 +39,7 @@ $http服务用来向后台请求数据
 
 常见内置服务
 $http服务用来向后台请求数据
-1234567891011121314151617181920212223242526272829303132var mod=angular.module(&amp;apos;m&amp;apos;,[]);mod.co">
+12345678910111213141516171819202122232425262728293031323334var mod=angular.module(&amp;apos;m&amp;apos;,[]);mo">
   
     <link rel="alternative" href="/atom.xml" title="卡卡卡颂的blog" type="application/atom+xml">
   
@@ -102,7 +102,7 @@ $http服务用来向后台请求数据
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -258,9 +258,9 @@ $http服务用来向后台请求数据
 </ul>
 <h2 id="常见内置服务"><a href="#常见内置服务" class="headerlink" title="常见内置服务"></a>常见内置服务</h2><ol>
 <li><p>$http服务用来向后台请求数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;m&apos;,[]);</div><div class="line">mod.controller(&apos;myCtrl&apos;,function  ($scope,$http) &#123;</div><div class="line">	// 注入http服务</div><div class="line">		// $http用来向后台请求数据</div><div class="line">		$http(&#123;</div><div class="line">			url:&apos;http.json&apos;,</div><div class="line">			method:&apos;GET&apos;,</div><div class="line">			params:&#123;data:&apos;aaaa&apos;&#125; //只是对于GET请求使用，在问号后面传递参数</div><div class="line"></div><div class="line">		//method:&apos;POST&apos;,</div><div class="line">		//data:&#123;&#125;</div><div class="line">		&#125;).success(function  (data,status,headers,config) &#123;</div><div class="line">			// 当成功时执行success方法中的回调函数</div><div class="line">				// data 请求回来的数据</div><div class="line">				// status 状态码</div><div class="line">				// headers是一个方法，执行时可看到头部信息</div><div class="line">				// config 配置信息，包含以上三者</div><div class="line">				console.log(data,status,headers,config);</div><div class="line">		&#125;).error(function  (err) &#123;</div><div class="line">			// 当失败时执行error中的回调函数</div><div class="line">			// err错误信息</div><div class="line">		&#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//$http返回的是一个promise (用来解决异步)</div><div class="line">// 封装的简便方法</div><div class="line">// $http.get()  $http.delete()</div><div class="line">	// 参数1 路径字符串 参数2 config 对象，放配置内容</div><div class="line">// $http.post()  $http.put()</div><div class="line">	// 参数1 路径字符串 参数2 请求体data  参数3 config</div><div class="line">// $http.jsonp() (实现跨域请求,其回调函数名 JSON_CALLBACK)</div><div class="line">	// 参数 请求路径</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;m&apos;,[]);</div><div class="line">mod.controller(&apos;myCtrl&apos;,function  ($scope,$http) &#123;</div><div class="line">	// 注入http服务</div><div class="line">		// $http用来向后台请求数据</div><div class="line">		$http(&#123;</div><div class="line">			url:&apos;http.json&apos;,</div><div class="line">			method:&apos;GET&apos;,</div><div class="line">			params:&#123;data:&apos;aaaa&apos;&#125; //只是对于GET请求使用，在问号后面传递参数</div><div class="line"></div><div class="line">		//method:&apos;POST&apos;,</div><div class="line">		//data:&#123;&#125;</div><div class="line">		&#125;).success(function  (data,status,headers,config) &#123;</div><div class="line">			// 当成功时执行success方法中的回调函数</div><div class="line">				// data 请求回来的数据</div><div class="line">				// status 状态码</div><div class="line">				// headers是一个方法，执行时可看到头部信息</div><div class="line">				// config 配置信息，包含以上三者</div><div class="line">				console.log(data,status,headers,config);</div><div class="line">		&#125;).error(function  (err) &#123;</div><div class="line">			// 当失败时执行error中的回调函数</div><div class="line">			// err错误信息</div><div class="line">		&#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//$http返回的是一个promise (用来解决异步)</div><div class="line">// 封装的简便方法</div><div class="line">// $http.get()  $http.delete()</div><div class="line">	// 参数1 路径字符串 参数2 config 对象，放配置内容</div><div class="line">// $http.post()  $http.put()</div><div class="line">	// 参数1 路径字符串 参数2 请求体data  参数3 config</div><div class="line">// $http.jsonp() (实现跨域请求,其回调函数名 JSON_CALLBACK)</div><div class="line">	// 参数 请求路径</div><div class="line">// $http.delete()</div><div class="line">// $http.put()</div></pre></td></tr></table></figure>
 </li>
-<li><p>\$interval与$timeout 设定计时器，不同于原生计时器在于其可触发脏值查询</p>
+<li><p>\$interval与$timeout 设定计时器，不同于原生计时器在于其可触发脏值查询,调用其cancel方法清除计时器</p>
 </li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var newMod=angular.module(&apos;newm&apos;,[]);</div><div class="line">newMod.controller(&apos;ctrl&apos;,function  ($scope,$interval,$timeout) &#123;</div><div class="line">	$scope.age=8;</div><div class="line">	$interval(function  () &#123;&#125;)</div><div class="line">	$scope.fn=function  () &#123;</div><div class="line">		$timeout.cancel(timer);</div><div class="line">		var timer=$timeout(fn,1000);</div><div class="line">	 // 未完</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>

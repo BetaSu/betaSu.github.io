@@ -74,7 +74,7 @@
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -440,9 +440,9 @@
 </ul>
 <h2 id="常见内置服务"><a href="#常见内置服务" class="headerlink" title="常见内置服务"></a>常见内置服务</h2><ol>
 <li><p>$http服务用来向后台请求数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;m&apos;,[]);</div><div class="line">mod.controller(&apos;myCtrl&apos;,function  ($scope,$http) &#123;</div><div class="line">	// 注入http服务</div><div class="line">		// $http用来向后台请求数据</div><div class="line">		$http(&#123;</div><div class="line">			url:&apos;http.json&apos;,</div><div class="line">			method:&apos;GET&apos;,</div><div class="line">			params:&#123;data:&apos;aaaa&apos;&#125; //只是对于GET请求使用，在问号后面传递参数</div><div class="line"></div><div class="line">		//method:&apos;POST&apos;,</div><div class="line">		//data:&#123;&#125;</div><div class="line">		&#125;).success(function  (data,status,headers,config) &#123;</div><div class="line">			// 当成功时执行success方法中的回调函数</div><div class="line">				// data 请求回来的数据</div><div class="line">				// status 状态码</div><div class="line">				// headers是一个方法，执行时可看到头部信息</div><div class="line">				// config 配置信息，包含以上三者</div><div class="line">				console.log(data,status,headers,config);</div><div class="line">		&#125;).error(function  (err) &#123;</div><div class="line">			// 当失败时执行error中的回调函数</div><div class="line">			// err错误信息</div><div class="line">		&#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//$http返回的是一个promise (用来解决异步)</div><div class="line">// 封装的简便方法</div><div class="line">// $http.get()  $http.delete()</div><div class="line">	// 参数1 路径字符串 参数2 config 对象，放配置内容</div><div class="line">// $http.post()  $http.put()</div><div class="line">	// 参数1 路径字符串 参数2 请求体data  参数3 config</div><div class="line">// $http.jsonp() (实现跨域请求,其回调函数名 JSON_CALLBACK)</div><div class="line">	// 参数 请求路径</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;m&apos;,[]);</div><div class="line">mod.controller(&apos;myCtrl&apos;,function  ($scope,$http) &#123;</div><div class="line">	// 注入http服务</div><div class="line">		// $http用来向后台请求数据</div><div class="line">		$http(&#123;</div><div class="line">			url:&apos;http.json&apos;,</div><div class="line">			method:&apos;GET&apos;,</div><div class="line">			params:&#123;data:&apos;aaaa&apos;&#125; //只是对于GET请求使用，在问号后面传递参数</div><div class="line"></div><div class="line">		//method:&apos;POST&apos;,</div><div class="line">		//data:&#123;&#125;</div><div class="line">		&#125;).success(function  (data,status,headers,config) &#123;</div><div class="line">			// 当成功时执行success方法中的回调函数</div><div class="line">				// data 请求回来的数据</div><div class="line">				// status 状态码</div><div class="line">				// headers是一个方法，执行时可看到头部信息</div><div class="line">				// config 配置信息，包含以上三者</div><div class="line">				console.log(data,status,headers,config);</div><div class="line">		&#125;).error(function  (err) &#123;</div><div class="line">			// 当失败时执行error中的回调函数</div><div class="line">			// err错误信息</div><div class="line">		&#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//$http返回的是一个promise (用来解决异步)</div><div class="line">// 封装的简便方法</div><div class="line">// $http.get()  $http.delete()</div><div class="line">	// 参数1 路径字符串 参数2 config 对象，放配置内容</div><div class="line">// $http.post()  $http.put()</div><div class="line">	// 参数1 路径字符串 参数2 请求体data  参数3 config</div><div class="line">// $http.jsonp() (实现跨域请求,其回调函数名 JSON_CALLBACK)</div><div class="line">	// 参数 请求路径</div><div class="line">// $http.delete()</div><div class="line">// $http.put()</div></pre></td></tr></table></figure>
 </li>
-<li><p>\$interval与$timeout 设定计时器，不同于原生计时器在于其可触发脏值查询</p>
+<li><p>\$interval与$timeout 设定计时器，不同于原生计时器在于其可触发脏值查询,调用其cancel方法清除计时器</p>
 </li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var newMod=angular.module(&apos;newm&apos;,[]);</div><div class="line">newMod.controller(&apos;ctrl&apos;,function  ($scope,$interval,$timeout) &#123;</div><div class="line">	$scope.age=8;</div><div class="line">	$interval(function  () &#123;&#125;)</div><div class="line">	$scope.fn=function  () &#123;</div><div class="line">		$timeout.cancel(timer);</div><div class="line">		var timer=$timeout(fn,1000);</div><div class="line">	 // 未完</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
@@ -568,6 +568,129 @@
 
 
   
+    <article id="post-我的理解2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/23/我的理解2/" class="article-date">
+  	<time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/23/我的理解2/">angular————方法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>方法</p>
+<ul>
+<li><p>方法包括内置方法、模块的方法</p>
+<ul>
+<li>常见内置方法</li>
+</ul>
+<ol>
+<li><p>大小写转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.uppercase(str)</div><div class="line">angular.lowercase(str)</div></pre></td></tr></table></figure>
+</li>
+<li><p>全等比较    相当于js中的===  坑：NaN===NaN //true</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.equals(value1,value2)</div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.toJson()  //相当于JSON.stringify</div><div class="line">angular.fromJson()  //相当于JSON.parse</div></pre></td></tr></table></figure>
+</li>
+<li><p>把value2(或其后的参数)中的值添加到value1中，value1改变，其他值不变</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.extend(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>value1的值覆盖value2的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.copy(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>遍历 参数3 改变this的指向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.forEach(item,index,参数3)</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数1 改变this指向 参数2 函数体 参数3往后是传参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.bind()</div></pre></td></tr></table></figure>
+</li>
+<li><p>类型检测</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">angular.isArray();</div><div class="line">angular.isObject();</div><div class="line">angular.isNumber();</div></pre></td></tr></table></figure>
+</li>
+<li><p>原生对象转化为jQuery对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.element();</div></pre></td></tr></table></figure>
+</li>
+<li><p>生成模块 参数1 模块名称 参数2 依赖模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;name&apos;,[])</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>模块方法</p>
+<ul>
+<li>模块即angular调用module方法生成的模块</li>
+<li>模块拥有自己的作用域</li>
+<li>常见模块方法</li>
+</ul>
+<ol>
+<li>生成控制器  产生自己的作用域</li>
+</ol>
+<ul>
+<li>参数1 模块名</li>
+<li>参数2 数组 索引1为’$scope’ 索引2至n为导入的服务,最后一个索引为定义模块的函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.module(&apos;ctrl&apos;,[&apos;$scope&apos;,&apos;name&apos;,function (s,n) &#123;&#125;])</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
+<li>生成自定义过滤器 方法见过滤器篇</li>
+</ol>
+</li>
+<li><p>$scope作用域方法</p>
+<ol>
+<li>$apply :强制刷新，调用$rootScope.$digest 从根作用域开始进行脏值查询</li>
+<li>$watch :监听数据改变</li>
+<li>$digest :强制刷新，从当前作用域到子作用域</li>
+<li>$emit :发射事件 基于事件驱动</li>
+<li>$broadcast: 广播事件 基于事件驱动</li>
+<li>$on :监听事件</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-我的理解3" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -665,119 +788,6 @@
 
 
   
-    <article id="post-我的理解2" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/23/我的理解2/" class="article-date">
-  	<time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/23/我的理解2/">angular————方法</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li><p>方法</p>
-<ul>
-<li><p>方法包括内置方法、模块的方法</p>
-<ul>
-<li>常见内置方法</li>
-</ul>
-<ol>
-<li><p>大小写转换</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.uppercase(str)</div><div class="line">angular.lowercase(str)</div></pre></td></tr></table></figure>
-</li>
-<li><p>全等比较    相当于js中的===  坑：NaN===NaN //true</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.equals(value1,value2)</div></pre></td></tr></table></figure>
-</li>
-<li><p>JSON转换</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.toJson()  //相当于JSON.stringify</div><div class="line">angular.fromJson()  //相当于JSON.parse</div></pre></td></tr></table></figure>
-</li>
-<li><p>把value2(或其后的参数)中的值添加到value1中，value1改变，其他值不变</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.extend(value1,value2);</div></pre></td></tr></table></figure>
-</li>
-<li><p>value1的值覆盖value2的值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.copy(value1,value2);</div></pre></td></tr></table></figure>
-</li>
-<li><p>遍历 参数3 改变this的指向</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.forEach(item,index,参数3)</div></pre></td></tr></table></figure>
-</li>
-<li><p>参数1 改变this指向 参数2 函数体 参数3往后是传参</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.bind()</div></pre></td></tr></table></figure>
-</li>
-<li><p>类型检测</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">angular.isArray();</div><div class="line">angular.isObject();</div><div class="line">angular.isNumber();</div></pre></td></tr></table></figure>
-</li>
-<li><p>原生对象转化为jQuery对象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.element();</div></pre></td></tr></table></figure>
-</li>
-<li><p>生成模块 参数1 模块名称 参数2 依赖模块</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;name&apos;,[])</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>模块方法</p>
-<ul>
-<li>模块即angular调用module方法生成的模块</li>
-<li>模块拥有自己的作用域</li>
-<li>常见模块方法</li>
-</ul>
-<ol>
-<li>生成控制器  产生自己的作用域</li>
-</ol>
-<ul>
-<li>参数1 模块名</li>
-<li>参数2 数组 索引1为’$scope’ 索引2至n为导入的服务,最后一个索引为定义模块的函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.module(&apos;ctrl&apos;,[&apos;$scope&apos;,&apos;name&apos;,function (s,n) &#123;&#125;])</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<ol>
-<li>生成自定义过滤器 方法见过滤器篇</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-angular知识总结" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -835,20 +845,24 @@
 </li>
 </ul>
 <ol>
-<li>ng-app </li>
-<li>ng-class</li>
-<li>ng-init</li>
-<li>ng-if </li>
-<li>ng-show </li>
-<li>ng-hide </li>
-<li>ng-include</li>
-<li>ng-model</li>
-<li>ng-repeat</li>
-<li>ng-style</li>
+<li>ng-app :angular起始位置，会形成$scope根目录</li>
+<li>ng-class :两种用法 ‘{true:”c1”,false:”c2”}[flag]’  ‘{c1:flag1,c2:flag2}’</li>
+<li>ng-init :初始化数据</li>
+<li>ng-if :控制元素是否存在，会形成自己的作用域，如果不存在内部作用域也会销毁</li>
+<li>ng-show :控制元素显示隐藏，即使隐藏了内部指令还会执行</li>
+<li>ng-hide :与show相反</li>
+<li>ng-include :引入html片段</li>
+<li>ng-model :用在表单元素上，存储value值，实现数据双向绑定</li>
+<li>ng-repeat :迭代DOM元素，会形成自己的作用域。当遍历重复数据会报错， track by $index解决</li>
+<li>ng-style :动态增加行内样式</li>
 <li>ng-src</li>
 <li>ng-href</li>
 <li>ng-change</li>
 <li>ng-model-options</li>
+<li>ng-click</li>
+<li>ng-bind </li>
+<li>ng-bind-template</li>
+<li>ng-cloak :解决闪烁,需要在加载的时候给一个隐藏样式</li>
 </ol>
 </li>
 <li><p>表达式</p>
@@ -860,6 +874,12 @@
 </li>
 </ol>
 </li>
+</ul>
+<p>##Angular 内部运行的三个阶段</p>
+<ul>
+<li>加载阶段 ：引入angular开始到对指令解析前</li>
+<li>编译阶段 ： template replac transclude compile</li>
+<li>链接阶段 ： link实现与作用域的绑定，如果当前没有形成在自己的作用域，scope指向上一级作用域</li>
 </ul>
 
       

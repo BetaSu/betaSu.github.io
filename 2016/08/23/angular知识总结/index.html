@@ -20,7 +20,7 @@ AngularJs是一款MVVM结构的前端框架。他分为M-model（数据层），
 
 AngularJs能做什么
 AngularJs通过内部的各种功能实现了在不操作DOM树（当然内部封装指令时会">
-<meta property="og:updated_time" content="2016-08-23T14:12:04.816Z">
+<meta property="og:updated_time" content="2016-08-30T03:34:23.248Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="angular————概论 指令 表达式">
 <meta name="twitter:description" content="AngularJs是什么
@@ -90,7 +90,7 @@ AngularJs通过内部的各种功能实现了在不操作DOM树（当然内部�
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -269,20 +269,24 @@ AngularJs通过内部的各种功能实现了在不操作DOM树（当然内部�
 </li>
 </ul>
 <ol>
-<li>ng-app </li>
-<li>ng-class</li>
-<li>ng-init</li>
-<li>ng-if </li>
-<li>ng-show </li>
-<li>ng-hide </li>
-<li>ng-include</li>
-<li>ng-model</li>
-<li>ng-repeat</li>
-<li>ng-style</li>
+<li>ng-app :angular起始位置，会形成$scope根目录</li>
+<li>ng-class :两种用法 ‘{true:”c1”,false:”c2”}[flag]’  ‘{c1:flag1,c2:flag2}’</li>
+<li>ng-init :初始化数据</li>
+<li>ng-if :控制元素是否存在，会形成自己的作用域，如果不存在内部作用域也会销毁</li>
+<li>ng-show :控制元素显示隐藏，即使隐藏了内部指令还会执行</li>
+<li>ng-hide :与show相反</li>
+<li>ng-include :引入html片段</li>
+<li>ng-model :用在表单元素上，存储value值，实现数据双向绑定</li>
+<li>ng-repeat :迭代DOM元素，会形成自己的作用域。当遍历重复数据会报错， track by $index解决</li>
+<li>ng-style :动态增加行内样式</li>
 <li>ng-src</li>
 <li>ng-href</li>
 <li>ng-change</li>
 <li>ng-model-options</li>
+<li>ng-click</li>
+<li>ng-bind </li>
+<li>ng-bind-template</li>
+<li>ng-cloak :解决闪烁,需要在加载的时候给一个隐藏样式</li>
 </ol>
 </li>
 <li><p>表达式</p>
@@ -295,6 +299,12 @@ AngularJs通过内部的各种功能实现了在不操作DOM树（当然内部�
 </ol>
 </li>
 </ul>
+<p>##Angular 内部运行的三个阶段</p>
+<ul>
+<li>加载阶段 ：引入angular开始到对指令解析前</li>
+<li>编译阶段 ： template replac transclude compile</li>
+<li>链接阶段 ： link实现与作用域的绑定，如果当前没有形成在自己的作用域，scope指向上一级作用域</li>
+</ul>
 
       
     </div>
@@ -304,11 +314,11 @@ AngularJs通过内部的各种功能实现了在不操作DOM树（当然内部�
     
 <nav id="article-nav">
   
-    <a href="/2016/08/23/我的理解2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/08/23/我的理解3/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          angular————方法
+          angular————过滤器
         
       </div>
     </a>
