@@ -4,48 +4,39 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>angular————过滤器 | 卡卡卡颂的blog</title>
+  <title>angular——表单控件 | 卡卡卡颂的blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="过滤器
+  <meta name="description" content="什么是angular表单控件？
+angular增强了常见的表单控件（如 url email date number），为其增加了一些默认的检测行为。比如input type为email类型时，输入的值不带有@符会默认为错误格式。几个常见的表单指令
 
-过滤器的作用是输出经过过滤后的数据
-过滤器分为内置过滤器与自定义过滤器
-过滤器有3种使用方法
 
-在表达式中使用 其中|是分隔符 :后面进行传参
-1&amp;#123;&amp;#123;name|currency:&amp;apos;￥&amp;apos;&amp;#125;&amp;#125;
-
-控制器中注入$filter服务
-1234mod.controller(&amp;apos;ctrl&amp;apos;,function  ($scop">
+required 同ng-required  必填项
+ng-maxlength 控制字符最大长度
+ng-minlength 控制字符最小长度
+ng-">
 <meta property="og:type" content="article">
-<meta property="og:title" content="angular————过滤器">
-<meta property="og:url" content="https://betasu.github.io/2016/08/23/我的理解3/index.html">
+<meta property="og:title" content="angular——表单控件">
+<meta property="og:url" content="https://betasu.github.io/2016/08/30/angular——表单控件/index.html">
 <meta property="og:site_name" content="卡卡卡颂的blog">
-<meta property="og:description" content="过滤器
+<meta property="og:description" content="什么是angular表单控件？
+angular增强了常见的表单控件（如 url email date number），为其增加了一些默认的检测行为。比如input type为email类型时，输入的值不带有@符会默认为错误格式。几个常见的表单指令
 
-过滤器的作用是输出经过过滤后的数据
-过滤器分为内置过滤器与自定义过滤器
-过滤器有3种使用方法
 
-在表达式中使用 其中|是分隔符 :后面进行传参
-1&amp;#123;&amp;#123;name|currency:&amp;apos;￥&amp;apos;&amp;#125;&amp;#125;
-
-控制器中注入$filter服务
-1234mod.controller(&amp;apos;ctrl&amp;apos;,function  ($scop">
-<meta property="og:updated_time" content="2016-08-23T14:54:39.576Z">
+required 同ng-required  必填项
+ng-maxlength 控制字符最大长度
+ng-minlength 控制字符最小长度
+ng-">
+<meta property="og:updated_time" content="2016-08-31T01:37:14.115Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="angular————过滤器">
-<meta name="twitter:description" content="过滤器
+<meta name="twitter:title" content="angular——表单控件">
+<meta name="twitter:description" content="什么是angular表单控件？
+angular增强了常见的表单控件（如 url email date number），为其增加了一些默认的检测行为。比如input type为email类型时，输入的值不带有@符会默认为错误格式。几个常见的表单指令
 
-过滤器的作用是输出经过过滤后的数据
-过滤器分为内置过滤器与自定义过滤器
-过滤器有3种使用方法
 
-在表达式中使用 其中|是分隔符 :后面进行传参
-1&amp;#123;&amp;#123;name|currency:&amp;apos;￥&amp;apos;&amp;#125;&amp;#125;
-
-控制器中注入$filter服务
-1234mod.controller(&amp;apos;ctrl&amp;apos;,function  ($scop">
+required 同ng-required  必填项
+ng-maxlength 控制字符最大长度
+ng-minlength 控制字符最小长度
+ng-">
   
     <link rel="alternative" href="/atom.xml" title="卡卡卡颂的blog" type="application/atom+xml">
   
@@ -223,11 +214,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-我的理解3" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-angular——表单控件" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/08/23/我的理解3/" class="article-date">
-  	<time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+      <a href="/2016/08/30/angular——表单控件/" class="article-date">
+  	<time datetime="2016-08-30T08:09:26.000Z" itemprop="datePublished">2016-08-30</time>
 </a>
     </div>
   
@@ -240,7 +231,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      angular————过滤器
+      angular——表单控件
     </h1>
   
 
@@ -256,51 +247,29 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ol>
-<li><p>过滤器</p>
-<ul>
-<li>过滤器的作用是输出经过过滤后的数据</li>
-<li>过滤器分为内置过滤器与自定义过滤器</li>
-<li><p>过滤器有3种使用方法</p>
-<ol>
-<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:&apos;￥&apos;&#125;&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>控制器中注入$filter服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,$filter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=$filter(&apos;uppercase&apos;)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,uppercaseFilter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>常见内置过滤器</p>
-<ol>
-<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
-</li>
-<li><p>uppercase lowercase 大小写过滤器</p>
-</li>
-<li><p>number 限制数字后面小数点位数</p>
-</li>
-<li><p>limitTo 用来限制字符串、数组的长度</p>
-</li>
-<li><p>json 把普通对象转换为JSON对象</p>
-</li>
-<li><p>date 转换时间格式</p>
-</li>
-<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
-<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
-</ol>
-</li>
-<li>如何生成自定义过滤器<ul>
-<li>参数1 过滤器的名字</li>
-<li>参数2 函数(定义过滤器的方法)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//返回前len项为大写的值的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">		// 参数1: input就是要使用该过滤器的数据</div><div class="line">		// 从第二个参数开始就是冒号后面传递的参数</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var a=input.slice(0,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		var b=input.slice(len);</div><div class="line">		return a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">//数组去重的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var newarr=[];</div><div class="line">		for (var i=0;i&lt;input.length;i++) &#123;</div><div class="line">			if (newarr.indexOf(input[i])===-1) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	return newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
+        <h2 id="什么是angular表单控件？"><a href="#什么是angular表单控件？" class="headerlink" title="什么是angular表单控件？"></a>什么是angular表单控件？</h2><ul>
+<li>angular增强了常见的表单控件（如 url email date number），为其增加了一些默认的检测行为。比如input type为email类型时，输入的值不带有@符会默认为错误格式。<h2 id="几个常见的表单指令"><a href="#几个常见的表单指令" class="headerlink" title="几个常见的表单指令"></a>几个常见的表单指令</h2></li>
 </ul>
-</li>
-</ul>
+<ol>
+<li>required 同ng-required  必填项</li>
+<li>ng-maxlength 控制字符最大长度</li>
+<li>ng-minlength 控制字符最小长度</li>
+<li><p>ng-pattern  传入正则，控制输入<br>5.ng-trim:false 不去除首尾空格 (url email data number都有内置正则匹配)</p>
+<h2 id="几个常见的表单属性"><a href="#几个常见的表单属性" class="headerlink" title="几个常见的表单属性"></a>几个常见的表单属性</h2><p>刚才介绍的表单指令需要绑定在表单元素上，由事件触发。在触发时，他们会改变与其对应的表单属性。这些属性可以用在诸如ng-show这样的指令上。</p>
+<ol>
+<li>$pristine 文本框未发生任何变化时为true。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> //注意取得相应表单属性需要表单控件有name属性</div><div class="line">&lt;form name=&quot;myForm&quot;&gt;</div><div class="line">	&lt;input type=&quot;text&quot; name=&quot;myText&quot; /&gt;</div><div class="line">	&lt;div ng-show=&quot;myForm.myText.$pristine&quot; class=&apos;alert alert-danger&apos;&gt;</div><div class="line">    	请输入</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>$dirty 文本框发生变化时的属性</li>
+<li>$invalid 验证失败时为true的属性</li>
+<li>$valid 验证成功时为true的属性</li>
+<li>$error 是一个对象，存储前面几个表单指令验证失败对应的属性。例：required项没填，则’表单name’.’组件name’.$error.required==true.<br>-同样的还有$error.maxlength $error.minlength $error.pattern $error.trim</li>
+</ol>
 </li>
 </ol>
+<p>##表单属性对应的样式<br> $pristine $dirty $valid $invalid都有对应的样式ng-pristine ng-dirty ng-valid ng-invalid样式，当相应的属性被触发发生改变，对应的样式也会被触发</p>
+<p>###再次提醒表单元素的属性都保存在 ‘表单name’.’组件name’下</p>
 
       
     </div>
@@ -310,18 +279,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/08/23/我的理解2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          angular————方法
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/08/23/angular知识总结/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">angular————概论 指令 表达式</div>
+    <a href="/2016/08/29/angular——单页面路由/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">angular——单页面路由</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -356,7 +316,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="我的理解3" data-title="angular————过滤器" data-url="https://betasu.github.io/2016/08/23/我的理解3/"></div>
+	<div class="ds-thread" data-thread-key="angular——表单控件" data-title="angular——表单控件" data-url="https://betasu.github.io/2016/08/30/angular——表单控件/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

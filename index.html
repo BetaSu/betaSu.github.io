@@ -74,7 +74,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -190,6 +190,81 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-angular——表单控件" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/30/angular——表单控件/" class="article-date">
+  	<time datetime="2016-08-30T08:09:26.000Z" itemprop="datePublished">2016-08-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/30/angular——表单控件/">angular——表单控件</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="什么是angular表单控件？"><a href="#什么是angular表单控件？" class="headerlink" title="什么是angular表单控件？"></a>什么是angular表单控件？</h2><ul>
+<li>angular增强了常见的表单控件（如 url email date number），为其增加了一些默认的检测行为。比如input type为email类型时，输入的值不带有@符会默认为错误格式。<h2 id="几个常见的表单指令"><a href="#几个常见的表单指令" class="headerlink" title="几个常见的表单指令"></a>几个常见的表单指令</h2></li>
+</ul>
+<ol>
+<li>required 同ng-required  必填项</li>
+<li>ng-maxlength 控制字符最大长度</li>
+<li>ng-minlength 控制字符最小长度</li>
+<li><p>ng-pattern  传入正则，控制输入<br>5.ng-trim:false 不去除首尾空格 (url email data number都有内置正则匹配)</p>
+<h2 id="几个常见的表单属性"><a href="#几个常见的表单属性" class="headerlink" title="几个常见的表单属性"></a>几个常见的表单属性</h2><p>刚才介绍的表单指令需要绑定在表单元素上，由事件触发。在触发时，他们会改变与其对应的表单属性。这些属性可以用在诸如ng-show这样的指令上。</p>
+<ol>
+<li>$pristine 文本框未发生任何变化时为true。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> //注意取得相应表单属性需要表单控件有name属性</div><div class="line">&lt;form name=&quot;myForm&quot;&gt;</div><div class="line">	&lt;input type=&quot;text&quot; name=&quot;myText&quot; /&gt;</div><div class="line">	&lt;div ng-show=&quot;myForm.myText.$pristine&quot; class=&apos;alert alert-danger&apos;&gt;</div><div class="line">    	请输入</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure>
+<ol>
+<li>$dirty 文本框发生变化时的属性</li>
+<li>$invalid 验证失败时为true的属性</li>
+<li>$valid 验证成功时为true的属性</li>
+<li>$error 是一个对象，存储前面几个表单指令验证失败对应的属性。例：required项没填，则’表单name’.’组件name’.$error.required==true.<br>-同样的还有$error.maxlength $error.minlength $error.pattern $error.trim</li>
+</ol>
+</li>
+</ol>
+<p>##表单属性对应的样式<br> $pristine $dirty $valid $invalid都有对应的样式ng-pristine ng-dirty ng-valid ng-invalid样式，当相应的属性被触发发生改变，对应的样式也会被触发</p>
+<p>###再次提醒表单元素的属性都保存在 ‘表单name’.’组件name’下</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-angular——单页面路由" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -954,93 +1029,6 @@
 </li>
 </ol>
 <h3 id="完整实现代码"><a href="#完整实现代码" class="headerlink" title="完整实现代码:"></a>完整实现代码:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot; ng-app=&quot;myApp&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;ng-model双向绑定的自定义模板实现&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;input type=&quot;text&quot; my-model=&quot;value&quot;&gt;&#123;&#123;value&#125;&#125;</div><div class="line">&lt;script src=&quot;angular.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">    myApp.directive(&apos;myModel&apos;,function  () &#123;</div><div class="line">        return &#123;</div><div class="line">            link:function  (scope,element,attrs) &#123;</div><div class="line">                element.on(&apos;keyup&apos;,function  () &#123;</div><div class="line">                    scope[attrs[&apos;myModel&apos;]]=element.val();</div><div class="line">                    scope.$apply();</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-myblog" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/21/myblog/" class="article-date">
-  	<time datetime="2016-08-21T02:55:10.000Z" itemprop="datePublished">2016-08-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/21/myblog/">angular 自定义指令的配置方法</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="angular-自定义指令的配置方法"><a href="#angular-自定义指令的配置方法" class="headerlink" title="angular 自定义指令的配置方法"></a>angular 自定义指令的配置方法</h2><h3 id="自定义模板的作用"><a href="#自定义模板的作用" class="headerlink" title="自定义模板的作用"></a>自定义模板的作用</h3><p>封装好需要的方法方便使用</p>
-<h3 id="配置属性及用途简介"><a href="#配置属性及用途简介" class="headerlink" title="配置属性及用途简介"></a>配置属性及用途简介</h3><ol>
-<li><p>template:产生一个模板</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">template:&apos;&lt;p&gt;我的模板&lt;/p&gt;&apos;</div></pre></td></tr></table></figure>
-</li>
-<li><p>templateUrl:引入一个外部模板</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">templateUrl:&apos;url.html&apos;</div></pre></td></tr></table></figure>
-</li>
-<li><p>scope:boolean或对象  定义该模板是否产生自己的作用域，如果不定义则为false。如果没有形成自己的作用域，该模板的作用域为父级作用域</p>
-</li>
-<li>replace:boolean  定义该模板是否替换原有DOM结构</li>
-<li><p>restrict:’ECMA’ 定义模板可以使用的方式</p>
-<ul>
-<li><p>E:element 作为元素标签调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;mytemplate&gt;&lt;/mytemplate&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>C：class 作为样式类名调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;mytemplate&quot;&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>M：comment 作为注释使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!-- directive:mytemplate --&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>A：attribute 作为属性名调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div mytemplate&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>transclude 保存原有标签内的内容，与ng-transclude联合使用 如：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;我是原始DOM结构&lt;span ng-transclude&gt;我是会保留下来的部分&lt;/span&gt;&lt;/p&gt;</div></pre></td></tr></table></figure>
-<p> 其中带有ng-transclude属性的span标签下的内容会保留<br> ps：ng-transclude会形成作用域</p>
-</li>
-<li><p>link 实现该模板作用域与模板属性、模板DOM元素间的链接，用以封装方法</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/*</div><div class="line">* @param scope 当前模板作用域，如果当前模板没有形成作用域，会直接找父级作用域</div><div class="line">* @param element 当前自定义指令所在的DOM元素，是一个jQ对象，angular内置轻量级jQ，也就是jqLite</div><div class="line">* @param attrs 自定义指令所在的DOM元素上的属性存储在attrs对象中</div><div class="line">*/</div><div class="line">link:function  (scope,element,attrs) &#123;      </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="配置选项-代码实例"><a href="#配置选项-代码实例" class="headerlink" title="配置选项 代码实例"></a>配置选项 代码实例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">   myApp.directive(&apos;mytemplate&apos;,function  () &#123;</div><div class="line">       //定义一个指令,命名是驼峰命名法，使用时用-分割，将大写转为小写</div><div class="line">       return &#123;</div><div class="line">           //返回值是对象</div><div class="line">           template:&apos;&lt;p&gt;我的模板&lt;span ng-transclude&gt;&lt;/span&gt;&lt;/p&gt;&apos;,</div><div class="line"></div><div class="line">           //或者引入外界模板</div><div class="line">           //templateUrl:&apos;url.html&apos;,</div><div class="line"></div><div class="line">           //替换掉原有DOM结构</div><div class="line">           replace:true,</div><div class="line"></div><div class="line">           //定义指令可以用的位置,默认：&apos;EA&apos;</div><div class="line">           restrict:&apos;ECMA&apos;,</div><div class="line"></div><div class="line">           //启用transclude</div><div class="line">           transclude:true,</div><div class="line"></div><div class="line">	//模板会形成自己作用域</div><div class="line">           scope:true,</div><div class="line"></div><div class="line">           link:function (scope,element,attrs) &#123;</div><div class="line">           	</div><div class="line">           &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">   &#125;)</div></pre></td></tr></table></figure>
       
     </div>
     
