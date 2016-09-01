@@ -74,7 +74,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>A propos</li>
 						
 					</ul>
 				</div>
@@ -190,6 +190,73 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-angular——多页面路由" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/01/angular——多页面路由/" class="article-date">
+  	<time datetime="2016-09-01T01:03:23.000Z" itemprop="datePublished">2016-09-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/01/angular——多页面路由/">angular——多页面路由</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="多页面路由与单页面路由的区别"><a href="#多页面路由与单页面路由的区别" class="headerlink" title="多页面路由与单页面路由的区别"></a>多页面路由与单页面路由的区别</h2><p>之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。</p>
+<h2 id="多页面路由引入"><a href="#多页面路由引入" class="headerlink" title="多页面路由引入"></a>多页面路由引入</h2><ol>
+<li>引入angular-ui-router.js文件</li>
+<li><p>模块中注入ui.router</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;app&apos;,[&apos;ui.router&apos;]);</div></pre></td></tr></table></figure>
+</li>
+<li><p>配置文件中注入$stateProvider和$urlRouterProvider,前者实现多页面路由，后者实现单页面路由中otherwise的功能</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.config(function ($stateProvider,$urlRouterProvider) &#123;&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>单页路由配置</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">//配置未定义的路径</div><div class="line">$urlRouterProvider.otherwise(&apos;/&apos;);</div><div class="line">//配置首页,状态为index</div><div class="line"> $stateProvider.state(&apos;index&apos;,&#123;</div><div class="line">           url:&apos;&apos;,</div><div class="line">           templateUrl:&apos;./index.html&apos;</div><div class="line">       &#125;).state(&apos;about&apos;,&#123;</div><div class="line">           url:&apos;/about&apos;,</div><div class="line">           templateUrl:&apos;./about.html&apos;,</div><div class="line">           controller:function  ($scope) &#123;</div><div class="line">               $scope.books=[&#123;id:1,name:&apos;王子与玫瑰&apos;&#125;,&#123;id:2,name:&apos;夜莺与玫瑰&apos;&#125;,&#123;id:3,name:&apos;王尔德&apos;&#125;]</div><div class="line">           &#125;,</div><div class="line">           //配置中注入的服务</div><div class="line">           resolve:&#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>多页面路由配置</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-angular——表单控件" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -956,78 +1023,6 @@
 <li>链接阶段 ： link实现与作用域的绑定，如果当前没有形成在自己的作用域，scope指向上一级作用域</li>
 </ul>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-angular ng-model实现" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/23/angular ng-model实现/" class="article-date">
-  	<time datetime="2016-08-23T02:55:10.000Z" itemprop="datePublished">2016-08-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/23/angular ng-model实现/">angular ng-model双向绑定的自定义模板实现</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="angular-ng-model双向绑定的自定义模板实现"><a href="#angular-ng-model双向绑定的自定义模板实现" class="headerlink" title="angular ng-model双向绑定的自定义模板实现"></a>angular ng-model双向绑定的自定义模板实现</h2><h2 id="流程："><a href="#流程：" class="headerlink" title="流程："></a>流程：</h2><ol>
-<li><p>定义模块</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var myApp=angular.module(&apos;myApp&apos;,[]);</div></pre></td></tr></table></figure>
-</li>
-<li><p>调用directive 自定义模板方法</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">myApp.directive(&apos;myModel&apos;,function () &#123;</div><div class="line">	return &#123;</div><div class="line">		link:function (scope,element,attrs) &#123;</div><div class="line"></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>link内部实现，第一步拿到input的内容，因为element是jQ对象，</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">element.val()</div></pre></td></tr></table></figure>
-</li>
-<li><p>link内部实现，第二步拿到my-model对应的变量名</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">attrs[&apos;my-model&apos;]</div></pre></td></tr></table></figure>
-</li>
-<li><p>link内部实现，在scope上定义对象</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scope[attrs[&apos;my-model&apos;]]=element.val();</div></pre></td></tr></table></figure>
-</li>
-<li><p>强制刷新，实现数据双向绑定</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scope.$apply();</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="完整实现代码"><a href="#完整实现代码" class="headerlink" title="完整实现代码:"></a>完整实现代码:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot; ng-app=&quot;myApp&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;ng-model双向绑定的自定义模板实现&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;input type=&quot;text&quot; my-model=&quot;value&quot;&gt;&#123;&#123;value&#125;&#125;</div><div class="line">&lt;script src=&quot;angular.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">    myApp.directive(&apos;myModel&apos;,function  () &#123;</div><div class="line">        return &#123;</div><div class="line">            link:function  (scope,element,attrs) &#123;</div><div class="line">                element.on(&apos;keyup&apos;,function  () &#123;</div><div class="line">                    scope[attrs[&apos;myModel&apos;]]=element.val();</div><div class="line">                    scope.$apply();</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
       
     </div>
     
