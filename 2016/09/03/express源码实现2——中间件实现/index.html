@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>express源码实现2——中间件实现 | 卡卡卡颂的blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="上一篇内容 实现express中最主要的方法——创建服务器，监听端口，接收各种前端请求。
+中间件是什么
+中间件就是在路由过程中起过渡作用，用以检查权限，检查是否合法，最后再进入我们真正的路由
+中间件有next方法，可以决定是否继续执行 如果调用next方法表示继续执行
+中间件也可以匹配路径 只要路径开头匹配即可,默认是/等同于不写。比如中间件的/add可以匹配请求路径的/add/user
+中间件中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="express源码实现2——中间件实现">
+<meta property="og:url" content="https://betasu.github.io/2016/09/03/express源码实现2——中间件实现/index.html">
+<meta property="og:site_name" content="卡卡卡颂的blog">
+<meta property="og:description" content="上一篇内容 实现express中最主要的方法——创建服务器，监听端口，接收各种前端请求。
+中间件是什么
+中间件就是在路由过程中起过渡作用，用以检查权限，检查是否合法，最后再进入我们真正的路由
+中间件有next方法，可以决定是否继续执行 如果调用next方法表示继续执行
+中间件也可以匹配路径 只要路径开头匹配即可,默认是/等同于不写。比如中间件的/add可以匹配请求路径的/add/user
+中间件中">
+<meta property="og:updated_time" content="2016-09-03T14:18:36.747Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="express源码实现2——中间件实现">
+<meta name="twitter:description" content="上一篇内容 实现express中最主要的方法——创建服务器，监听端口，接收各种前端请求。
+中间件是什么
+中间件就是在路由过程中起过渡作用，用以检查权限，检查是否合法，最后再进入我们真正的路由
+中间件有next方法，可以决定是否继续执行 如果调用next方法表示继续执行
+中间件也可以匹配路径 只要路径开头匹配即可,默认是/等同于不写。比如中间件的/add可以匹配请求路径的/add/user
+中间件中">
+  
+    <link rel="alternative" href="/atom.xml" title="卡卡卡颂的blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="//favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="0" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">BetaSu</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/archives">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/BetaSu" title="github">github</a>
+					        
+								<a class="rss" target="_blank" href="#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/jing-cang-tian" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">BetaSu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img lazy-src="0" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">BetaSu</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/archives">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/BetaSu" title="github">github</a>
+			        
+						<a class="rss" target="_blank" href="#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/jing-cang-tian" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-express源码实现2——中间件实现" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/03/express源码实现2——中间件实现/" class="article-date">
+  	<time datetime="2016-09-03T13:05:00.000Z" itemprop="datePublished">2016-09-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      express源码实现2——中间件实现
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="上一篇内容"><a href="#上一篇内容" class="headerlink" title="上一篇内容"></a>上一篇内容</h2><p> 实现express中最主要的方法——创建服务器，监听端口，接收各种前端请求。</p>
+<h2 id="中间件是什么"><a href="#中间件是什么" class="headerlink" title="中间件是什么"></a>中间件是什么</h2><ol>
+<li>中间件就是在路由过程中起过渡作用，用以检查权限，检查是否合法，最后再进入我们真正的路由</li>
+<li>中间件有next方法，可以决定是否继续执行 如果调用next方法表示继续执行</li>
+<li>中间件也可以匹配路径 只要路径开头匹配即可,默认是/等同于不写。比如中间件的/add可以匹配请求路径的/add/user</li>
+<li>中间件中的req和res 和路由中的是同一个</li>
+<li>一个页面中可以有多个中间件<h2 id="本篇文章的目的"><a href="#本篇文章的目的" class="headerlink" title="本篇文章的目的"></a>本篇文章的目的</h2></li>
+</ol>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
+<li>分析express调用方法<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var express=require(&apos;express&apos;);</div><div class="line">var app=express();</div><div class="line">//监听8080端口，启动服务器</div><div class="line">app.listen(8080);</div><div class="line">app.get(&apos;/&apos;,function (req,res) &#123;</div><div class="line">	//代码</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>从调用方法来看，express是一个函数，我们需要取得的是express的返回值。该返回值上的listen方法启动服务器并监听端口。该返回值有get、post、put等方法用来接收相应方法的请求。</p>
+<ul>
+<li>代码实现<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">//1.定义express函数</div><div class="line">var express=function() &#123;</div><div class="line">	//5.定义app函数，因为被作为createServer()的回调函数传入,所以接收req、res两个参数</div><div class="line">	var app=function (req,res) &#123;&#125;</div><div class="line"></div><div class="line">	//6.路由路由池，存放各种请求，用以在适当时候加载</div><div class="line">	app.routes=[];</div><div class="line"></div><div class="line">	//7.定义各种请求方法对应的函数</div><div class="line">	var methods=[&apos;get&apos;,&apos;post&apos;,&apos;put&apos;,&apos;options&apos;,&apos;delete&apos;,&apos;all&apos;];</div><div class="line">	methods.forEach(function (method) &#123;</div><div class="line">		//各种方法的函数接收两个参数  路径 与回调函数</div><div class="line">		app[method]=function (path,fn) &#123;</div><div class="line">			//将方法，路径与回调函数全部放入方发池</div><div class="line">			var config=&#123;method:method,path:path,fn:fn&#125;;</div><div class="line">			routes.push(config);</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">	</div><div class="line">	//4.定义返回值上的listen方法</div><div class="line">	app.listen=function (port) &#123;</div><div class="line">		//启动服务器，监听端口，返回值作为createServer()的回调函数传入</div><div class="line">		require(&apos;http&apos;).createServer(app).listen(port);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	//3.返回方法</div><div class="line">	return app;</div><div class="line">&#125;</div><div class="line">//2.暴露接口</div><div class="line">module.exports=express;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
+<li>当请求到来时将请求与路由池中保存的请求匹配，匹配上就执行相应回调函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">//第5步定义的函数</div><div class="line">var app=function (req,res) &#123;</div><div class="line">	//取得请求中的方法名和路径</div><div class="line">	var method=req.method;</div><div class="line">	var urlObj=require(&apos;url&apos;).parse(req.url,true);</div><div class="line">	var pathname=urlObj.pathname;</div><div class="line"></div><div class="line">	//将请求的方法名与路径与路由池中保存的匹配</div><div class="line">	var route=app.routes.find(function (route) &#123;</div><div class="line">		//返回路径与方法都匹配项，其中method==&apos;all&apos;能匹配所有方法,path==&quot;*&quot;能匹配所有路径</div><div class="line">		return (route.method==method||route.method==&quot;all&quot;)&amp;&amp;(route.path==pathname||route.path==&quot;*&quot;)</div><div class="line">	&#125;)</div><div class="line">	//如果匹配到，就执行该路由的回调函数，传入req和res</div><div class="line">	if (route) &#123;</div><div class="line">	route.fn(req,res);</div><div class="line">	&#125; else &#123;</div><div class="line">		//未匹配到则在页面上显示相应信息</div><div class="line">		res.end(`Cannot $&#123;method&#125; $&#123;pathname&#125;`)</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/09/03/express源码实现—1—基础实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">express源码实现1——基础实现</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="express源码实现2——中间件实现" data-title="express源码实现2——中间件实现" data-url="https://betasu.github.io/2016/09/03/express源码实现2——中间件实现/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 BetaSu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: /
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

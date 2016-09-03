@@ -74,7 +74,7 @@
 						<li>Links</li>
 						
 						
-						<li>A propos</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -190,6 +190,248 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-我的理解2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/23/我的理解2/" class="article-date">
+  	<time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/23/我的理解2/">angular————方法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>方法</p>
+<ul>
+<li><p>方法包括内置方法、模块的方法</p>
+<ul>
+<li>常见内置方法</li>
+</ul>
+<ol>
+<li><p>大小写转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.uppercase(str)</div><div class="line">angular.lowercase(str)</div></pre></td></tr></table></figure>
+</li>
+<li><p>全等比较    相当于js中的===  坑：NaN===NaN //true</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.equals(value1,value2)</div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON转换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.toJson()  //相当于JSON.stringify</div><div class="line">angular.fromJson()  //相当于JSON.parse</div></pre></td></tr></table></figure>
+</li>
+<li><p>把value2(或其后的参数)中的值添加到value1中，value1改变，其他值不变</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.extend(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>value1的值覆盖value2的值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.copy(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>遍历 参数3 改变this的指向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.forEach(item,index,参数3)</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数1 改变this指向 参数2 函数体 参数3往后是传参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.bind()</div></pre></td></tr></table></figure>
+</li>
+<li><p>类型检测</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">angular.isArray();</div><div class="line">angular.isObject();</div><div class="line">angular.isNumber();</div></pre></td></tr></table></figure>
+</li>
+<li><p>原生对象转化为jQuery对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.element();</div></pre></td></tr></table></figure>
+</li>
+<li><p>生成模块 参数1 模块名称 参数2 依赖模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;name&apos;,[])</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>模块方法</p>
+<ul>
+<li>模块即angular调用module方法生成的模块</li>
+<li>模块拥有自己的作用域</li>
+<li>常见模块方法</li>
+</ul>
+<ol>
+<li>生成控制器  产生自己的作用域</li>
+</ol>
+<ul>
+<li>参数1 模块名</li>
+<li>参数2 数组 索引1为’$scope’ 索引2至n为导入的服务,最后一个索引为定义模块的函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.module(&apos;ctrl&apos;,[&apos;$scope&apos;,&apos;name&apos;,function (s,n) &#123;&#125;])</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
+<li>生成自定义过滤器 方法见过滤器篇</li>
+</ol>
+</li>
+<li><p>$scope作用域方法</p>
+<ol>
+<li>$apply :强制刷新，调用$rootScope.$digest 从根作用域开始进行脏值查询</li>
+<li>$watch :监听数据改变</li>
+<li>$digest :强制刷新，从当前作用域到子作用域</li>
+<li>$emit :发射事件 基于事件驱动</li>
+<li>$broadcast: 广播事件 基于事件驱动</li>
+<li>$on :监听事件</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-angular知识总结" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/23/angular知识总结/" class="article-date">
+  	<time datetime="2016-08-23T13:03:01.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/23/angular知识总结/">angular————概论 指令 表达式</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="AngularJs是什么"><a href="#AngularJs是什么" class="headerlink" title="AngularJs是什么"></a>AngularJs是什么</h2><ul>
+<li>AngularJs是一款MVVM结构的前端框架。他分为M-model（数据层），V-view（视图层），VM-viewModel（视图模型层）。其中V与VM实现了双向数据绑定（具体的实现方法是通过内部的$digest也就是脏值查询实现的）。VM与M实现数据的交互</li>
+</ul>
+<h2 id="AngularJs能做什么"><a href="#AngularJs能做什么" class="headerlink" title="AngularJs能做什么"></a>AngularJs能做什么</h2><ul>
+<li>AngularJs通过内部的各种功能实现了在不操作DOM树（当然内部封装指令时会调用DOM方法）的情况下根据需要实时渲染前端页面、与后端交互。并且实现了模块化。是一款在不断的使用中可以不断健壮的框架。</li>
+</ul>
+<h2 id="AngularJs怎么做"><a href="#AngularJs怎么做" class="headerlink" title="AngularJs怎么做"></a>AngularJs怎么做</h2><ul>
+<li><p>Angular通过各种内部的功能组合实现前端页面实时渲染。具体如下</p>
+<ol>
+<li><p>指令</p>
+<ul>
+<li>凡是以ng-或者data-ng-为前缀的都是angularJS的内置指令</li>
+<li>指令分为内置指令和自定义指令，自定义指令通过mod.directive()方法产生</li>
+<li><p>指令有4种调用方法，即“ECMA”。</p>
+<ul>
+<li><p>E-element 作为元素标签调用 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;abcd&gt;&lt;/abcd&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>C-class 作为类调用 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;abcd&quot;&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>M-comment 作为注释调用,指令内的replace:true，且注释前后有2个空格</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!-- directive:zfpx --&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>A-attribute 作为元素属性调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div abcd&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>ng-app :angular起始位置，会形成$scope根目录</li>
+<li>ng-class :两种用法 ‘{true:”c1”,false:”c2”}[flag]’  ‘{c1:flag1,c2:flag2}’</li>
+<li>ng-init :初始化数据</li>
+<li>ng-if :控制元素是否存在，会形成自己的作用域，如果不存在内部作用域也会销毁</li>
+<li>ng-show :控制元素显示隐藏，即使隐藏了内部指令还会执行</li>
+<li>ng-hide :与show相反</li>
+<li>ng-include :引入html片段</li>
+<li>ng-model :用在表单元素上，存储value值，实现数据双向绑定</li>
+<li>ng-repeat :迭代DOM元素，会形成自己的作用域。当遍历重复数据会报错， track by $index解决</li>
+<li>ng-style :动态增加行内样式</li>
+<li>ng-src</li>
+<li>ng-href</li>
+<li>ng-change</li>
+<li>ng-model-options</li>
+<li>ng-click</li>
+<li>ng-bind </li>
+<li>ng-bind-template</li>
+<li>ng-cloak :解决闪烁,需要在加载的时候给一个隐藏样式</li>
+</ol>
+</li>
+<li><p>表达式</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;&#125;&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>实现DOM中的数据与作用域$scope数据的绑定</li>
+<li>可以放文字，变量，运算符，其中变量可以存储字符串、数组、对象等</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p>##Angular 内部运行的三个阶段</p>
+<ul>
+<li>加载阶段 ：引入angular开始到对指令解析前</li>
+<li>编译阶段 ： template replac transclude compile</li>
+<li>链接阶段 ： link实现与作用域的绑定，如果当前没有形成在自己的作用域，scope指向上一级作用域</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-angular ng-model实现" class="article article-type-post" itemscope itemprop="blogPost">
   
