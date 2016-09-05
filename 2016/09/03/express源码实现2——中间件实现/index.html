@@ -22,7 +22,7 @@
 中间件有next方法，可以决定是否继续执行 如果调用next方法表示继续执行
 中间件也可以匹配路径 只要路径开头匹配即可,默认是/等同于不写。比如中间件的/add可以匹配请求路径的/add/user
 中间件中">
-<meta property="og:updated_time" content="2016-09-03T14:18:36.747Z">
+<meta property="og:updated_time" content="2016-09-04T02:12:42.027Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="express源码实现2——中间件实现">
 <meta name="twitter:description" content="上一篇内容 实现express中最主要的方法——创建服务器，监听端口，接收各种前端请求。
@@ -93,7 +93,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -247,19 +247,14 @@
 <li>中间件有next方法，可以决定是否继续执行 如果调用next方法表示继续执行</li>
 <li>中间件也可以匹配路径 只要路径开头匹配即可,默认是/等同于不写。比如中间件的/add可以匹配请求路径的/add/user</li>
 <li>中间件中的req和res 和路由中的是同一个</li>
-<li>一个页面中可以有多个中间件<h2 id="本篇文章的目的"><a href="#本篇文章的目的" class="headerlink" title="本篇文章的目的"></a>本篇文章的目的</h2></li>
+<li>一个页面中可以有多个中间件<h2 id="本篇文章的目的"><a href="#本篇文章的目的" class="headerlink" title="本篇文章的目的"></a>本篇文章的目的</h2>实现express中间件的源码<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2>之前路由的判断原理是将前端发送来的每个请求与路由池里保存的请求匹配，匹配上就执行相应回调函数。现在加入中间件，由于中间件不调用next()方法会阻塞接下来中间件/路由的执行，所以采用的原理是：讲中间件放入路由池，每当接收到前端请求，依次遍历路由池中的值，判断是中间件还是路由，分别处理。</li>
 </ol>
 <h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
-<li>分析express调用方法<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var express=require(&apos;express&apos;);</div><div class="line">var app=express();</div><div class="line">//监听8080端口，启动服务器</div><div class="line">app.listen(8080);</div><div class="line">app.get(&apos;/&apos;,function (req,res) &#123;</div><div class="line">	//代码</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<li><p>定义中间件函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">app.use=function (path,fn) &#123;</div><div class="line">	//当只传递回调函数不传递路径时</div><div class="line">	if (typeof fn !=&apos;function&apos;) &#123;</div><div class="line">		fn=path;</div><div class="line">		path=&apos;/&apos;;</div><div class="line">	&#125;</div><div class="line">	var config=&#123;method:&apos;middleware&apos;,path:path,fn:fn&#125;</div><div class="line">	app.routes.push(config);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
-</ol>
-<p>从调用方法来看，express是一个函数，我们需要取得的是express的返回值。该返回值上的listen方法启动服务器并监听端口。该返回值有get、post、put等方法用来接收相应方法的请求。</p>
-<ul>
-<li>代码实现<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">//1.定义express函数</div><div class="line">var express=function() &#123;</div><div class="line">	//5.定义app函数，因为被作为createServer()的回调函数传入,所以接收req、res两个参数</div><div class="line">	var app=function (req,res) &#123;&#125;</div><div class="line"></div><div class="line">	//6.路由路由池，存放各种请求，用以在适当时候加载</div><div class="line">	app.routes=[];</div><div class="line"></div><div class="line">	//7.定义各种请求方法对应的函数</div><div class="line">	var methods=[&apos;get&apos;,&apos;post&apos;,&apos;put&apos;,&apos;options&apos;,&apos;delete&apos;,&apos;all&apos;];</div><div class="line">	methods.forEach(function (method) &#123;</div><div class="line">		//各种方法的函数接收两个参数  路径 与回调函数</div><div class="line">		app[method]=function (path,fn) &#123;</div><div class="line">			//将方法，路径与回调函数全部放入方发池</div><div class="line">			var config=&#123;method:method,path:path,fn:fn&#125;;</div><div class="line">			routes.push(config);</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">	</div><div class="line">	//4.定义返回值上的listen方法</div><div class="line">	app.listen=function (port) &#123;</div><div class="line">		//启动服务器，监听端口，返回值作为createServer()的回调函数传入</div><div class="line">		require(&apos;http&apos;).createServer(app).listen(port);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	//3.返回方法</div><div class="line">	return app;</div><div class="line">&#125;</div><div class="line">//2.暴露接口</div><div class="line">module.exports=express;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<ol>
-<li>当请求到来时将请求与路由池中保存的请求匹配，匹配上就执行相应回调函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">//第5步定义的函数</div><div class="line">var app=function (req,res) &#123;</div><div class="line">	//取得请求中的方法名和路径</div><div class="line">	var method=req.method;</div><div class="line">	var urlObj=require(&apos;url&apos;).parse(req.url,true);</div><div class="line">	var pathname=urlObj.pathname;</div><div class="line"></div><div class="line">	//将请求的方法名与路径与路由池中保存的匹配</div><div class="line">	var route=app.routes.find(function (route) &#123;</div><div class="line">		//返回路径与方法都匹配项，其中method==&apos;all&apos;能匹配所有方法,path==&quot;*&quot;能匹配所有路径</div><div class="line">		return (route.method==method||route.method==&quot;all&quot;)&amp;&amp;(route.path==pathname||route.path==&quot;*&quot;)</div><div class="line">	&#125;)</div><div class="line">	//如果匹配到，就执行该路由的回调函数，传入req和res</div><div class="line">	if (route) &#123;</div><div class="line">	route.fn(req,res);</div><div class="line">	&#125; else &#123;</div><div class="line">		//未匹配到则在页面上显示相应信息</div><div class="line">		res.end(`Cannot $&#123;method&#125; $&#123;pathname&#125;`)</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+<li><p>定义中间件的next方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">function express () &#123;</div><div class="line">	//首先在express函数上部定义一个索引</div><div class="line">	var index=0;</div><div class="line">	//执行一次next</div><div class="line">	next();</div><div class="line">	function next () &#123;</div><div class="line">		//判断是否遍历完都没有匹配到</div><div class="line">		if (index&gt;=app.routes.length) &#123;</div><div class="line">			res.end(`Cannot $&#123;method&#125; $&#123;pathname&#125;`)</div><div class="line">		&#125;</div><div class="line">		//遍历到的路由项</div><div class="line">		var route=app.routes[index++];</div><div class="line">		//如果是中间件	</div><div class="line">		if (route.method==&apos;middleware&apos;) &#123;</div><div class="line">			/**判断路径是否匹配</div><div class="line">			*第一项匹配所有路径</div><div class="line">			*第二项与请求路径完全匹配</div><div class="line">			*第三项模糊匹配</div><div class="line">			**/</div><div class="line">			if (route.path==&apos;/&apos;||route.path==pathname||pathname.startsWith(route.path+&apos;/&apos;)) &#123;</div><div class="line">				//匹配成功，执行中间件回调函数</div><div class="line">				route.fn(req,res,next);</div><div class="line">			&#125; else &#123;</div><div class="line">				//没匹配到，进行下一次遍历</div><div class="line">				next();</div><div class="line">			&#125;</div><div class="line">		//如果是路由	</div><div class="line">		&#125; else &#123;</div><div class="line">			//判断路由是否匹配</div><div class="line">			if ((route.method==method||route.method==&apos;all&apos;)&amp;&amp;(route.path==pathname||route.pathname==&apos;*&apos;)) &#123;</div><div class="line">				//路由匹配成功</div><div class="line">				route.fn(req,res);</div><div class="line">			&#125; else &#123;</div><div class="line">				//没匹配到，进行下次遍历</div><div class="line">				next();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
 </ol>
 
       
@@ -269,6 +264,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2016/09/05/express源码实现——错误中间件及params/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          express源码实现——错误中间件及params
+        
+      </div>
+    </a>
   
   
     <a href="/2016/09/03/express源码实现—1—基础实现/" id="article-nav-older" class="article-nav-link-wrap">

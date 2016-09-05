@@ -4,48 +4,63 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>angular————过滤器 | 卡卡卡颂的blog</title>
+  <title>express源码实现——错误中间件及params | 卡卡卡颂的blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="过滤器
+  <meta name="description" content="上一篇内容 实现express中间件的源码
+本篇文章的目的 实现错误中间件及params
+思路
+错误中间件思路:
 
-过滤器的作用是输出经过过滤后的数据
-过滤器分为内置过滤器与自定义过滤器
-过滤器有3种使用方法
 
-在表达式中使用 其中|是分隔符 :后面进行传参
-1&amp;#123;&amp;#123;name|currency:&amp;apos;￥&amp;apos;&amp;#125;&amp;#125;
+每次调用next方法，判断是否传递err参数。
+如果err存在，则查询当前路由池中的索引是否为错误中间件。
+如果是错误中间件，执行回调函数。
+如果不是错误中间件，继续调用next并传递错误信息。
 
-控制器中注入$filter服务
-1234mod.controller(&amp;apos;ctrl&amp;apos;,function  ($scop">
+
+params思路:  
+
+
+判断请求路径是否含查询参数，如果包含将参数名提取出来并">
 <meta property="og:type" content="article">
-<meta property="og:title" content="angular————过滤器">
-<meta property="og:url" content="https://betasu.github.io/2016/08/23/我的理解3/index.html">
+<meta property="og:title" content="express源码实现——错误中间件及params">
+<meta property="og:url" content="https://betasu.github.io/2016/09/05/express源码实现——错误中间件及params/index.html">
 <meta property="og:site_name" content="卡卡卡颂的blog">
-<meta property="og:description" content="过滤器
+<meta property="og:description" content="上一篇内容 实现express中间件的源码
+本篇文章的目的 实现错误中间件及params
+思路
+错误中间件思路:
 
-过滤器的作用是输出经过过滤后的数据
-过滤器分为内置过滤器与自定义过滤器
-过滤器有3种使用方法
 
-在表达式中使用 其中|是分隔符 :后面进行传参
-1&amp;#123;&amp;#123;name|currency:&amp;apos;￥&amp;apos;&amp;#125;&amp;#125;
+每次调用next方法，判断是否传递err参数。
+如果err存在，则查询当前路由池中的索引是否为错误中间件。
+如果是错误中间件，执行回调函数。
+如果不是错误中间件，继续调用next并传递错误信息。
 
-控制器中注入$filter服务
-1234mod.controller(&amp;apos;ctrl&amp;apos;,function  ($scop">
-<meta property="og:updated_time" content="2016-08-23T14:54:39.576Z">
+
+params思路:  
+
+
+判断请求路径是否含查询参数，如果包含将参数名提取出来并">
+<meta property="og:updated_time" content="2016-09-05T04:11:15.007Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="angular————过滤器">
-<meta name="twitter:description" content="过滤器
+<meta name="twitter:title" content="express源码实现——错误中间件及params">
+<meta name="twitter:description" content="上一篇内容 实现express中间件的源码
+本篇文章的目的 实现错误中间件及params
+思路
+错误中间件思路:
 
-过滤器的作用是输出经过过滤后的数据
-过滤器分为内置过滤器与自定义过滤器
-过滤器有3种使用方法
 
-在表达式中使用 其中|是分隔符 :后面进行传参
-1&amp;#123;&amp;#123;name|currency:&amp;apos;￥&amp;apos;&amp;#125;&amp;#125;
+每次调用next方法，判断是否传递err参数。
+如果err存在，则查询当前路由池中的索引是否为错误中间件。
+如果是错误中间件，执行回调函数。
+如果不是错误中间件，继续调用next并传递错误信息。
 
-控制器中注入$filter服务
-1234mod.controller(&amp;apos;ctrl&amp;apos;,function  ($scop">
+
+params思路:  
+
+
+判断请求路径是否含查询参数，如果包含将参数名提取出来并">
   
     <link rel="alternative" href="/atom.xml" title="卡卡卡颂的blog" type="application/atom+xml">
   
@@ -223,11 +238,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-我的理解3" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-express源码实现——错误中间件及params" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/08/23/我的理解3/" class="article-date">
-  	<time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+      <a href="/2016/09/05/express源码实现——错误中间件及params/" class="article-date">
+  	<time datetime="2016-09-05T02:24:10.000Z" itemprop="datePublished">2016-09-05</time>
 </a>
     </div>
   
@@ -240,7 +255,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      angular————过滤器
+      express源码实现——错误中间件及params
     </h1>
   
 
@@ -256,51 +271,33 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ol>
-<li><p>过滤器</p>
+        <h2 id="上一篇内容"><a href="#上一篇内容" class="headerlink" title="上一篇内容"></a>上一篇内容</h2><p> 实现express中间件的源码</p>
+<h2 id="本篇文章的目的"><a href="#本篇文章的目的" class="headerlink" title="本篇文章的目的"></a>本篇文章的目的</h2><p> 实现错误中间件及params</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ul>
+<li>错误中间件思路:</li>
+</ul>
+<ol>
+<li>每次调用next方法，判断是否传递err参数。</li>
+<li>如果err存在，则查询当前路由池中的索引是否为错误中间件。</li>
+<li>如果是错误中间件，执行回调函数。</li>
+<li>如果不是错误中间件，继续调用next并传递错误信息。</li>
+</ol>
 <ul>
-<li>过滤器的作用是输出经过过滤后的数据</li>
-<li>过滤器分为内置过滤器与自定义过滤器</li>
-<li><p>过滤器有3种使用方法</p>
-<ol>
-<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:&apos;￥&apos;&#125;&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>控制器中注入$filter服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,$filter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=$filter(&apos;uppercase&apos;)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,uppercaseFilter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>常见内置过滤器</p>
-<ol>
-<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
-</li>
-<li><p>uppercase lowercase 大小写过滤器</p>
-</li>
-<li><p>number 限制数字后面小数点位数</p>
-</li>
-<li><p>limitTo 用来限制字符串、数组的长度</p>
-</li>
-<li><p>json 把普通对象转换为JSON对象</p>
-</li>
-<li><p>date 转换时间格式</p>
-</li>
-<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
-<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
-</ol>
-</li>
-<li>如何生成自定义过滤器<ul>
-<li>参数1 过滤器的名字</li>
-<li>参数2 函数(定义过滤器的方法)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//返回前len项为大写的值的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">		// 参数1: input就是要使用该过滤器的数据</div><div class="line">		// 从第二个参数开始就是冒号后面传递的参数</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var a=input.slice(0,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		var b=input.slice(len);</div><div class="line">		return a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">//数组去重的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var newarr=[];</div><div class="line">		for (var i=0;i&lt;input.length;i++) &#123;</div><div class="line">			if (newarr.indexOf(input[i])===-1) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	return newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
+<li>params思路:  </li>
 </ul>
-</li>
-</ul>
-</li>
+<ol>
+<li>判断请求路径是否含查询参数，如果包含将参数名提取出来并将路径转化成一个正则。</li>
+<li>当请求到来时，将储存的正则与请求路径进行匹配。</li>
+<li>如果匹配成功，将保存的参数名与对应的参数值组成对象赋给req。</li>
+<li>如果匹配失败，执行next();<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2></li>
 </ol>
+<ul>
+<li><p>错误中间件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//在next函数中</div><div class="line">if (err) &#123;</div><div class="line">	//判断是否是错误中间件， 依据是错误中间件有4个形参</div><div class="line">	if (route.method==&apos;middleware&apos;&amp;&amp;route.fn.length==4) &#123;</div><div class="line">		route.fn(err,req,res,next);</div><div class="line">	&#125; else &#123;</div><div class="line">		//不是错误中间件，将错误继续传递下去</div><div class="line">		next(err);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>查询参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">//首先在方法对应函数中设置对查询参数的保存</div><div class="line">methods.forEach(function (method) &#123;</div><div class="line">	app[method]=function (path,fn) &#123;</div><div class="line">		var config=&#123;method:method,path:path,fn:fn&#125;;</div><div class="line">	&#125;</div><div class="line">	//如果路径中含查询参数</div><div class="line">	if (path.includes(&apos;:&apos;)) &#123;</div><div class="line">		var params=[];</div><div class="line">		config.path=path.replace(/:([^\/]+)/g,function () &#123;</div><div class="line">			//保存参数值</div><div class="line">			params.push(arguments[1]);</div><div class="line">			//返回一个正则，匹配非/ ,用来在请求中匹配</div><div class="line">			return &apos;([^\/]+)&apos;;</div><div class="line">		&#125;)</div><div class="line">		config.params=params;</div><div class="line">	&#125;</div><div class="line">	app.routes.push(config);</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//在next函数中,判断当前路由是否含查询参数</div><div class="line">if (route.params) &#123;</div><div class="line">	//当前请求与保存的带正则的路由路径匹配</div><div class="line">	var matcher=req.path.match(new RegExp(route.path));</div><div class="line">	//如果匹配上</div><div class="line">	if (matcher) &#123;</div><div class="line">		//创建params对象</div><div class="line">		var obj=&#123;&#125;;</div><div class="line">		route.params.forEach(function (item,index) &#123;</div><div class="line">			obj[item]=matcher[index+1]</div><div class="line">		&#125;)</div><div class="line">		req.params=obj;</div><div class="line">		route.fn(req,res);</div><div class="line">		//没有匹配上</div><div class="line">	&#125; else &#123;</div><div class="line">	next();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ul>
 
       
     </div>
@@ -310,18 +307,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/08/23/我的理解2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          angular————方法
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/08/23/angular知识总结/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">angular————概论 指令 表达式</div>
+    <a href="/2016/09/03/express源码实现2——中间件实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">express源码实现2——中间件实现</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -356,7 +344,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="我的理解3" data-title="angular————过滤器" data-url="https://betasu.github.io/2016/08/23/我的理解3/"></div>
+	<div class="ds-thread" data-thread-key="express源码实现——错误中间件及params" data-title="express源码实现——错误中间件及params" data-url="https://betasu.github.io/2016/09/05/express源码实现——错误中间件及params/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
