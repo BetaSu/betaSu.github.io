@@ -74,7 +74,7 @@
 						<li>Links</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -353,6 +353,103 @@
 
 
   
+    <article id="post-我的理解3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/23/我的理解3/" class="article-date">
+  	<time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/23/我的理解3/">angular————过滤器</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>过滤器</p>
+<ul>
+<li>过滤器的作用是输出经过过滤后的数据</li>
+<li>过滤器分为内置过滤器与自定义过滤器</li>
+<li><p>过滤器有3种使用方法</p>
+<ol>
+<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:&apos;￥&apos;&#125;&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>控制器中注入$filter服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,$filter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=$filter(&apos;uppercase&apos;)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,uppercaseFilter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>常见内置过滤器</p>
+<ol>
+<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
+</li>
+<li><p>uppercase lowercase 大小写过滤器</p>
+</li>
+<li><p>number 限制数字后面小数点位数</p>
+</li>
+<li><p>limitTo 用来限制字符串、数组的长度</p>
+</li>
+<li><p>json 把普通对象转换为JSON对象</p>
+</li>
+<li><p>date 转换时间格式</p>
+</li>
+<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
+<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
+</ol>
+</li>
+<li>如何生成自定义过滤器<ul>
+<li>参数1 过滤器的名字</li>
+<li>参数2 函数(定义过滤器的方法)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//返回前len项为大写的值的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">		// 参数1: input就是要使用该过滤器的数据</div><div class="line">		// 从第二个参数开始就是冒号后面传递的参数</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var a=input.slice(0,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		var b=input.slice(len);</div><div class="line">		return a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">//数组去重的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var newarr=[];</div><div class="line">		for (var i=0;i&lt;input.length;i++) &#123;</div><div class="line">			if (newarr.indexOf(input[i])===-1) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	return newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-我的理解2" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -446,103 +543,6 @@
 <li>$broadcast: 广播事件 基于事件驱动</li>
 <li>$on :监听事件</li>
 </ol>
-</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-我的理解3" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/23/我的理解3/" class="article-date">
-  	<time datetime="2016-08-23T14:08:07.000Z" itemprop="datePublished">2016-08-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/23/我的理解3/">angular————过滤器</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li><p>过滤器</p>
-<ul>
-<li>过滤器的作用是输出经过过滤后的数据</li>
-<li>过滤器分为内置过滤器与自定义过滤器</li>
-<li><p>过滤器有3种使用方法</p>
-<ol>
-<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:&apos;￥&apos;&#125;&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>控制器中注入$filter服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,$filter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=$filter(&apos;uppercase&apos;)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(&apos;ctrl&apos;,function  ($scope,uppercaseFilter) &#123;</div><div class="line">	$scope.name=&apos;aaaaabbbbdddd&apos;;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>常见内置过滤器</p>
-<ol>
-<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
-</li>
-<li><p>uppercase lowercase 大小写过滤器</p>
-</li>
-<li><p>number 限制数字后面小数点位数</p>
-</li>
-<li><p>limitTo 用来限制字符串、数组的长度</p>
-</li>
-<li><p>json 把普通对象转换为JSON对象</p>
-</li>
-<li><p>date 转换时间格式</p>
-</li>
-<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
-<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
-</ol>
-</li>
-<li>如何生成自定义过滤器<ul>
-<li>参数1 过滤器的名字</li>
-<li>参数2 函数(定义过滤器的方法)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//返回前len项为大写的值的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">		// 参数1: input就是要使用该过滤器的数据</div><div class="line">		// 从第二个参数开始就是冒号后面传递的参数</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var a=input.slice(0,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		var b=input.slice(len);</div><div class="line">		return a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line">//数组去重的过滤器</div><div class="line">mod.filter(&apos;newF&apos;,function  () &#123;</div><div class="line">	return function  (input,len) &#123;</div><div class="line">		var newarr=[];</div><div class="line">		for (var i=0;i&lt;input.length;i++) &#123;</div><div class="line">			if (newarr.indexOf(input[i])===-1) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	return newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ul>
 </li>
 </ul>
 </li>
