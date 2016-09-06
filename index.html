@@ -191,6 +191,67 @@
 
       <div class="body-wrap">
   
+    <article id="post-node源码实现——base64转换" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/06/node源码实现——base64转换/" class="article-date">
+  	<time datetime="2016-09-06T03:32:38.000Z" itemprop="datePublished">2016-09-06</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/06/node源码实现——base64转换/">node源码实现——base64转换</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="base64格式文件可以用来存放小容量的文件-如动态生成的验证码-node中实现了各种编码格式的转换-如utf8-base64"><a href="#base64格式文件可以用来存放小容量的文件-如动态生成的验证码-node中实现了各种编码格式的转换-如utf8-base64" class="headerlink" title="base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64)."></a>base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64).</h2><h2 id="字符串转换成base64格式流程"><a href="#字符串转换成base64格式流程" class="headerlink" title="字符串转换成base64格式流程"></a>字符串转换成base64格式流程</h2><ol>
+<li>定义chars=’ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/‘.split(‘’);</li>
+<li>将字符串转换成buffer。</li>
+<li>buffer每一项转换成二进制。</li>
+<li>将得到的二进制拼接成字符串，再以6个为一组截取成段(因为二进制6个为一组转换成十进制最大为2^6-1=63,刚好能和chars一一对应)。</li>
+<li>每一段转换成十进制，该十进制就对应chars中相应的索引。</li>
+<li>将对应的索引拼接在一起就是base64格式内容。</li>
+</ol>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">function toBase64 (str) &#123;</div><div class="line">    var chars=&apos;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&apos;.split(&apos;&apos;);</div><div class="line">    var buffer=new Buffer(str);</div><div class="line">    var str=&apos;&apos;;</div><div class="line">    var arr=[];</div><div class="line">    //遍历buffer的每一项，转换成二进制</div><div class="line">    for (var i=0;i&lt;buffer.length;i++) &#123;</div><div class="line">       var a= buffer[i].toString(2);</div><div class="line">        str+=a;</div><div class="line">    &#125;</div><div class="line">    //对拼接的二进制6个为一组分割，转换成十进制，去chars中查找索引对应值</div><div class="line">    str.replace(/\d&#123;6&#125;/g,function  () &#123;</div><div class="line">        arr.push(chars[parseInt(arguments[0],2)]);</div><div class="line">    &#125;)  </div><div class="line">    //将结果拼接并输出</div><div class="line">    return arr.join(&apos;&apos;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-express源码实现——错误中间件及params" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -816,86 +877,6 @@
 </li>
 </ol>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-angular 自定义模板取得控制器中数据的方法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/" class="article-date">
-  	<time datetime="2016-08-24T08:20:10.000Z" itemprop="datePublished">2016-08-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/">angular 自定义指令取得控制器中数据的方法</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="这是一个问题"><a href="#这是一个问题" class="headerlink" title="这是一个问题"></a>这是一个问题</h2><pre><code>我们知道$scope作用域中可以定义值、变量、方法。而我们子定义模板中link方法的形参只能取得模板所在作用域的值、变量、方法。我们如何在模板中取得模板所在控制器作用域中的数据呢。
-</code></pre><h2 id="数据大不同"><a href="#数据大不同" class="headerlink" title="数据大不同"></a>数据大不同</h2><ul>
-<li>数据可以分为固定的值、变量、方法。这三者的获取方法是不同的。</li>
-</ul>
-<h2 id="固定值的获取-代码提供"><a href="#固定值的获取-代码提供" class="headerlink" title="固定值的获取,代码提供"></a>固定值的获取,代码提供</h2><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html &gt;</div><div class="line">&lt;html lang=&quot;en&quot; ng-app=&quot;myApp&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;scope 取得控制器作用域中的值&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;div ng-controller=&quot;myCtrl&quot;&gt;</div><div class="line">    myCtrl:&lt;input type=&quot;text&quot; ng-model=&quot;name&quot;&gt;</div><div class="line">    my-dir:&lt;my-dir name=&quot;&#123;&#123;name&#125;&#125;&quot;&gt;&lt;/my-dir&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script src=&quot;angular.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var myApp=angular.module(&apos;myApp&apos;,[]);</div><div class="line">    myApp.controller(&apos;myCtrl&apos;,[&apos;$scope&apos;,function  ($scope) &#123;</div><div class="line">        $scope.name=&apos;珠峰培训&apos;;</div><div class="line">    &#125;])</div><div class="line">    myApp.directive(&apos;myDir&apos;,function () &#123;</div><div class="line">        return &#123;</div><div class="line">            template:&apos;&lt;input type=&quot;text&quot; ng-model=&quot;name1&quot;&gt;&apos;,</div><div class="line">            scope:&#123;</div><div class="line">                name1:&apos;@name&apos;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
-</code></pre><ol>
-<li><p>定义name属性，取得上级控制器作用域中的name值</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">my-dir:&lt;my-dir name=&quot;&#123;&#123;name&#125;&#125;&quot;&gt;&lt;/my-dir&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>模板scope对象中定义name1属性，其中@name等于上一级取得的name值。这样模板中name1属性就取得了上级控制器作用域中的name属性</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scope:&#123;</div><div class="line">              name1:&apos;@name&apos;</div><div class="line">          &#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>将第二步保存的name1赋给模板DOM中</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">template:&apos;&lt;input type=&quot;text&quot; ng-model=&quot;name1&quot;&gt;&apos;,</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>##自定义模板取得控制器中变量的方法</p>
-<ol>
-<li>将上面第一步中    name=”“ 改为name=”name”，使得取得的是变量</li>
-<li>将上面第二步中 name1:’@name’ 改为 name:’=name’,取得第一步取得的值</li>
-</ol>
-<p>##自定义模板取得控制器中方法的方法</p>
-<ol>
-<li>将上面第一步中    name=”“ 改为name=”name”，使得取得的是变量</li>
-<li>将上面第二步中 name1:’@name’ 改为 name:’=name’,取得第一步取得的值</li>
-</ol>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><pre><code>- name=&quot;{{name}}&quot;中{{name}}保存的是name变量的值，是一个固定的值，无法做到双向绑定
-- name=&quot;name&quot; 中&quot;name&quot; 保存的是指向控制器中$scope.name，不是固定的，可以双向绑定
-</code></pre>
       
     </div>
     
