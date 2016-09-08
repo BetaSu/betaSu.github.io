@@ -4,36 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>angular——多页面路由 | 卡卡卡颂的blog</title>
+  <title>node源码实现——嵌套文件夹的创建 | 卡卡卡颂的blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
-多页面路由引入
-引入angular-ui-router.js文件
-模块中注入ui.router
- 1var mod=angular.module(&amp;apos;app&amp;apos;,[&amp;apos;ui.router&amp;apos;]);
-
-配置文件中注">
+  <meta name="description" content="为什么需要手动实现嵌套文件夹的创建node中fs模块原生提供了2种创建文件夹的方法：fs.mkdir (异步) 与fs.mkdirSync (同步)。但是原生的方法在创建嵌套文件夹时(如：a/b/c/d)时，必须在父级文件夹存在的情况下才能创建子级文件夹。所以不能一次创建a/b/c/d这样的嵌套文件夹。只能先创建a，再在a文件夹中创建b······
+嵌套文件夹创建实现原理递归调用创建函数，循环遍历">
 <meta property="og:type" content="article">
-<meta property="og:title" content="angular——多页面路由">
-<meta property="og:url" content="https://betasu.github.io/2016/09/01/angular——多页面路由/index.html">
+<meta property="og:title" content="node源码实现——嵌套文件夹的创建">
+<meta property="og:url" content="https://betasu.github.io/2016/09/07/node源码实现——嵌套文件夹的创建/index.html">
 <meta property="og:site_name" content="卡卡卡颂的blog">
-<meta property="og:description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
-多页面路由引入
-引入angular-ui-router.js文件
-模块中注入ui.router
- 1var mod=angular.module(&amp;apos;app&amp;apos;,[&amp;apos;ui.router&amp;apos;]);
-
-配置文件中注">
-<meta property="og:updated_time" content="2016-09-01T01:39:15.184Z">
+<meta property="og:description" content="为什么需要手动实现嵌套文件夹的创建node中fs模块原生提供了2种创建文件夹的方法：fs.mkdir (异步) 与fs.mkdirSync (同步)。但是原生的方法在创建嵌套文件夹时(如：a/b/c/d)时，必须在父级文件夹存在的情况下才能创建子级文件夹。所以不能一次创建a/b/c/d这样的嵌套文件夹。只能先创建a，再在a文件夹中创建b······
+嵌套文件夹创建实现原理递归调用创建函数，循环遍历">
+<meta property="og:updated_time" content="2016-09-07T07:08:33.767Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="angular——多页面路由">
-<meta name="twitter:description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
-多页面路由引入
-引入angular-ui-router.js文件
-模块中注入ui.router
- 1var mod=angular.module(&amp;apos;app&amp;apos;,[&amp;apos;ui.router&amp;apos;]);
-
-配置文件中注">
+<meta name="twitter:title" content="node源码实现——嵌套文件夹的创建">
+<meta name="twitter:description" content="为什么需要手动实现嵌套文件夹的创建node中fs模块原生提供了2种创建文件夹的方法：fs.mkdir (异步) 与fs.mkdirSync (同步)。但是原生的方法在创建嵌套文件夹时(如：a/b/c/d)时，必须在父级文件夹存在的情况下才能创建子级文件夹。所以不能一次创建a/b/c/d这样的嵌套文件夹。只能先创建a，再在a文件夹中创建b······
+嵌套文件夹创建实现原理递归调用创建函数，循环遍历">
   
     <link rel="alternative" href="/atom.xml" title="卡卡卡颂的blog" type="application/atom+xml">
   
@@ -211,11 +196,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-angular——多页面路由" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-node源码实现——嵌套文件夹的创建" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/09/01/angular——多页面路由/" class="article-date">
-  	<time datetime="2016-09-01T01:03:23.000Z" itemprop="datePublished">2016-09-01</time>
+      <a href="/2016/09/07/node源码实现——嵌套文件夹的创建/" class="article-date">
+  	<time datetime="2016-09-07T03:03:39.000Z" itemprop="datePublished">2016-09-07</time>
 </a>
     </div>
   
@@ -228,7 +213,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      angular——多页面路由
+      node源码实现——嵌套文件夹的创建
     </h1>
   
 
@@ -244,21 +229,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="多页面路由与单页面路由的区别"><a href="#多页面路由与单页面路由的区别" class="headerlink" title="多页面路由与单页面路由的区别"></a>多页面路由与单页面路由的区别</h2><p>之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。</p>
-<h2 id="多页面路由引入"><a href="#多页面路由引入" class="headerlink" title="多页面路由引入"></a>多页面路由引入</h2><ol>
-<li>引入angular-ui-router.js文件</li>
-<li><p>模块中注入ui.router</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;app&apos;,[&apos;ui.router&apos;]);</div></pre></td></tr></table></figure>
+        <h2 id="为什么需要手动实现嵌套文件夹的创建"><a href="#为什么需要手动实现嵌套文件夹的创建" class="headerlink" title="为什么需要手动实现嵌套文件夹的创建"></a>为什么需要手动实现嵌套文件夹的创建</h2><p>node中fs模块原生提供了2种创建文件夹的方法：fs.mkdir (异步) 与fs.mkdirSync (同步)。但是原生的方法在创建嵌套文件夹时(如：a/b/c/d)时，必须在父级文件夹存在的情况下才能创建子级文件夹。所以不能一次创建a/b/c/d这样的嵌套文件夹。只能先创建a，再在a文件夹中创建b······</p>
+<h2 id="嵌套文件夹创建实现原理"><a href="#嵌套文件夹创建实现原理" class="headerlink" title="嵌套文件夹创建实现原理"></a>嵌套文件夹创建实现原理</h2><p>递归调用创建函数，循环遍历路径，一层层判断文件夹是否存在，如果不存在就创建，存在就继续遍历下一层。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>提供2种方法，一种容易理解，一种比较复杂。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">//首先引入依赖</div><div class="line">var fs=require(&apos;fs&apos;);</div><div class="line">var path=require(&apos;path&apos;)</div></pre></td></tr></table></figure></p>
+<ul>
+<li><p>简单的版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">//简单版本</div><div class="line">function makeDirp (path) &#123;</div><div class="line">	//分隔符的兼容</div><div class="line">    var sep=path.sep;</div><div class="line">    path=path.replace(/[\\/]/g,sep);</div><div class="line">    var dir=path.split(sep);</div><div class="line">    var index=1;</div><div class="line">    make();</div><div class="line">    //递归调用</div><div class="line">    function make () &#123;</div><div class="line">        if (index&gt;dir.length) return;</div><div class="line">        //每次查找文件夹名+分隔符 是否存在</div><div class="line">        var subdir=dir.slice(0,index++).join(sep);</div><div class="line">        fs.exists(subdir,function  (exist) &#123;</div><div class="line">        	//存在则继续查找下一级</div><div class="line">            if (exist) &#123;</div><div class="line">                make()</div><div class="line">                //不存在则创建后查找下一级</div><div class="line">            &#125; else &#123;</div><div class="line">                fs.mkdir(subdir,function  () &#123;</div><div class="line">                    make();</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
-<li><p>配置文件中注入$stateProvider和$urlRouterProvider,前者实现多页面路由，后者实现单页面路由中otherwise的功能</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.config(function ($stateProvider,$urlRouterProvider) &#123;&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>单页路由配置</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">//配置未定义的路径</div><div class="line">$urlRouterProvider.otherwise(&apos;/&apos;);</div><div class="line">//配置首页,状态为index</div><div class="line"> $stateProvider.state(&apos;index&apos;,&#123;</div><div class="line">           url:&apos;&apos;,</div><div class="line">           templateUrl:&apos;./index.html&apos;</div><div class="line">       &#125;).state(&apos;about&apos;,&#123;</div><div class="line">           url:&apos;/about&apos;,</div><div class="line">           templateUrl:&apos;./about.html&apos;,</div><div class="line">           controller:function  ($scope) &#123;</div><div class="line">               $scope.books=[&#123;id:1,name:&apos;王子与玫瑰&apos;&#125;,&#123;id:2,name:&apos;夜莺与玫瑰&apos;&#125;,&#123;id:3,name:&apos;王尔德&apos;&#125;]</div><div class="line">           &#125;,</div><div class="line">           //配置中注入的服务</div><div class="line">           resolve:&#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>多页面路由配置</p>
-</li>
-</ol>
+<li><p>复杂的版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function mkdirp (p,callback) &#123;</div><div class="line">	//判断路径是否存在</div><div class="line">    fs.exists(p,function  (exist) &#123;</div><div class="line">    	//存在则直接调用回调函数</div><div class="line">    	//不存在则递归调用自己，传入当前文件夹所在的文件夹路径</div><div class="line">        return exist?callback():mkdirp(path.dirname(p),function () &#123;</div><div class="line">            fs.mkdir(p,callback);</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ul>
 
       
     </div>
@@ -268,18 +248,18 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/09/03/express源码实现—1—基础实现/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/09/08/node源码实现——promise/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          express源码实现1——基础实现
+          node源码实现——promise
         
       </div>
     </a>
   
   
-    <a href="/2016/08/30/angular——表单控件/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">angular——表单控件</div>
+    <a href="/2016/09/06/node源码实现——EVENT/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">node源码实现——EVENT</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -314,7 +294,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="angular——多页面路由" data-title="angular——多页面路由" data-url="https://betasu.github.io/2016/09/01/angular——多页面路由/"></div>
+	<div class="ds-thread" data-thread-key="node源码实现——嵌套文件夹的创建" data-title="node源码实现——嵌套文件夹的创建" data-url="https://betasu.github.io/2016/09/07/node源码实现——嵌套文件夹的创建/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

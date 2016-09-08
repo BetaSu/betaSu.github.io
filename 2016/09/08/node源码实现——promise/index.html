@@ -4,36 +4,30 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>angular——多页面路由 | 卡卡卡颂的blog</title>
+  <title>node源码实现——promise | 卡卡卡颂的blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
-多页面路由引入
-引入angular-ui-router.js文件
-模块中注入ui.router
- 1var mod=angular.module(&amp;apos;app&amp;apos;,[&amp;apos;ui.router&amp;apos;]);
-
-配置文件中注">
+  <meta name="description" content="promise是什么 顾名思义，promise就是一个承诺。承诺需要一段时间后兑现。在node中，这段时间就是异步操作执行到调用回调函数的时间。所以，promise的操作和异步操作有关。
+promise的状态
+Pending Promise对象实例创建时候的初始状态
+Fulfilled 可以理解为成功的状态
+Rejected 可以理解为失败的状态promise的简单应用12345678910111">
 <meta property="og:type" content="article">
-<meta property="og:title" content="angular——多页面路由">
-<meta property="og:url" content="https://betasu.github.io/2016/09/01/angular——多页面路由/index.html">
+<meta property="og:title" content="node源码实现——promise">
+<meta property="og:url" content="https://betasu.github.io/2016/09/08/node源码实现——promise/index.html">
 <meta property="og:site_name" content="卡卡卡颂的blog">
-<meta property="og:description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
-多页面路由引入
-引入angular-ui-router.js文件
-模块中注入ui.router
- 1var mod=angular.module(&amp;apos;app&amp;apos;,[&amp;apos;ui.router&amp;apos;]);
-
-配置文件中注">
-<meta property="og:updated_time" content="2016-09-01T01:39:15.184Z">
+<meta property="og:description" content="promise是什么 顾名思义，promise就是一个承诺。承诺需要一段时间后兑现。在node中，这段时间就是异步操作执行到调用回调函数的时间。所以，promise的操作和异步操作有关。
+promise的状态
+Pending Promise对象实例创建时候的初始状态
+Fulfilled 可以理解为成功的状态
+Rejected 可以理解为失败的状态promise的简单应用12345678910111">
+<meta property="og:updated_time" content="2016-09-08T07:37:16.507Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="angular——多页面路由">
-<meta name="twitter:description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
-多页面路由引入
-引入angular-ui-router.js文件
-模块中注入ui.router
- 1var mod=angular.module(&amp;apos;app&amp;apos;,[&amp;apos;ui.router&amp;apos;]);
-
-配置文件中注">
+<meta name="twitter:title" content="node源码实现——promise">
+<meta name="twitter:description" content="promise是什么 顾名思义，promise就是一个承诺。承诺需要一段时间后兑现。在node中，这段时间就是异步操作执行到调用回调函数的时间。所以，promise的操作和异步操作有关。
+promise的状态
+Pending Promise对象实例创建时候的初始状态
+Fulfilled 可以理解为成功的状态
+Rejected 可以理解为失败的状态promise的简单应用12345678910111">
   
     <link rel="alternative" href="/atom.xml" title="卡卡卡颂的blog" type="application/atom+xml">
   
@@ -211,11 +205,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-angular——多页面路由" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-node源码实现——promise" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/09/01/angular——多页面路由/" class="article-date">
-  	<time datetime="2016-09-01T01:03:23.000Z" itemprop="datePublished">2016-09-01</time>
+      <a href="/2016/09/08/node源码实现——promise/" class="article-date">
+  	<time datetime="2016-09-08T06:33:31.000Z" itemprop="datePublished">2016-09-08</time>
 </a>
     </div>
   
@@ -228,7 +222,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      angular——多页面路由
+      node源码实现——promise
     </h1>
   
 
@@ -244,22 +238,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="多页面路由与单页面路由的区别"><a href="#多页面路由与单页面路由的区别" class="headerlink" title="多页面路由与单页面路由的区别"></a>多页面路由与单页面路由的区别</h2><p>之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。</p>
-<h2 id="多页面路由引入"><a href="#多页面路由引入" class="headerlink" title="多页面路由引入"></a>多页面路由引入</h2><ol>
-<li>引入angular-ui-router.js文件</li>
-<li><p>模块中注入ui.router</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var mod=angular.module(&apos;app&apos;,[&apos;ui.router&apos;]);</div></pre></td></tr></table></figure>
+        <h2 id="promise是什么"><a href="#promise是什么" class="headerlink" title="promise是什么"></a>promise是什么</h2><p> 顾名思义，promise就是一个承诺。承诺需要一段时间后兑现。在node中，这段时间就是异步操作执行到调用回调函数的时间。所以，promise的操作和异步操作有关。</p>
+<h2 id="promise的状态"><a href="#promise的状态" class="headerlink" title="promise的状态"></a>promise的状态</h2><ul>
+<li>Pending Promise对象实例创建时候的初始状态</li>
+<li>Fulfilled 可以理解为成功的状态</li>
+<li>Rejected 可以理解为失败的状态<h2 id="promise的简单应用"><a href="#promise的简单应用" class="headerlink" title="promise的简单应用"></a>promise的简单应用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//定义一个Promise实例，实例会立即执行传参。传参接收2个参数</div><div class="line">//resolve参数是一个函数，用以改变promise的状态以及执行成功状态的回调函数</div><div class="line">//reject参数是一个函数，用以改变promise的状态以及执行失败状态的回调函数</div><div class="line">var promise=new Promise((resolve,reject)=&gt;&#123;</div><div class="line">	setTimeout(()=&gt;&#123;</div><div class="line">		if (Math.random&gt;0.5) resolve(&apos;success&apos;);</div><div class="line">		else reject(&apos;fail&apos;);</div><div class="line">	&#125;,1000)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//promise的实例的then方法接收两个函数参数，是对resolve与reject函数的定义</div><div class="line">promise.then(fullfiled,rejected)</div></pre></td></tr></table></figure>
 </li>
-<li><p>配置文件中注入$stateProvider和$urlRouterProvider,前者实现多页面路由，后者实现单页面路由中otherwise的功能</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.config(function ($stateProvider,$urlRouterProvider) &#123;&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>单页路由配置</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">//配置未定义的路径</div><div class="line">$urlRouterProvider.otherwise(&apos;/&apos;);</div><div class="line">//配置首页,状态为index</div><div class="line"> $stateProvider.state(&apos;index&apos;,&#123;</div><div class="line">           url:&apos;&apos;,</div><div class="line">           templateUrl:&apos;./index.html&apos;</div><div class="line">       &#125;).state(&apos;about&apos;,&#123;</div><div class="line">           url:&apos;/about&apos;,</div><div class="line">           templateUrl:&apos;./about.html&apos;,</div><div class="line">           controller:function  ($scope) &#123;</div><div class="line">               $scope.books=[&#123;id:1,name:&apos;王子与玫瑰&apos;&#125;,&#123;id:2,name:&apos;夜莺与玫瑰&apos;&#125;,&#123;id:3,name:&apos;王尔德&apos;&#125;]</div><div class="line">           &#125;,</div><div class="line">           //配置中注入的服务</div><div class="line">           resolve:&#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>多页面路由配置</p>
-</li>
+</ul>
+<h2 id="源码实现思路"><a href="#源码实现思路" class="headerlink" title="源码实现思路"></a>源码实现思路</h2><ol>
+<li>由于要实例化，所以Promise首先是一个类。constructor上有一个记录状态的变量。并且在实例化的过程中会立即执行传参。</li>
+<li>原型上有一个then方法，接受两个参数，分别是成功与失败状态要调用的函数。但是由于这两个函数都有传参，所以还需要包装一下。</li>
+<li>在contructor中定义resolve与reject函数，这两个函数接收传参，执行时会改变实例状态，并把传参赋给then上定义的方法并执行他。</li>
+<li>在constructor中执行Promise中传入的函数，将包装好的resolve与reject传入。</li>
 </ol>
-
+<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">//1.定义Promise类</div><div class="line">class Promise &#123;</div><div class="line">	//2.接收一个函数为参数</div><div class="line">	constructor (fn) &#123;</div><div class="line">		//3.保存状态，默认为&apos;unfulfilled&apos;</div><div class="line">		this._status=&apos;unfulfilled&apos;;</div><div class="line">		</div><div class="line">		//5.包装好resolve</div><div class="line">		let resolve=(data)=&gt;&#123;</div><div class="line">			//改变状态</div><div class="line">			this._status=&apos;fulfilled&apos;;</div><div class="line">			this._resolve(data);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		//6.包装好reject</div><div class="line">		let reject=(err)=&gt;&#123;</div><div class="line">			//改变状态</div><div class="line">			this._status=&apos;failed&apos;;</div><div class="line">			this._reject(err);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		//7.立即执行</div><div class="line">		fn(resolve,reject);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	//4.Promise.prototype上定义then方法,将传递的函数保存为内部方法</div><div class="line">	then (resolve,reject) &#123;</div><div class="line">		this._resolve=resolve;</div><div class="line">		this._reject=reject;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
       
     </div>
     
@@ -268,18 +260,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/09/03/express源码实现—1—基础实现/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          express源码实现1——基础实现
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/08/30/angular——表单控件/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">angular——表单控件</div>
+    <a href="/2016/09/07/node源码实现——嵌套文件夹的创建/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">node源码实现——嵌套文件夹的创建</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -314,7 +297,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="angular——多页面路由" data-title="angular——多页面路由" data-url="https://betasu.github.io/2016/09/01/angular——多页面路由/"></div>
+	<div class="ds-thread" data-thread-key="node源码实现——promise" data-title="node源码实现——promise" data-url="https://betasu.github.io/2016/09/08/node源码实现——promise/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
