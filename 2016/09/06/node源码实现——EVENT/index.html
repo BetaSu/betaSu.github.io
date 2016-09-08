@@ -1,12 +1,90 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
+<!doctype html>
+
+
+
   
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>node源码实现——EVENT | 卡卡卡颂的blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="EVENT(事件)的作用在node中很多异步方法需要监听事件，比如数据传输时需要监听流是否传输成功(data事件)，数据是否传输完毕(end事件)。所以需要一个模块用来存储事件相关的操作(事件注册、事件监听、事件触发).
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="EVENT(事件)的作用在node中很多异步方法需要监听事件，比如数据传输时需要监听流是否传输成功(data事件)，数据是否传输完毕(end事件)。所以需要一个模块用来存储事件相关的操作(事件注册、事件监听、事件触发).
 EVENT的机制
 对于需要事件相关操作的函数，只需将其构造函数的原型指向事件的构造函数。这样其实例就能取得事件操作的方法。
 对于事件库本身，提供事件的注册、监听、触发、取消绑定以">
@@ -18,222 +96,194 @@ EVENT的机制
 EVENT的机制
 对于需要事件相关操作的函数，只需将其构造函数的原型指向事件的构造函数。这样其实例就能取得事件操作的方法。
 对于事件库本身，提供事件的注册、监听、触发、取消绑定以">
-<meta property="og:updated_time" content="2016-09-06T14:33:06.994Z">
+<meta property="og:updated_time" content="2016-09-08T09:23:02.447Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="node源码实现——EVENT">
 <meta name="twitter:description" content="EVENT(事件)的作用在node中很多异步方法需要监听事件，比如数据传输时需要监听流是否传输成功(data事件)，数据是否传输完毕(end事件)。所以需要一个模块用来存储事件相关的操作(事件注册、事件监听、事件触发).
 EVENT的机制
 对于需要事件相关操作的函数，只需将其构造函数的原型指向事件的构造函数。这样其实例就能取得事件操作的方法。
 对于事件库本身，提供事件的注册、监听、触发、取消绑定以">
-  
-    <link rel="alternative" href="/atom.xml" title="卡卡卡颂的blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="//favicon.png">
-  
-  <link rel="stylesheet" href="/css/style.css">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://betasu.github.io/2016/09/06/node源码实现——EVENT/"/>
+
+  <title> node源码实现——EVENT | 卡卡卡颂的blog </title>
 </head>
 
-<body>
-  <div id="container">
-    <div class="left-col">
-    <div class="overlay"></div>
-<div class="intrude-less">
-	<header id="header" class="inner">
-		<a href="/" class="profilepic">
-			
-			<img lazy-src="0" class="js-avatar">
-			
-		</a>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-		<hgroup>
-		  <h1 class="header-author"><a href="/">BetaSu</a></h1>
-		</hgroup>
+  
 
-		
 
-		
-			<div class="switch-btn">
-				<div class="icon">
-					<div class="icon-ctn">
-						<div class="icon-wrap icon-house" data-idx="0">
-							<div class="birdhouse"></div>
-							<div class="birdhouse_holes"></div>
-						</div>
-						<div class="icon-wrap icon-ribbon hide" data-idx="1">
-							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
-						</div>
-						
-						
-						<div class="icon-wrap icon-me hide" data-idx="3">
-							<div class="user"></div>
-							<div class="shoulder"></div>
-						</div>
-						
-					</div>
-					
-				</div>
-				<div class="tips-box hide">
-					<div class="tips-arrow"></div>
-					<ul class="tips-inner">
-						<li>Menu</li>
-						<li>Tags</li>
-						
-						<li>Links</li>
-						
-						
-						<li>A propos</li>
-						
-					</ul>
-				</div>
-			</div>
-		
 
-		<div class="switch-area">
-			<div class="switch-wrap">
-				<section class="switch-part switch-part1">
-					<nav class="header-menu">
-						<ul>
-						
-							<li><a href="/archives">主页</a></li>
-				        
-							<li><a href="/archives">所有文章</a></li>
-				        
-						</ul>
-					</nav>
-					<nav class="header-nav">
-						<div class="social">
-							
-								<a class="github" target="_blank" href="https://github.com/BetaSu" title="github">github</a>
-					        
-								<a class="rss" target="_blank" href="#" title="rss">rss</a>
-					        
-								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/jing-cang-tian" title="zhihu">zhihu</a>
-					        
-						</div>
-					</nav>
-				</section>
-				
-				
-				<section class="switch-part switch-part2">
-					<div class="widget tagcloud" id="js-tagcloud">
-						
-					</div>
-				</section>
-				
-				
-				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
-			        
-			        </div>
-				</section>
-				
 
-				
-				
-				<section class="switch-part switch-part4">
-				
-					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
-				</section>
-				
-			</div>
-		</div>
-	</header>				
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">卡卡卡颂的blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
 </div>
 
-    </div>
-    <div class="mid-col">
-      <nav id="mobile-nav">
-  	<div class="overlay">
-  		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">BetaSu</h1>
-  	</div>
-	<div class="intrude-less">
-		<header id="header" class="inner">
-			<div class="profilepic">
-				
-					<img lazy-src="0" class="js-avatar">
-				
-			</div>
-			<hgroup>
-			  <h1 class="header-author">BetaSu</h1>
-			</hgroup>
-			
-			<nav class="header-menu">
-				<ul>
-				
-					<li><a href="/archives">主页</a></li>
-		        
-					<li><a href="/archives">所有文章</a></li>
-		        
-		        <div class="clearfix"></div>
-				</ul>
-			</nav>
-			<nav class="header-nav">
-				<div class="social">
-					
-						<a class="github" target="_blank" href="https://github.com/BetaSu" title="github">github</a>
-			        
-						<a class="rss" target="_blank" href="#" title="rss">rss</a>
-			        
-						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/jing-cang-tian" title="zhihu">zhihu</a>
-			        
-				</div>
-			</nav>
-		</header>				
-	</div>
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
 </nav>
 
-      <div class="body-wrap"><article id="post-node源码实现——EVENT" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/09/06/node源码实现——EVENT/" class="article-date">
-  	<time datetime="2016-09-06T13:08:34.000Z" itemprop="datePublished">2016-09-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+
   
-    <h1 class="article-title" itemprop="name">
-      node源码实现——EVENT
-    </h1>
   
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                node源码实现——EVENT
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T21:08:34+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
-      
-      <div class="article-info article-info-post">
-        
-        
-
-        <div class="clearfix"></div>
-      </div>
-      
     
-    <div class="article-entry" itemprop="articleBody">
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
       
         <h2 id="EVENT-事件-的作用"><a href="#EVENT-事件-的作用" class="headerlink" title="EVENT(事件)的作用"></a>EVENT(事件)的作用</h2><p>在node中很多异步方法需要监听事件，比如数据传输时需要监听流是否传输成功(data事件)，数据是否传输完毕(end事件)。所以需要一个模块用来存储事件相关的操作(事件注册、事件监听、事件触发).</p>
 <h2 id="EVENT的机制"><a href="#EVENT的机制" class="headerlink" title="EVENT的机制"></a>EVENT的机制</h2><ol>
@@ -241,145 +291,280 @@ EVENT的机制
 <li>对于事件库本身，提供事件的注册、监听、触发、取消绑定以及事件方法池。<h2 id="EVENT实现原理"><a href="#EVENT实现原理" class="headerlink" title="EVENT实现原理"></a>EVENT实现原理</h2></li>
 <li>设定一个事件方法池。</li>
 <li>当监听事件时，将事件名与其对应回调函数放入方法池。</li>
-<li>触发事件时，从方法池中找到相应事件名，依次执行事件名下保存的回调函数。<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">//事件构造函数</div><div class="line">function Event () &#123;</div><div class="line">    //事件方法池</div><div class="line">    this._events=&#123;&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//事件的监听</div><div class="line">Event.prototype.on=function (eventName,callback) &#123;</div><div class="line">    var listeners=this._events[eventName];</div><div class="line">    //如果事件方法池中存在对应方法名</div><div class="line">    if (listeners) &#123;</div><div class="line">        //在对应方法名数组中新加入一个回调函数</div><div class="line">        listeners.push(callback);</div><div class="line">    &#125; else &#123;</div><div class="line">        //事件方法池中对应方法名赋值为一个含回调函数的数组</div><div class="line">        this._events[eventName]=[callback];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//事件的触发</div><div class="line">Event.prototype.emit=function (eventName) &#123;</div><div class="line">    //第一项传参(也是形参)是事件名，从第二项开始就是传递给回调函数的参数，这里将这些参数保存在数组里</div><div class="line">    var args=Array.prototype.slice.call(arguments,1);</div><div class="line">    var listeners=this._events[eventName];</div><div class="line">    //如果事件方法池中存在相应的方法名</div><div class="line">    if (listeners) &#123;</div><div class="line">        for (var i=0;i&lt;listeners.length;i++) &#123;</div><div class="line">            //依次执行方法名所对应的回调函数</div><div class="line">            listeners[i].apply(null,args);</div><div class="line">        &#125;</div><div class="line">    &#125; else &#123;</div><div class="line">        console.log(&apos;对应方法不存在&apos;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//事件的移除</div><div class="line">Event.prototype.removeListener=function (eventName,callback) &#123;</div><div class="line">	this._events[eventName].filter(function (fn)&#123;</div><div class="line">		return fn!=callback;</div><div class="line">	&#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line">//只执行一次的事件</div><div class="line">Event.prototype.once=function (eventName,callback) &#123;</div><div class="line">	//原理是执行完回调函数后移除这个事件</div><div class="line"></div><div class="line">	//存储this指向，用以在one函数中调用指向once函数</div><div class="line">	var that=this;</div><div class="line">	function one () &#123;</div><div class="line">		//存储可能的传参</div><div class="line">		var args=Array.prototype.slice.call(arguments);</div><div class="line">		//执行回调函数</div><div class="line">		callback.apply(that,args);</div><div class="line">		//执行完后移除事件，这里的this指向的是事件实例</div><div class="line">		this.removeListener(eventName,one);	</div><div class="line">	&#125;</div><div class="line">	//监听名为one的函数</div><div class="line">	this.on(eventName,one);</div><div class="line">&#125;</div><div class="line"></div><div class="line">module.exports=Event;</div></pre></td></tr></table></figure>
+<li>触发事件时，从方法池中找到相应事件名，依次执行事件名下保存的回调函数。<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//事件构造函数</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Event</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">//事件方法池</span></div><div class="line">    <span class="keyword">this</span>._events=&#123;&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//事件的监听</span></div><div class="line">Event.prototype.on=<span class="function"><span class="keyword">function</span> (<span class="params">eventName,callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> listeners=<span class="keyword">this</span>._events[eventName];</div><div class="line">    <span class="comment">//如果事件方法池中存在对应方法名</span></div><div class="line">    <span class="keyword">if</span> (listeners) &#123;</div><div class="line">        <span class="comment">//在对应方法名数组中新加入一个回调函数</span></div><div class="line">        listeners.push(callback);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//事件方法池中对应方法名赋值为一个含回调函数的数组</span></div><div class="line">        <span class="keyword">this</span>._events[eventName]=[callback];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//事件的触发</span></div><div class="line">Event.prototype.emit=<span class="function"><span class="keyword">function</span> (<span class="params">eventName</span>) </span>&#123;</div><div class="line">    <span class="comment">//第一项传参(也是形参)是事件名，从第二项开始就是传递给回调函数的参数，这里将这些参数保存在数组里</span></div><div class="line">    <span class="keyword">var</span> args=<span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">    <span class="keyword">var</span> listeners=<span class="keyword">this</span>._events[eventName];</div><div class="line">    <span class="comment">//如果事件方法池中存在相应的方法名</span></div><div class="line">    <span class="keyword">if</span> (listeners) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;listeners.length;i++) &#123;</div><div class="line">            <span class="comment">//依次执行方法名所对应的回调函数</span></div><div class="line">            listeners[i].apply(<span class="literal">null</span>,args);</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'对应方法不存在'</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//事件的移除</span></div><div class="line">Event.prototype.removeListener=<span class="function"><span class="keyword">function</span> (<span class="params">eventName,callback</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>._events[eventName].filter(<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>)</span>&#123;</div><div class="line">		<span class="keyword">return</span> fn!=callback;</div><div class="line">	&#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//只执行一次的事件</span></div><div class="line">Event.prototype.once=<span class="function"><span class="keyword">function</span> (<span class="params">eventName,callback</span>) </span>&#123;</div><div class="line">	<span class="comment">//原理是执行完回调函数后移除这个事件</span></div><div class="line"></div><div class="line">	<span class="comment">//存储this指向，用以在one函数中调用指向once函数</span></div><div class="line">	<span class="keyword">var</span> that=<span class="keyword">this</span>;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">one</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">//存储可能的传参</span></div><div class="line">		<span class="keyword">var</span> args=<span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</div><div class="line">		<span class="comment">//执行回调函数</span></div><div class="line">		callback.apply(that,args);</div><div class="line">		<span class="comment">//执行完后移除事件，这里的this指向的是事件实例</span></div><div class="line">		<span class="keyword">this</span>.removeListener(eventName,one);	</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//监听名为one的函数</span></div><div class="line">	<span class="keyword">this</span>.on(eventName,one);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports=Event;</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//引入继承模块</div><div class="line">var util=require(&apos;util&apos;);</div><div class="line"></div><div class="line">//A构造函数的实例继承事件库方法</div><div class="line">function A () &#123;</div><div class="line">	//A的实例取得Event的实例属性</div><div class="line">	Event.apply(this);</div><div class="line">&#125;</div><div class="line">//A.prototype的原型指向Event.prototype</div><div class="line">util.inherits(A,Event);</div><div class="line"></div><div class="line">//这样A的实例就继承了事件库的方法</div></pre></td></tr></table></figure>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//引入继承模块</span></div><div class="line"><span class="keyword">var</span> util=<span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"></div><div class="line"><span class="comment">//A构造函数的实例继承事件库方法</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//A的实例取得Event的实例属性</span></div><div class="line">	Event.apply(<span class="keyword">this</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">//A.prototype的原型指向Event.prototype</span></div><div class="line">util.inherits(A,Event);</div><div class="line"></div><div class="line"><span class="comment">//这样A的实例就继承了事件库的方法</span></div></pre></td></tr></table></figure>
       
     </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/node源码实现——base64转换/" rel="next" title="node源码实现——base64转换">
+                <i class="fa fa-chevron-left"></i> node源码实现——base64转换
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/07/node源码实现——嵌套文件夹的创建/" rel="prev" title="node源码实现——嵌套文件夹的创建">
+                node源码实现——嵌套文件夹的创建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
     
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2016/09/07/node源码实现——嵌套文件夹的创建/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
+
+
+        </div>
         
-          node源码实现——嵌套文件夹的创建
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://p1.so.qhmsg.com/t0104ff6ab349246736.jpg"
+               alt="BetaSu" />
+          <p class="site-author-name" itemprop="name">BetaSu</p>
+          <p class="site-description motion-element" itemprop="description">一言不合撸源码</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#EVENT-事件-的作用"><span class="nav-number">1.</span> <span class="nav-text">EVENT(事件)的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EVENT的机制"><span class="nav-number">2.</span> <span class="nav-text">EVENT的机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EVENT实现原理"><span class="nav-number">3.</span> <span class="nav-text">EVENT实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">4.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">5.</span> <span class="nav-text">使用方法</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
         
       </div>
-    </a>
-  
-  
-    <a href="/2016/09/06/node源码实现——base64转换/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">node源码实现——base64转换</div>
-      <strong class="article-nav-caption">></strong>
-    </a>
-  
-</nav>
+    </main>
 
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
   
-</article>
-
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-    <a class="jiathis_button_twitter"></a>
-    <a class="jiathis_button_plus"></a> 
-    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BetaSu</span>
 </div>
 
-
-
-
-
-
-<div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="node源码实现——EVENT" data-title="node源码实现——EVENT" data-url="https://betasu.github.io/2016/09/06/node源码实现——EVENT/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
 </div>
 
-
-
-
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
 </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info">
-    	<div class="footer-left">
-    		&copy; 2016 BetaSu
-    	</div>
-      	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
     </div>
   </div>
-</footer>
-    </div>
-    
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
 
+  
 
-<script>
-	var yiliaConfig = {
-		fancybox: true,
-		mathjax: true,
-		animate: true,
-		isHome: false,
-		isPost: true,
-		isArchive: false,
-		isTag: false,
-		isCategory: false,
-		open_in_new: false,
-		root: /
-	}
-</script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
-<script src="/js/main.js"></script>
-
-
-
-
-
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';                 
-    }       
-});
-</script>
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
 </script>
 
 
-  </div>
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
 </body>
 </html>
