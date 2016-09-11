@@ -84,19 +84,16 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+<meta name="description" content="什么是静态服务器 -当浏览器向服务器发送请求时，一部分请求是用户主动发送的——比如表单的提交。还有一部分是浏览器页面渲染过程中自动向后端发送的请求——比如对css文件、对图片的请求。这后面一部分文件有一个特点——他们不会经常改变，是作为静态文件存在于服务器的。 -这部分文件如果也像其他文件一样每一个都设置一个请求回调，将会十分繁琐。这时候就需要一个能自动加载静态文件的插件。在express中通过中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https://betasu.github.io/2016/08/21/hello-world/index.html">
+<meta property="og:title" content="express源码实现现5——静态服务器">
+<meta property="og:url" content="https://betasu.github.io/2016/09/11/express源码实现现5——静态服务器/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
-<meta property="og:updated_time" content="2016-08-21T01:53:30.027Z">
+<meta property="og:description" content="什么是静态服务器 -当浏览器向服务器发送请求时，一部分请求是用户主动发送的——比如表单的提交。还有一部分是浏览器页面渲染过程中自动向后端发送的请求——比如对css文件、对图片的请求。这后面一部分文件有一个特点——他们不会经常改变，是作为静态文件存在于服务器的。 -这部分文件如果也像其他文件一样每一个都设置一个请求回调，将会十分繁琐。这时候就需要一个能自动加载静态文件的插件。在express中通过中">
+<meta property="og:updated_time" content="2016-09-11T02:33:25.521Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+<meta name="twitter:title" content="express源码实现现5——静态服务器">
+<meta name="twitter:description" content="什么是静态服务器 -当浏览器向服务器发送请求时，一部分请求是用户主动发送的——比如表单的提交。还有一部分是浏览器页面渲染过程中自动向后端发送的请求——比如对css文件、对图片的请求。这后面一部分文件有一个特点——他们不会经常改变，是作为静态文件存在于服务器的。 -这部分文件如果也像其他文件一样每一个都设置一个请求回调，将会十分繁琐。这时候就需要一个能自动加载静态文件的插件。在express中通过中">
 
 
 
@@ -117,9 +114,9 @@ Quick">
 
 
 
-  <link rel="canonical" href="https://betasu.github.io/2016/08/21/hello-world/"/>
+  <link rel="canonical" href="https://betasu.github.io/2016/09/11/express源码实现现5——静态服务器/"/>
 
-  <title> Hello World | 我是卡卡卡颂 </title>
+  <title> express源码实现现5——静态服务器 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +236,7 @@ Quick">
             
             
               
-                Hello World
+                express源码实现现5——静态服务器
               
             
           </h1>
@@ -251,8 +248,8 @@ Quick">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-21T09:53:30+08:00" content="2016-08-21">
-              2016-08-21
+            <time itemprop="dateCreated" datetime="2016-09-11T09:45:13+08:00" content="2016-09-11">
+              2016-09-11
             </time>
           </span>
 
@@ -279,16 +276,9 @@ Quick">
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
+        <h2 id="什么是静态服务器"><a href="#什么是静态服务器" class="headerlink" title="什么是静态服务器"></a>什么是静态服务器</h2><p> -当浏览器向服务器发送请求时，一部分请求是用户主动发送的——比如表单的提交。还有一部分是浏览器页面渲染过程中自动向后端发送的请求——比如对css文件、对图片的请求。这后面一部分文件有一个特点——他们不会经常改变，是作为静态文件存在于服务器的。<br> -这部分文件如果也像其他文件一样每一个都设置一个请求回调，将会十分繁琐。这时候就需要一个能自动加载静态文件的插件。在express中通过中间件的形式实现。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p> 在优先级很高的中间件中指定一个静态文件夹，每次响应请求时都会先搜索一遍静态文件夹，如果找到匹配的文件就返给客户端。</p>
+<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs=<span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> path=<span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="comment">//作为中间件使用</span></div><div class="line"><span class="built_in">module</span>.exports=<span class="function"><span class="keyword">function</span> (<span class="params">p</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">req,res,next</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> file=path.join(p,req.path);</div><div class="line">		fs.exists(file,<span class="function"><span class="keyword">function</span> (<span class="params">exist</span>)</span>&#123;</div><div class="line">		<span class="comment">//如果文件存在则发送给客户端</span></div><div class="line">			<span class="keyword">if</span> (exist&amp;&amp;file!=<span class="string">'/'</span>) &#123;</div><div class="line">				fs.createReadStream(file).pipe(res);</div><div class="line">			&#125; <span class="keyword">else</span> next();</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
       
     </div>
 
@@ -313,13 +303,13 @@ Quick">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/09/09/express源码实现4——res-send/" rel="next" title="express源码实现4——res.send">
+                <i class="fa fa-chevron-left"></i> express源码实现4——res.send
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/21/myblog/" rel="prev" title="angular 自定义指令的配置方法">
-                angular 自定义指令的配置方法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -419,7 +409,7 @@ Quick">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是静态服务器"><span class="nav-number">1.</span> <span class="nav-text">什么是静态服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码实现"><span class="nav-number">3.</span> <span class="nav-text">源码实现</span></a></li></ol></div>
             
           </div>
         </section>
