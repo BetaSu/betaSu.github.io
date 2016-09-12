@@ -84,25 +84,16 @@
 
 
 
-<meta name="description" content="base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64).字符串转换成base64格式流程
-定义chars=’ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/‘.split(‘’);
-将字符串转换成buffer。
-buffer每一项转换成二进制。">
+<meta name="description" content="为了验证闭包的学习，有必要实现一个简单的依赖加载器。代码实现123456789101112131415161718192021222324252627282930var myModules=(function () &amp;#123;		//保存所有定义的模块	var modules=&amp;#123;&amp;#125;;	/**	 *定义新模块，接收3个参数	 *name:模块名	 *deps:模块依赖的其他模块">
 <meta property="og:type" content="article">
-<meta property="og:title" content="node源码实现——base64转换">
-<meta property="og:url" content="https://betasu.github.io/2016/09/06/node源码实现——base64转换/index.html">
+<meta property="og:title" content="简单的依赖加载器实现">
+<meta property="og:url" content="https://betasu.github.io/2016/09/12/简单的依赖加载器实现/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64).字符串转换成base64格式流程
-定义chars=’ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/‘.split(‘’);
-将字符串转换成buffer。
-buffer每一项转换成二进制。">
-<meta property="og:updated_time" content="2016-09-08T09:23:10.111Z">
+<meta property="og:description" content="为了验证闭包的学习，有必要实现一个简单的依赖加载器。代码实现123456789101112131415161718192021222324252627282930var myModules=(function () &amp;#123;		//保存所有定义的模块	var modules=&amp;#123;&amp;#125;;	/**	 *定义新模块，接收3个参数	 *name:模块名	 *deps:模块依赖的其他模块">
+<meta property="og:updated_time" content="2016-09-12T10:29:38.743Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="node源码实现——base64转换">
-<meta name="twitter:description" content="base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64).字符串转换成base64格式流程
-定义chars=’ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/‘.split(‘’);
-将字符串转换成buffer。
-buffer每一项转换成二进制。">
+<meta name="twitter:title" content="简单的依赖加载器实现">
+<meta name="twitter:description" content="为了验证闭包的学习，有必要实现一个简单的依赖加载器。代码实现123456789101112131415161718192021222324252627282930var myModules=(function () &amp;#123;		//保存所有定义的模块	var modules=&amp;#123;&amp;#125;;	/**	 *定义新模块，接收3个参数	 *name:模块名	 *deps:模块依赖的其他模块">
 
 
 
@@ -123,9 +114,9 @@ buffer每一项转换成二进制。">
 
 
 
-  <link rel="canonical" href="https://betasu.github.io/2016/09/06/node源码实现——base64转换/"/>
+  <link rel="canonical" href="https://betasu.github.io/2016/09/12/简单的依赖加载器实现/"/>
 
-  <title> node源码实现——base64转换 | 我是卡卡卡颂 </title>
+  <title> 简单的依赖加载器实现 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -245,7 +236,7 @@ buffer每一项转换成二进制。">
             
             
               
-                node源码实现——base64转换
+                简单的依赖加载器实现
               
             
           </h1>
@@ -257,8 +248,8 @@ buffer每一项转换成二进制。">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-06T11:32:38+08:00" content="2016-09-06">
-              2016-09-06
+            <time itemprop="dateCreated" datetime="2016-09-12T17:16:55+08:00" content="2016-09-12">
+              2016-09-12
             </time>
           </span>
 
@@ -285,15 +276,11 @@ buffer每一项转换成二进制。">
       
 
       
-        <h2 id="base64格式文件可以用来存放小容量的文件-如动态生成的验证码-node中实现了各种编码格式的转换-如utf8-base64"><a href="#base64格式文件可以用来存放小容量的文件-如动态生成的验证码-node中实现了各种编码格式的转换-如utf8-base64" class="headerlink" title="base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64)."></a>base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64).</h2><h2 id="字符串转换成base64格式流程"><a href="#字符串转换成base64格式流程" class="headerlink" title="字符串转换成base64格式流程"></a>字符串转换成base64格式流程</h2><ol>
-<li>定义chars=’ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/‘.split(‘’);</li>
-<li>将字符串转换成buffer。</li>
-<li>buffer每一项转换成二进制。</li>
-<li>将得到的二进制拼接成字符串，再以6个为一组截取成段(因为二进制6个为一组转换成十进制最大为2^6-1=63,刚好能和chars一一对应)。</li>
-<li>每一段转换成十进制，该十进制就对应chars中相应的索引。</li>
-<li>将对应的索引拼接在一起就是base64格式内容。</li>
-</ol>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">toBase64</span> (<span class="params">str</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> chars=<span class="string">'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'</span>.split(<span class="string">''</span>);</div><div class="line">    <span class="keyword">var</span> buffer=<span class="keyword">new</span> Buffer(str);</div><div class="line">    <span class="keyword">var</span> str=<span class="string">''</span>;</div><div class="line">    <span class="keyword">var</span> arr=[];</div><div class="line">    <span class="comment">//遍历buffer的每一项，转换成二进制</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;buffer.length;i++) &#123;</div><div class="line">       <span class="keyword">var</span> a= buffer[i].toString(<span class="number">2</span>);</div><div class="line">        str+=a;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//对拼接的二进制6个为一组分割，转换成十进制，去chars中查找索引对应值</span></div><div class="line">    str.replace(<span class="regexp">/\d&#123;6&#125;/g</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        arr.push(chars[<span class="built_in">parseInt</span>(<span class="built_in">arguments</span>[<span class="number">0</span>],<span class="number">2</span>)]);</div><div class="line">    &#125;)  </div><div class="line">    <span class="comment">//将结果拼接并输出</span></div><div class="line">    <span class="keyword">return</span> arr.join(<span class="string">''</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <h2 id="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"><a href="#为了验证闭包的学习，有必要实现一个简单的依赖加载器。" class="headerlink" title="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"></a>为了验证闭包的学习，有必要实现一个简单的依赖加载器。</h2><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myModules=(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//保存所有定义的模块</span></div><div class="line">	<span class="keyword">var</span> modules=&#123;&#125;;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 *定义新模块，接收3个参数</div><div class="line">	 *name:模块名</div><div class="line">	 *deps:模块依赖的其他模块</div><div class="line">	 *impl:模块的定义</div><div class="line">	**/ </div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">define</span>(<span class="params">name,deps,impl</span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//遍历依赖每一项，取出每个模块</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;deps.length;i++) &#123;</div><div class="line">			deps[i]=modules[deps[i]];</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//将新模块存储进模块池，并注入依赖</span></div><div class="line">		modules[name]=impl.apply(impl,deps);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//从模块池中取出模块</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">get</span> (<span class="params">name</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> modules[name];</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//暴露api</span></div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		define: define,</div><div class="line">		get: get</div><div class="line">	&#125;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">myModules.define(&apos;bar&apos;,[],function () &#123;</div><div class="line">	function hello (who) &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello:hello</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">myModules.define(&apos;foo&apos;,[&apos;bar&apos;],function (bar) &#123;</div><div class="line">	functin hello2 () &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello2:hello2</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">var bar=myModules.get(&apos;bar&apos;);</div><div class="line">var foo=myModules.get(&apos;foo&apos;);</div></pre></td></tr></table></figure>
+<ul>
+<li>内容转自《你不知道的Javascript》</li>
+</ul>
 
       
     </div>
@@ -319,17 +306,13 @@ buffer每一项转换成二进制。">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/05/express源码实现——错误中间件及params/" rel="next" title="express源码实现3——错误中间件及params">
-                <i class="fa fa-chevron-left"></i> express源码实现3——错误中间件及params
+              <a href="/2016/09/11/express源码实现现5——静态服务器/" rel="next" title="express源码实现现5——静态服务器">
+                <i class="fa fa-chevron-left"></i> express源码实现现5——静态服务器
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/06/node源码实现——EVENT/" rel="prev" title="node源码实现——EVENT">
-                node源码实现——EVENT <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -429,7 +412,7 @@ buffer每一项转换成二进制。">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#base64格式文件可以用来存放小容量的文件-如动态生成的验证码-node中实现了各种编码格式的转换-如utf8-base64"><span class="nav-number">1.</span> <span class="nav-text">base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64).</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串转换成base64格式流程"><span class="nav-number">2.</span> <span class="nav-text">字符串转换成base64格式流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为了验证闭包的学习，有必要实现一个简单的依赖加载器。"><span class="nav-number">1.</span> <span class="nav-text">为了验证闭包的学习，有必要实现一个简单的依赖加载器。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">2.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a></li></ol></div>
             
           </div>
         </section>

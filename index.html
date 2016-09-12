@@ -238,6 +238,104 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/12/简单的依赖加载器实现/" itemprop="url">
+                  简单的依赖加载器实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-12T17:16:55+08:00" content="2016-09-12">
+              2016-09-12
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"><a href="#为了验证闭包的学习，有必要实现一个简单的依赖加载器。" class="headerlink" title="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"></a>为了验证闭包的学习，有必要实现一个简单的依赖加载器。</h2><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myModules=(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//保存所有定义的模块</span></div><div class="line">	<span class="keyword">var</span> modules=&#123;&#125;;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 *定义新模块，接收3个参数</div><div class="line">	 *name:模块名</div><div class="line">	 *deps:模块依赖的其他模块</div><div class="line">	 *impl:模块的定义</div><div class="line">	**/ </div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">define</span>(<span class="params">name,deps,impl</span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//遍历依赖每一项，取出每个模块</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;deps.length;i++) &#123;</div><div class="line">			deps[i]=modules[deps[i]];</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//将新模块存储进模块池，并注入依赖</span></div><div class="line">		modules[name]=impl.apply(impl,deps);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//从模块池中取出模块</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">get</span> (<span class="params">name</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> modules[name];</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//暴露api</span></div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		define: define,</div><div class="line">		get: get</div><div class="line">	&#125;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">myModules.define(&apos;bar&apos;,[],function () &#123;</div><div class="line">	function hello (who) &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello:hello</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">myModules.define(&apos;foo&apos;,[&apos;bar&apos;],function (bar) &#123;</div><div class="line">	functin hello2 () &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello2:hello2</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">var bar=myModules.get(&apos;bar&apos;);</div><div class="line">var foo=myModules.get(&apos;foo&apos;);</div></pre></td></tr></table></figure>
+<ul>
+<li>内容转自《你不知道的Javascript》</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/11/express源码实现现5——静态服务器/" itemprop="url">
                   express源码实现现5——静态服务器
                 </a>
@@ -428,7 +526,7 @@
               
                 
                 <a class="post-title-link" href="/2016/09/08/node源码实现——promise/" itemprop="url">
-                  node源码实现——promise
+                  node源码实现——简单的promise实现
                 </a>
               
             
@@ -1154,114 +1252,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/01/angular——多页面路由/" itemprop="url">
-                  angular——多页面路由
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-01T09:03:23+08:00" content="2016-09-01">
-              2016-09-01
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="多页面路由与单页面路由的区别"><a href="#多页面路由与单页面路由的区别" class="headerlink" title="多页面路由与单页面路由的区别"></a>多页面路由与单页面路由的区别</h2><p>之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。</p>
-<h2 id="多页面路由引入"><a href="#多页面路由引入" class="headerlink" title="多页面路由引入"></a>多页面路由引入</h2><ol>
-<li>引入angular-ui-router.js文件</li>
-<li><p>模块中注入ui.router</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'app'</span>,[<span class="string">'ui.router'</span>]);</div></pre></td></tr></table></figure>
-</li>
-<li><p>配置文件中注入$stateProvider和$urlRouterProvider,前者实现多页面路由，后者实现单页面路由中otherwise的功能</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.config(<span class="function"><span class="keyword">function</span> (<span class="params">$stateProvider,$urlRouterProvider</span>) </span>&#123;&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>单页路由配置</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//配置未定义的路径</span></div><div class="line">$urlRouterProvider.otherwise(<span class="string">'/'</span>);</div><div class="line"><span class="comment">//配置首页,状态为index</span></div><div class="line"> $stateProvider.state(<span class="string">'index'</span>,&#123;</div><div class="line">           url:<span class="string">''</span>,</div><div class="line">           templateUrl:<span class="string">'./index.html'</span></div><div class="line">       &#125;).state(<span class="string">'about'</span>,&#123;</div><div class="line">           url:<span class="string">'/about'</span>,</div><div class="line">           templateUrl:<span class="string">'./about.html'</span>,</div><div class="line">           controller:<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line">               $scope.books=[&#123;id:<span class="number">1</span>,name:<span class="string">'王子与玫瑰'</span>&#125;,&#123;id:<span class="number">2</span>,name:<span class="string">'夜莺与玫瑰'</span>&#125;,&#123;id:<span class="number">3</span>,name:<span class="string">'王尔德'</span>&#125;]</div><div class="line">           &#125;,</div><div class="line">           <span class="comment">//配置中注入的服务</span></div><div class="line">           resolve:&#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>多页面路由配置</p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1307,7 +1297,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
