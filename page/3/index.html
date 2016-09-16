@@ -238,6 +238,166 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/23/angular知识总结/" itemprop="url">
+                  angular————概论 指令 表达式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-23T21:03:01+08:00" content="2016-08-23">
+              2016-08-23
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="AngularJs是什么"><a href="#AngularJs是什么" class="headerlink" title="AngularJs是什么"></a>AngularJs是什么</h2><ul>
+<li>AngularJs是一款MVVM结构的前端框架。他分为M-model（数据层），V-view（视图层），VM-viewModel（视图模型层）。其中V与VM实现了双向数据绑定（具体的实现方法是通过内部的$digest也就是脏值查询实现的）。VM与M实现数据的交互</li>
+</ul>
+<h2 id="AngularJs能做什么"><a href="#AngularJs能做什么" class="headerlink" title="AngularJs能做什么"></a>AngularJs能做什么</h2><ul>
+<li>AngularJs通过内部的各种功能实现了在不操作DOM树（当然内部封装指令时会调用DOM方法）的情况下根据需要实时渲染前端页面、与后端交互。并且实现了模块化。是一款在不断的使用中可以不断健壮的框架。</li>
+</ul>
+<h2 id="AngularJs怎么做"><a href="#AngularJs怎么做" class="headerlink" title="AngularJs怎么做"></a>AngularJs怎么做</h2><ul>
+<li><p>Angular通过各种内部的功能组合实现前端页面实时渲染。具体如下</p>
+<ol>
+<li><p>指令</p>
+<ul>
+<li>凡是以ng-或者data-ng-为前缀的都是angularJS的内置指令</li>
+<li>指令分为内置指令和自定义指令，自定义指令通过mod.directive()方法产生</li>
+<li><p>指令有4种调用方法，即“ECMA”。</p>
+<ul>
+<li><p>E-element 作为元素标签调用 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;abcd&gt;&lt;/abcd&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>C-class 作为类调用 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;abcd&quot;&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>M-comment 作为注释调用,指令内的replace:true，且注释前后有2个空格</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!-- directive:zfpx --&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>A-attribute 作为元素属性调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div abcd&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>ng-app :angular起始位置，会形成$scope根目录</li>
+<li>ng-class :两种用法 ‘{true:”c1”,false:”c2”}[flag]’  ‘{c1:flag1,c2:flag2}’</li>
+<li>ng-init :初始化数据</li>
+<li>ng-if :控制元素是否存在，会形成自己的作用域，如果不存在内部作用域也会销毁</li>
+<li>ng-show :控制元素显示隐藏，即使隐藏了内部指令还会执行</li>
+<li>ng-hide :与show相反</li>
+<li>ng-include :引入html片段</li>
+<li>ng-model :用在表单元素上，存储value值，实现数据双向绑定</li>
+<li>ng-repeat :迭代DOM元素，会形成自己的作用域。当遍历重复数据会报错， track by $index解决</li>
+<li>ng-style :动态增加行内样式</li>
+<li>ng-src</li>
+<li>ng-href</li>
+<li>ng-change</li>
+<li>ng-model-options</li>
+<li>ng-click</li>
+<li>ng-bind </li>
+<li>ng-bind-template</li>
+<li>ng-cloak :解决闪烁,需要在加载的时候给一个隐藏样式</li>
+</ol>
+</li>
+<li><p>表达式</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;&#125;&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>实现DOM中的数据与作用域$scope数据的绑定</li>
+<li>可以放文字，变量，运算符，其中变量可以存储字符串、数组、对象等</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p>##Angular 内部运行的三个阶段</p>
+<ul>
+<li>加载阶段 ：引入angular开始到对指令解析前</li>
+<li>编译阶段 ： template replac transclude compile</li>
+<li>链接阶段 ： link实现与作用域的绑定，如果当前没有形成在自己的作用域，scope指向上一级作用域</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/23/angular ng-model实现/" itemprop="url">
                   angular ng-model双向绑定的自定义模板实现
                 </a>
@@ -605,7 +765,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

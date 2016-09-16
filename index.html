@@ -238,6 +238,125 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/16/WebSocket入门/" itemprop="url">
+                  WebSocket入门
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T14:18:22+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是WebSocket"><a href="#什么是WebSocket" class="headerlink" title="什么是WebSocket"></a>什么是WebSocket</h2><p>WebSocket是html5提供的一种浏览器和服务器进行全双工通信的技术。要解释全双工通信，首先得介绍一下WebSocket之前浏览器与服务器通信的技术。</p>
+<h2 id="WebSocket之前的通信技术"><a href="#WebSocket之前的通信技术" class="headerlink" title="WebSocket之前的通信技术"></a>WebSocket之前的通信技术</h2><ol>
+<li><p>轮询<br> 为了实时获得数据，浏览器周期性的向服务器发送请求，如果服务器没有新的数据则返回空响应。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">  setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">      xhr.open(<span class="string">'GET'</span>,<span class="string">'/data'</span>,<span class="literal">true</span>);</div><div class="line">      xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">          <span class="keyword">if</span>(xhr.readyState == <span class="number">4</span> &amp;&amp; xhr.status == <span class="number">200</span>)&#123;</div><div class="line">            <span class="built_in">document</span>.querySelector(<span class="string">'#content'</span>).innerHTML = xhr.responseText;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">      xhr.send();</div><div class="line">  &#125;,<span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<p> 缺点:1.大量无意义的请求造成网络压力</p>
+<pre><code>2.不能实时得到新数据
+</code></pre></li>
+<li><p>长轮询<br> 为了弥补轮询的缺陷，浏览器向服务器发送请求，如果服务器有响应新数据，浏览器再在接收响应的时候继续发送请求，使数据随时保持更新。</p>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//封装请求</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">        xhr.open(<span class="string">'GET'</span>, <span class="string">'/data'</span>, <span class="literal">true</span>);</div><div class="line">        xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (xhr.readyState == <span class="number">4</span> &amp;&amp; xhr.status == <span class="number">200</span>) &#123;</div><div class="line">                <span class="built_in">document</span>.querySelector(<span class="string">'#content'</span>).innerHTML = xhr.responseText;</div><div class="line">                <span class="comment">//回调函数中递归调用</span></div><div class="line">                send();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        xhr.send();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">send();</div></pre></td></tr></table></figure>
+<p> 缺点:如果是频繁的发送数据，浏览器会一直处于加载的状态</p>
+</li>
+<li><p>iframe流<br> 利用iframe接收的服务器响应中如果包含脚本就会执行的原理,用iframe标签的src属性向服务器发起请求。</p>
+<h3 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//客户端网页</span></div><div class="line">&lt;iframe src=<span class="string">"http://localhost:1234/time"</span> frameborder=<span class="string">"0"</span>&gt;&lt;/iframe&gt;</div><div class="line"></div><div class="line"><span class="comment">//服务端</span></div><div class="line">app.get(<span class="string">'/time'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">req,res</span>) </span>&#123;</div><div class="line">    setInterval(<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="comment">//如果调用end、send会结束响应, write方法不会，能实现持续写入</span></div><div class="line">        res.write(<span class="string">`&lt;script&gt;</span></div><div class="line">        	//由于iframe会形成自己的document，所以要用parent.document取得页面</div><div class="line">           parent.document.querySelector('#time').innerHTML= new Date().toLocaleString();</div><div class="line">        &lt;/script&gt;`);</div><div class="line">    &#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="WebSocket的优势"><a href="#WebSocket的优势" class="headerlink" title="WebSocket的优势"></a>WebSocket的优势</h2><p>使用WebSocket，浏览器和服务器只需要要做一个握手的动作，然后，浏览器和服务器之间就形成了一条快速通道，两者之间就直接可以数据互相传送</p>
+<ul>
+<li>节省资源：互相沟通的Header是很小的-大概只有 2 Bytes。</li>
+<li>推送信息：不需要客户端请求,服务器可以主动传送数据给客户端</li>
+<li>支持跨域：WebSocket天生支持跨域<h2 id="解释一下单工、双工"><a href="#解释一下单工、双工" class="headerlink" title="解释一下单工、双工"></a>解释一下单工、双工</h2></li>
+<li>单工指只能由一端向另一端发送数据。</li>
+<li>半双工指客户端、服务器可以互相发送数据，但不能在同一时间。必须有先后顺序。我们平时利用http协议与后台的通信都是半双工。</li>
+<li>双工指服务器和客户端可以随时向对方发送数据与接收对方的数据。</li>
+</ul>
+<h2 id="WebSocket-API"><a href="#WebSocket-API" class="headerlink" title="WebSocket API"></a>WebSocket API</h2><h3 id="服务器端"><a href="#服务器端" class="headerlink" title="服务器端"></a>服务器端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocketServer=<span class="built_in">require</span>(<span class="string">'ws'</span>).Server;</div><div class="line"><span class="keyword">var</span> server=<span class="keyword">new</span> WebSocketServer(&#123;port:<span class="number">8000</span>&#125;);</div><div class="line"></div><div class="line"><span class="comment">//监听客户端请求 ,即与客户端握手</span></div><div class="line">server.on(<span class="string">'connection'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">websocket</span>)</span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//监听从客户端传来的信息</span></div><div class="line">	websocket.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(msg);</div><div class="line">		<span class="comment">//向客户端发送信息</span></div><div class="line">		websocket.send(msg);</div><div class="line">	&#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Node客户端"><a href="#Node客户端" class="headerlink" title="Node客户端"></a>Node客户端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocket=<span class="built_in">require</span>(<span class="string">'ws'</span>);</div><div class="line"><span class="keyword">var</span> ws=<span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080/'</span>);</div><div class="line"><span class="comment">//检测服务器是否开放，即与服务端握手</span></div><div class="line">ws.on(<span class="string">'open'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//如果服务器开放向服务器发送信息</span></div><div class="line">	ws.send(<span class="string">'hello'</span>)</div><div class="line">&#125;);</div><div class="line"><span class="comment">//监听从服务器传来的数据</span></div><div class="line">ws.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">data,flag</span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(data);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Web客户端"><a href="#Web客户端" class="headerlink" title="Web客户端"></a>Web客户端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ws=<span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080/'</span>);</div><div class="line"><span class="comment">//监听连接事件</span></div><div class="line">ws.on(<span class="string">'open'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//向服务器发送数据</span></div><div class="line">	ws.send(<span class="number">123</span>);</div><div class="line">&#125;)</div><div class="line"><span class="comment">//监听服务器传来的数据</span></div><div class="line">ws.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</div><div class="line">	</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/12/简单的依赖加载器实现/" itemprop="url">
                   简单的依赖加载器实现
                 </a>
@@ -1058,113 +1177,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/09/03/express源码实现—1—基础实现/" itemprop="url">
-                  express源码实现1——基础实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-03T21:05:00+08:00" content="2016-09-03">
-              2016-09-03
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="express是什么"><a href="#express是什么" class="headerlink" title="express是什么"></a>express是什么</h2><p> express之于nodeJS相当于jQuery之于JS。是一款后端框架（我个人觉得更应该是一个库），能用更简洁的代码量实现原生nodeJS中的效果。</p>
-<h2 id="本篇文章的目的"><a href="#本篇文章的目的" class="headerlink" title="本篇文章的目的"></a>本篇文章的目的</h2><p> 实现express中最主要的方法——创建服务器，监听端口，接收各种前端请求。</p>
-<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
-<li>分析express调用方法<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express=<span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> app=express();</div><div class="line"><span class="comment">//监听8080端口，启动服务器</span></div><div class="line">app.listen(<span class="number">8080</span>);</div><div class="line">app.get(<span class="string">'/'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;</div><div class="line">	<span class="comment">//代码</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>从调用方法来看，express是一个函数，我们需要取得的是express的返回值。该返回值上的listen方法启动服务器并监听端口。该返回值有get、post、put等方法用来接收相应方法的请求。</p>
-<ul>
-<li>代码实现<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.定义express函数</span></div><div class="line"><span class="keyword">var</span> express=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//5.定义app函数，因为被作为createServer()的回调函数传入,所以接收req、res两个参数</span></div><div class="line">	<span class="keyword">var</span> app=<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;&#125;</div><div class="line"></div><div class="line">	<span class="comment">//6.路由路由池，存放各种请求，用以在适当时候加载</span></div><div class="line">	app.routes=[];</div><div class="line"></div><div class="line">	<span class="comment">//7.定义各种请求方法对应的函数</span></div><div class="line">	<span class="keyword">var</span> methods=[<span class="string">'get'</span>,<span class="string">'post'</span>,<span class="string">'put'</span>,<span class="string">'options'</span>,<span class="string">'delete'</span>,<span class="string">'all'</span>];</div><div class="line">	methods.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">method</span>) </span>&#123;</div><div class="line">		<span class="comment">//各种方法的函数接收两个参数  路径 与回调函数</span></div><div class="line">		app[method]=<span class="function"><span class="keyword">function</span> (<span class="params">path,fn</span>) </span>&#123;</div><div class="line">			<span class="comment">//将方法，路径与回调函数全部放入方发池</span></div><div class="line">			<span class="keyword">var</span> config=&#123;method:method,path:path,fn:fn&#125;;</div><div class="line">			routes.push(config);</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">	</div><div class="line">	<span class="comment">//4.定义返回值上的listen方法</span></div><div class="line">	app.listen=<span class="function"><span class="keyword">function</span> (<span class="params">port</span>) </span>&#123;</div><div class="line">		<span class="comment">//启动服务器，监听端口，返回值作为createServer()的回调函数传入</span></div><div class="line">		<span class="built_in">require</span>(<span class="string">'http'</span>).createServer(app).listen(port);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//3.返回方法</span></div><div class="line">	<span class="keyword">return</span> app;</div><div class="line">&#125;</div><div class="line"><span class="comment">//2.暴露接口</span></div><div class="line"><span class="built_in">module</span>.exports=express;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<ol>
-<li>当请求到来时将请求与路由池中保存的请求匹配，匹配上就执行相应回调函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//第5步定义的函数</span></div><div class="line"><span class="keyword">var</span> app=<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;</div><div class="line">	<span class="comment">//取得请求中的方法名和路径</span></div><div class="line">	<span class="keyword">var</span> method=req.method;</div><div class="line">	<span class="keyword">var</span> urlObj=<span class="built_in">require</span>(<span class="string">'url'</span>).parse(req.url,<span class="literal">true</span>);</div><div class="line">	<span class="keyword">var</span> pathname=urlObj.pathname;</div><div class="line"></div><div class="line">	<span class="comment">//将请求的方法名与路径与路由池中保存的匹配</span></div><div class="line">	<span class="keyword">var</span> route=app.routes.find(<span class="function"><span class="keyword">function</span> (<span class="params">route</span>) </span>&#123;</div><div class="line">		<span class="comment">//返回路径与方法都匹配项，其中method=='all'能匹配所有方法,path=="*"能匹配所有路径</span></div><div class="line">		<span class="keyword">return</span> (route.method==method||route.method==<span class="string">"all"</span>)&amp;&amp;(route.path==pathname||route.path==<span class="string">"*"</span>)</div><div class="line">	&#125;)</div><div class="line">	<span class="comment">//如果匹配到，就执行该路由的回调函数，传入req和res</span></div><div class="line">	<span class="keyword">if</span> (route) &#123;</div><div class="line">	route.fn(req,res);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="comment">//未匹配到则在页面上显示相应信息</span></div><div class="line">		res.end(<span class="string">`Cannot <span class="subst">$&#123;method&#125;</span> <span class="subst">$&#123;pathname&#125;</span>`</span>)</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/09/03/express源码实现2——中间件实现/" itemprop="url">
                   express源码实现2——中间件实现
                 </a>
@@ -1297,7 +1309,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

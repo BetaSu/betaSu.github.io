@@ -238,6 +238,113 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/03/express源码实现—1—基础实现/" itemprop="url">
+                  express源码实现1——基础实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-03T21:05:00+08:00" content="2016-09-03">
+              2016-09-03
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="express是什么"><a href="#express是什么" class="headerlink" title="express是什么"></a>express是什么</h2><p> express之于nodeJS相当于jQuery之于JS。是一款后端框架（我个人觉得更应该是一个库），能用更简洁的代码量实现原生nodeJS中的效果。</p>
+<h2 id="本篇文章的目的"><a href="#本篇文章的目的" class="headerlink" title="本篇文章的目的"></a>本篇文章的目的</h2><p> 实现express中最主要的方法——创建服务器，监听端口，接收各种前端请求。</p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
+<li>分析express调用方法<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express=<span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> app=express();</div><div class="line"><span class="comment">//监听8080端口，启动服务器</span></div><div class="line">app.listen(<span class="number">8080</span>);</div><div class="line">app.get(<span class="string">'/'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;</div><div class="line">	<span class="comment">//代码</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>从调用方法来看，express是一个函数，我们需要取得的是express的返回值。该返回值上的listen方法启动服务器并监听端口。该返回值有get、post、put等方法用来接收相应方法的请求。</p>
+<ul>
+<li>代码实现<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.定义express函数</span></div><div class="line"><span class="keyword">var</span> express=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//5.定义app函数，因为被作为createServer()的回调函数传入,所以接收req、res两个参数</span></div><div class="line">	<span class="keyword">var</span> app=<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;&#125;</div><div class="line"></div><div class="line">	<span class="comment">//6.路由路由池，存放各种请求，用以在适当时候加载</span></div><div class="line">	app.routes=[];</div><div class="line"></div><div class="line">	<span class="comment">//7.定义各种请求方法对应的函数</span></div><div class="line">	<span class="keyword">var</span> methods=[<span class="string">'get'</span>,<span class="string">'post'</span>,<span class="string">'put'</span>,<span class="string">'options'</span>,<span class="string">'delete'</span>,<span class="string">'all'</span>];</div><div class="line">	methods.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">method</span>) </span>&#123;</div><div class="line">		<span class="comment">//各种方法的函数接收两个参数  路径 与回调函数</span></div><div class="line">		app[method]=<span class="function"><span class="keyword">function</span> (<span class="params">path,fn</span>) </span>&#123;</div><div class="line">			<span class="comment">//将方法，路径与回调函数全部放入方发池</span></div><div class="line">			<span class="keyword">var</span> config=&#123;method:method,path:path,fn:fn&#125;;</div><div class="line">			routes.push(config);</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">	</div><div class="line">	<span class="comment">//4.定义返回值上的listen方法</span></div><div class="line">	app.listen=<span class="function"><span class="keyword">function</span> (<span class="params">port</span>) </span>&#123;</div><div class="line">		<span class="comment">//启动服务器，监听端口，返回值作为createServer()的回调函数传入</span></div><div class="line">		<span class="built_in">require</span>(<span class="string">'http'</span>).createServer(app).listen(port);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//3.返回方法</span></div><div class="line">	<span class="keyword">return</span> app;</div><div class="line">&#125;</div><div class="line"><span class="comment">//2.暴露接口</span></div><div class="line"><span class="built_in">module</span>.exports=express;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
+<li>当请求到来时将请求与路由池中保存的请求匹配，匹配上就执行相应回调函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//第5步定义的函数</span></div><div class="line"><span class="keyword">var</span> app=<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;</div><div class="line">	<span class="comment">//取得请求中的方法名和路径</span></div><div class="line">	<span class="keyword">var</span> method=req.method;</div><div class="line">	<span class="keyword">var</span> urlObj=<span class="built_in">require</span>(<span class="string">'url'</span>).parse(req.url,<span class="literal">true</span>);</div><div class="line">	<span class="keyword">var</span> pathname=urlObj.pathname;</div><div class="line"></div><div class="line">	<span class="comment">//将请求的方法名与路径与路由池中保存的匹配</span></div><div class="line">	<span class="keyword">var</span> route=app.routes.find(<span class="function"><span class="keyword">function</span> (<span class="params">route</span>) </span>&#123;</div><div class="line">		<span class="comment">//返回路径与方法都匹配项，其中method=='all'能匹配所有方法,path=="*"能匹配所有路径</span></div><div class="line">		<span class="keyword">return</span> (route.method==method||route.method==<span class="string">"all"</span>)&amp;&amp;(route.path==pathname||route.path==<span class="string">"*"</span>)</div><div class="line">	&#125;)</div><div class="line">	<span class="comment">//如果匹配到，就执行该路由的回调函数，传入req和res</span></div><div class="line">	<span class="keyword">if</span> (route) &#123;</div><div class="line">	route.fn(req,res);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="comment">//未匹配到则在页面上显示相应信息</span></div><div class="line">		res.end(<span class="string">`Cannot <span class="subst">$&#123;method&#125;</span> <span class="subst">$&#123;pathname&#125;</span>`</span>)</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/01/angular——多页面路由/" itemprop="url">
                   angular——多页面路由
                 </a>
@@ -1324,166 +1431,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/23/angular知识总结/" itemprop="url">
-                  angular————概论 指令 表达式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-23T21:03:01+08:00" content="2016-08-23">
-              2016-08-23
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="AngularJs是什么"><a href="#AngularJs是什么" class="headerlink" title="AngularJs是什么"></a>AngularJs是什么</h2><ul>
-<li>AngularJs是一款MVVM结构的前端框架。他分为M-model（数据层），V-view（视图层），VM-viewModel（视图模型层）。其中V与VM实现了双向数据绑定（具体的实现方法是通过内部的$digest也就是脏值查询实现的）。VM与M实现数据的交互</li>
-</ul>
-<h2 id="AngularJs能做什么"><a href="#AngularJs能做什么" class="headerlink" title="AngularJs能做什么"></a>AngularJs能做什么</h2><ul>
-<li>AngularJs通过内部的各种功能实现了在不操作DOM树（当然内部封装指令时会调用DOM方法）的情况下根据需要实时渲染前端页面、与后端交互。并且实现了模块化。是一款在不断的使用中可以不断健壮的框架。</li>
-</ul>
-<h2 id="AngularJs怎么做"><a href="#AngularJs怎么做" class="headerlink" title="AngularJs怎么做"></a>AngularJs怎么做</h2><ul>
-<li><p>Angular通过各种内部的功能组合实现前端页面实时渲染。具体如下</p>
-<ol>
-<li><p>指令</p>
-<ul>
-<li>凡是以ng-或者data-ng-为前缀的都是angularJS的内置指令</li>
-<li>指令分为内置指令和自定义指令，自定义指令通过mod.directive()方法产生</li>
-<li><p>指令有4种调用方法，即“ECMA”。</p>
-<ul>
-<li><p>E-element 作为元素标签调用 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;abcd&gt;&lt;/abcd&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>C-class 作为类调用 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;abcd&quot;&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>M-comment 作为注释调用,指令内的replace:true，且注释前后有2个空格</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;!-- directive:zfpx --&gt;</div></pre></td></tr></table></figure>
-</li>
-<li><p>A-attribute 作为元素属性调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;div abcd&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<ol>
-<li>ng-app :angular起始位置，会形成$scope根目录</li>
-<li>ng-class :两种用法 ‘{true:”c1”,false:”c2”}[flag]’  ‘{c1:flag1,c2:flag2}’</li>
-<li>ng-init :初始化数据</li>
-<li>ng-if :控制元素是否存在，会形成自己的作用域，如果不存在内部作用域也会销毁</li>
-<li>ng-show :控制元素显示隐藏，即使隐藏了内部指令还会执行</li>
-<li>ng-hide :与show相反</li>
-<li>ng-include :引入html片段</li>
-<li>ng-model :用在表单元素上，存储value值，实现数据双向绑定</li>
-<li>ng-repeat :迭代DOM元素，会形成自己的作用域。当遍历重复数据会报错， track by $index解决</li>
-<li>ng-style :动态增加行内样式</li>
-<li>ng-src</li>
-<li>ng-href</li>
-<li>ng-change</li>
-<li>ng-model-options</li>
-<li>ng-click</li>
-<li>ng-bind </li>
-<li>ng-bind-template</li>
-<li>ng-cloak :解决闪烁,需要在加载的时候给一个隐藏样式</li>
-</ol>
-</li>
-<li><p>表达式</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;&#125;&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>实现DOM中的数据与作用域$scope数据的绑定</li>
-<li>可以放文字，变量，运算符，其中变量可以存储字符串、数组、对象等</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<p>##Angular 内部运行的三个阶段</p>
-<ul>
-<li>加载阶段 ：引入angular开始到对指令解析前</li>
-<li>编译阶段 ： template replac transclude compile</li>
-<li>链接阶段 ： link实现与作用域的绑定，如果当前没有形成在自己的作用域，scope指向上一级作用域</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1529,7 +1476,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
