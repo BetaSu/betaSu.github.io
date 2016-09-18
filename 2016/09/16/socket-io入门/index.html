@@ -84,16 +84,28 @@
 
 
 
-<meta name="description" content="什么是静态服务器 -当浏览器向服务器发送请求时，一部分请求是用户主动发送的——比如表单的提交。还有一部分是浏览器页面渲染过程中自动向后端发送的请求——比如对css文件、对图片的请求。这后面一部分文件有一个特点——他们不会经常改变，是作为静态文件存在于服务器的。 -这部分文件如果也像其他文件一样每一个都设置一个请求回调，将会十分繁琐。这时候就需要一个能自动加载静态文件的插件。在express中通过中">
+<meta name="description" content="什么是socket.io一般说法是socket.io是一个websocket库。不过我更喜欢把他称为一个前后端交互库。因为他不仅封装了websocket的方法，在不支持websocket的浏览器中他会调用其他方法（如轮询，长轮询，iframe流）实现交互。
+socket.io的特点
+简易:封装了客户端与服务器端的api。
+跨平台:可以在自己喜欢的平台开发实时应用。
+兼容性:这点开篇已经说过。最低兼">
 <meta property="og:type" content="article">
-<meta property="og:title" content="express源码实现现5——静态服务器">
-<meta property="og:url" content="https://betasu.github.io/2016/09/11/express源码实现现5——静态服务器/index.html">
+<meta property="og:title" content="socket.io入门">
+<meta property="og:url" content="https://betasu.github.io/2016/09/16/socket-io入门/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="什么是静态服务器 -当浏览器向服务器发送请求时，一部分请求是用户主动发送的——比如表单的提交。还有一部分是浏览器页面渲染过程中自动向后端发送的请求——比如对css文件、对图片的请求。这后面一部分文件有一个特点——他们不会经常改变，是作为静态文件存在于服务器的。 -这部分文件如果也像其他文件一样每一个都设置一个请求回调，将会十分繁琐。这时候就需要一个能自动加载静态文件的插件。在express中通过中">
-<meta property="og:updated_time" content="2016-09-11T02:33:25.521Z">
+<meta property="og:description" content="什么是socket.io一般说法是socket.io是一个websocket库。不过我更喜欢把他称为一个前后端交互库。因为他不仅封装了websocket的方法，在不支持websocket的浏览器中他会调用其他方法（如轮询，长轮询，iframe流）实现交互。
+socket.io的特点
+简易:封装了客户端与服务器端的api。
+跨平台:可以在自己喜欢的平台开发实时应用。
+兼容性:这点开篇已经说过。最低兼">
+<meta property="og:updated_time" content="2016-09-18T09:20:28.983Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="express源码实现现5——静态服务器">
-<meta name="twitter:description" content="什么是静态服务器 -当浏览器向服务器发送请求时，一部分请求是用户主动发送的——比如表单的提交。还有一部分是浏览器页面渲染过程中自动向后端发送的请求——比如对css文件、对图片的请求。这后面一部分文件有一个特点——他们不会经常改变，是作为静态文件存在于服务器的。 -这部分文件如果也像其他文件一样每一个都设置一个请求回调，将会十分繁琐。这时候就需要一个能自动加载静态文件的插件。在express中通过中">
+<meta name="twitter:title" content="socket.io入门">
+<meta name="twitter:description" content="什么是socket.io一般说法是socket.io是一个websocket库。不过我更喜欢把他称为一个前后端交互库。因为他不仅封装了websocket的方法，在不支持websocket的浏览器中他会调用其他方法（如轮询，长轮询，iframe流）实现交互。
+socket.io的特点
+简易:封装了客户端与服务器端的api。
+跨平台:可以在自己喜欢的平台开发实时应用。
+兼容性:这点开篇已经说过。最低兼">
 
 
 
@@ -114,9 +126,9 @@
 
 
 
-  <link rel="canonical" href="https://betasu.github.io/2016/09/11/express源码实现现5——静态服务器/"/>
+  <link rel="canonical" href="https://betasu.github.io/2016/09/16/socket-io入门/"/>
 
-  <title> express源码实现现5——静态服务器 | 我是卡卡卡颂 </title>
+  <title> socket.io入门 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -236,7 +248,7 @@
             
             
               
-                express源码实现现5——静态服务器
+                socket.io入门
               
             
           </h1>
@@ -248,8 +260,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-11T09:45:13+08:00" content="2016-09-11">
-              2016-09-11
+            <time itemprop="dateCreated" datetime="2016-09-16T14:59:50+08:00" content="2016-09-16">
+              2016-09-16
             </time>
           </span>
 
@@ -276,9 +288,20 @@
       
 
       
-        <h2 id="什么是静态服务器"><a href="#什么是静态服务器" class="headerlink" title="什么是静态服务器"></a>什么是静态服务器</h2><p> -当浏览器向服务器发送请求时，一部分请求是用户主动发送的——比如表单的提交。还有一部分是浏览器页面渲染过程中自动向后端发送的请求——比如对css文件、对图片的请求。这后面一部分文件有一个特点——他们不会经常改变，是作为静态文件存在于服务器的。<br> -这部分文件如果也像其他文件一样每一个都设置一个请求回调，将会十分繁琐。这时候就需要一个能自动加载静态文件的插件。在express中通过中间件的形式实现。</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p> 在优先级很高的中间件中指定一个静态文件夹，每次响应请求时都会先搜索一遍静态文件夹，如果找到匹配的文件就返给客户端。</p>
-<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs=<span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> path=<span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="comment">//作为中间件使用</span></div><div class="line"><span class="built_in">module</span>.exports=<span class="function"><span class="keyword">function</span> (<span class="params">p</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">req,res,next</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> file=path.join(p,req.path);</div><div class="line">		fs.exists(file,<span class="function"><span class="keyword">function</span> (<span class="params">exist</span>)</span>&#123;</div><div class="line">		<span class="comment">//如果文件存在则发送给客户端</span></div><div class="line">			<span class="keyword">if</span> (exist&amp;&amp;file!=<span class="string">'/'</span>) &#123;</div><div class="line">				fs.createReadStream(file).pipe(res);</div><div class="line">			&#125; <span class="keyword">else</span> next();</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <h2 id="什么是socket-io"><a href="#什么是socket-io" class="headerlink" title="什么是socket.io"></a>什么是socket.io</h2><p>一般说法是socket.io是一个websocket库。不过我更喜欢把他称为一个前后端交互库。因为他不仅封装了websocket的方法，在不支持websocket的浏览器中他会调用其他方法（如轮询，长轮询，iframe流）实现交互。</p>
+<h2 id="socket-io的特点"><a href="#socket-io的特点" class="headerlink" title="socket.io的特点"></a>socket.io的特点</h2><ol>
+<li>简易:封装了客户端与服务器端的api。</li>
+<li>跨平台:可以在自己喜欢的平台开发实时应用。</li>
+<li>兼容性:这点开篇已经说过。最低兼容到IE5.5.</li>
+</ol>
+<h2 id="简单的部署"><a href="#简单的部署" class="headerlink" title="简单的部署"></a>简单的部署</h2><p>服务器端<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//与express配合使用</span></div><div class="line"><span class="keyword">var</span> express=<span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> app=express();</div><div class="line"></div><div class="line"><span class="keyword">var</span> server=<span class="built_in">require</span>(<span class="string">'http'</span>).createServer(app);</div><div class="line"><span class="keyword">var</span> io=<span class="built_in">require</span>(<span class="string">'socket.io'</span>)(server);</div><div class="line">server.listen(<span class="number">1234</span>);</div><div class="line"></div><div class="line"><span class="comment">//检测客户端的连接</span></div><div class="line">io.on(<span class="string">'connection'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">socket</span>) </span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//检测连接来的客户端发送的信息</span></div><div class="line">	socket.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line"></div><div class="line">	&#125;)</div><div class="line">	</div><div class="line">	<span class="comment">//向socket客户端发送消息</span></div><div class="line">	socket.send(<span class="string">'123'</span>);</div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>客户端</p>
+<ul>
+<li>服务端运行后会在根目录动态生成socket.io的客户端js文件 客户端可以通过固定路径/socket.io/socket.io.js添加引用</li>
+<li>客户端加载socket.io文件后会得到一个全局的对象io</li>
+<li>connect方法可以接受一个url参数，url可以是socket服务的url，也可以是相对路径，如果省略则表示默认连接当前路径 创建index.html文件<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/socket.io/socket.io.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>&gt;</div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">	</div><div class="line">	<span class="keyword">var</span> socket=io.connect(<span class="string">'/'</span>);</div><div class="line">	<span class="comment">//监听是否连接成功</span></div><div class="line">	socket.on(<span class="string">'connect'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//连接成功后向服务器发送消息</span></div><div class="line">		socket.send(<span class="string">'123'</span>);</div><div class="line">	&#125;)</div><div class="line">	<span class="comment">//监听是否与服务器断开连接</span></div><div class="line">	socket.on(<span class="string">'disconnect'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		</div><div class="line">	&#125;)</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></li>
+</ul>
+
       
     </div>
 
@@ -303,17 +326,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/09/express源码实现4——res-send/" rel="next" title="express源码实现4——res.send">
-                <i class="fa fa-chevron-left"></i> express源码实现4——res.send
+              <a href="/2016/09/16/WebSocket入门/" rel="next" title="WebSocket入门">
+                <i class="fa fa-chevron-left"></i> WebSocket入门
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/12/简单的依赖加载器实现/" rel="prev" title="简单的依赖加载器实现">
-                简单的依赖加载器实现 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -413,7 +432,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是静态服务器"><span class="nav-number">1.</span> <span class="nav-text">什么是静态服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码实现"><span class="nav-number">3.</span> <span class="nav-text">源码实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是socket-io"><span class="nav-number">1.</span> <span class="nav-text">什么是socket.io</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-io的特点"><span class="nav-number">2.</span> <span class="nav-text">socket.io的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的部署"><span class="nav-number">3.</span> <span class="nav-text">简单的部署</span></a></li></ol></div>
             
           </div>
         </section>
