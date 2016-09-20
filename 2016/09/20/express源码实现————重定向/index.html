@@ -84,15 +84,19 @@
 
 
 
-<meta name="description" content="一言不合撸源码">
-<meta property="og:type" content="website">
-<meta property="og:title" content="我是卡卡卡颂">
-<meta property="og:url" content="https://betasu.github.io/archives/2016/08/page/2/index.html">
+<meta name="description" content="什么是重定向重定向就是指当访问某个路由时自动跳转到另一个路由（比如注册成功自动跳转到首页）。
+重定向代码实现12345678910//用中间件的形式实现module.exports=function (req,res,next) &amp;#123;	res.redirect=function (url) &amp;#123;		//设置http状态码为302（重定向）		res.statusCode=302;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="express源码实现6————重定向">
+<meta property="og:url" content="https://betasu.github.io/2016/09/20/express源码实现————重定向/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="一言不合撸源码">
+<meta property="og:description" content="什么是重定向重定向就是指当访问某个路由时自动跳转到另一个路由（比如注册成功自动跳转到首页）。
+重定向代码实现12345678910//用中间件的形式实现module.exports=function (req,res,next) &amp;#123;	res.redirect=function (url) &amp;#123;		//设置http状态码为302（重定向）		res.statusCode=302;">
+<meta property="og:updated_time" content="2016-09-20T04:40:31.568Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我是卡卡卡颂">
-<meta name="twitter:description" content="一言不合撸源码">
+<meta name="twitter:title" content="express源码实现6————重定向">
+<meta name="twitter:description" content="什么是重定向重定向就是指当访问某个路由时自动跳转到另一个路由（比如注册成功自动跳转到首页）。
+重定向代码实现12345678910//用中间件的形式实现module.exports=function (req,res,next) &amp;#123;	res.redirect=function (url) &amp;#123;		//设置http状态码为302（重定向）		res.statusCode=302;">
 
 
 
@@ -113,9 +117,9 @@
 
 
 
-  <link rel="canonical" href="https://betasu.github.io/archives/2016/08/page/2/"/>
+  <link rel="canonical" href="https://betasu.github.io/2016/09/20/express源码实现————重定向/"/>
 
-  <title> 归档 | 我是卡卡卡颂 </title>
+  <title> express源码实现6————重定向 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -136,7 +140,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,107 +218,117 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 26 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2016">2016</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/08/21/myblog/" itemprop="url">
-              
-                <span itemprop="name">angular 自定义指令的配置方法</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-08-21T10:55:10+08:00"
-              content="2016-08-21" >
-          08-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/08/21/hello-world/" itemprop="url">
-              
-                <span itemprop="name">Hello World</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-08-21T09:53:30+08:00"
-              content="2016-08-21" >
-          08-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2016/08/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2016/08/">1</a><span class="page-number current">2</span>
-  </nav>
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                express源码实现6————重定向
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-20T12:34:01+08:00" content="2016-09-20">
+              2016-09-20
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
 
 
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是重定向"><a href="#什么是重定向" class="headerlink" title="什么是重定向"></a>什么是重定向</h2><p>重定向就是指当访问某个路由时自动跳转到另一个路由（比如注册成功自动跳转到首页）。</p>
+<h2 id="重定向代码实现"><a href="#重定向代码实现" class="headerlink" title="重定向代码实现"></a>重定向代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//用中间件的形式实现</span></div><div class="line"><span class="built_in">module</span>.exports=<span class="function"><span class="keyword">function</span> (<span class="params">req,res,next</span>) </span>&#123;</div><div class="line">	res.redirect=<span class="function"><span class="keyword">function</span> (<span class="params">url</span>) </span>&#123;</div><div class="line">		<span class="comment">//设置http状态码为302（重定向）</span></div><div class="line">		res.statusCode=<span class="number">302</span>;</div><div class="line">		<span class="comment">//设置响应头,注意状态码与响应头缺一不可</span></div><div class="line">		res.setHeader(<span class="string">'Location'</span>,url);</div><div class="line">		res.end(<span class="string">''</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/16/socket-io入门/" rel="next" title="socket.io入门">
+                <i class="fa fa-chevron-left"></i> socket.io入门
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -322,6 +336,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -341,8 +359,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://p1.so.qhmsg.com/t0104ff6ab349246736.jpg"
@@ -378,6 +405,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是重定向"><span class="nav-number">1.</span> <span class="nav-text">什么是重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重定向代码实现"><span class="nav-number">2.</span> <span class="nav-text">重定向代码实现</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -481,11 +519,9 @@
 
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   
