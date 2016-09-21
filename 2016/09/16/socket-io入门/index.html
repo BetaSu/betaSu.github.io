@@ -98,7 +98,7 @@ socket.io的特点
 简易:封装了客户端与服务器端的api。
 跨平台:可以在自己喜欢的平台开发实时应用。
 兼容性:这点开篇已经说过。最低兼">
-<meta property="og:updated_time" content="2016-09-18T09:20:28.983Z">
+<meta property="og:updated_time" content="2016-09-21T14:13:00.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="socket.io入门">
 <meta name="twitter:description" content="什么是socket.io一般说法是socket.io是一个websocket库。不过我更喜欢把他称为一个前后端交互库。因为他不仅封装了websocket的方法，在不支持websocket的浏览器中他会调用其他方法（如轮询，长轮询，iframe流）实现交互。
@@ -299,8 +299,64 @@ socket.io的特点
 <ul>
 <li>服务端运行后会在根目录动态生成socket.io的客户端js文件 客户端可以通过固定路径/socket.io/socket.io.js添加引用</li>
 <li>客户端加载socket.io文件后会得到一个全局的对象io</li>
-<li>connect方法可以接受一个url参数，url可以是socket服务的url，也可以是相对路径，如果省略则表示默认连接当前路径 创建index.html文件<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/socket.io/socket.io.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>&gt;</div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">	</div><div class="line">	<span class="keyword">var</span> socket=io.connect(<span class="string">'/'</span>);</div><div class="line">	<span class="comment">//监听是否连接成功</span></div><div class="line">	socket.on(<span class="string">'connect'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//连接成功后向服务器发送消息</span></div><div class="line">		socket.send(<span class="string">'123'</span>);</div><div class="line">	&#125;)</div><div class="line">	<span class="comment">//监听是否与服务器断开连接</span></div><div class="line">	socket.on(<span class="string">'disconnect'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		</div><div class="line">	&#125;)</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></li>
+<li>connect方法可以接受一个url参数，url可以是socket服务的url，也可以是相对路径，如果省略则表示默认连接当前路径 创建index.html文件<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/socket.io/socket.io.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>&gt;</div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">	</div><div class="line">	<span class="keyword">var</span> socket=io.connect(<span class="string">'/'</span>);</div><div class="line">	<span class="comment">//监听是否连接成功</span></div><div class="line">	socket.on(<span class="string">'connect'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//连接成功后向服务器发送消息</span></div><div class="line">		socket.send(<span class="string">'123'</span>);</div><div class="line">	&#125;)</div><div class="line">	<span class="comment">//监听是否与服务器断开连接</span></div><div class="line">	socket.on(<span class="string">'disconnect'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		</div><div class="line">	&#125;)</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
 </ul>
+<h2 id="服务端事件汇总"><a href="#服务端事件汇总" class="headerlink" title="服务端事件汇总"></a>服务端事件汇总</h2><table>
+<thead>
+<tr>
+<th>事件名</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>connection</td>
+<td style="text-align:center">客户端成功连接到服务器</td>
+</tr>
+<tr>
+<td>message</td>
+<td style="text-align:center">接收到客户端发送的消息</td>
+</tr>
+<tr>
+<td>disconnect</td>
+<td style="text-align:center">客户端断开连接</td>
+</tr>
+<tr>
+<td>error</td>
+<td style="text-align:center">监听错误</td>
+</tr>
+</tbody>
+</table>
+<h2 id="客户端事件汇总"><a href="#客户端事件汇总" class="headerlink" title="客户端事件汇总"></a>客户端事件汇总</h2><table>
+<thead>
+<tr>
+<th>事件名</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>connect</td>
+<td style="text-align:center">成功连接到服务器</td>
+</tr>
+<tr>
+<td>message</td>
+<td style="text-align:center">接收到服务器发送的消息</td>
+</tr>
+<tr>
+<td>disconnect</td>
+<td style="text-align:center">客户端断开连接</td>
+</tr>
+<tr>
+<td>error</td>
+<td style="text-align:center">监听错误</td>
+</tr>
+</tbody>
+</table>
+<h2 id="划分房间"><a href="#划分房间" class="headerlink" title="划分房间"></a>划分房间</h2><p> 一个服务端可以有很多不同的房间，客户端可以进入不同的房间，在房间内通信不会影响到房间非该房间的客户端<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">socket.join(<span class="string">'chatroom'</span>);   <span class="comment">//客户端进入chatroom房间</span></div><div class="line">socket.leave(<span class="string">'chatroom'</span>);   <span class="comment">//客户端立刻chatroom房间</span></div></pre></td></tr></table></figure></p>
+<h2 id="全局广播"><a href="#全局广播" class="headerlink" title="全局广播"></a>全局广播</h2><p>服务端发送信息有send和emit方法 事件。其中send方法只有房间内的客户端能监听到。而emit（广播）所有客户端都可以监听到。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">io.emit(<span class="string">'message'</span>,<span class="string">'全局广播'</span>);</div></pre></td></tr></table></figure></p>
+<h2 id="send与emit比较"><a href="#send与emit比较" class="headerlink" title="send与emit比较"></a>send与emit比较</h2><p>send只是emit封装后的方法<br>emit源码如下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Socket.prototype.send = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//ES6方法，类数组转数组</span></div><div class="line">  <span class="keyword">var</span> args = toArray(<span class="built_in">arguments</span>);</div><div class="line">  <span class="comment">//推入事件名message</span></div><div class="line">  args.unshift(<span class="string">'message'</span>);</div><div class="line">  <span class="comment">//执行</span></div><div class="line">  <span class="keyword">this</span>.emit.apply(<span class="keyword">this</span>, args);</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -436,7 +492,7 @@ socket.io的特点
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是socket-io"><span class="nav-number">1.</span> <span class="nav-text">什么是socket.io</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-io的特点"><span class="nav-number">2.</span> <span class="nav-text">socket.io的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的部署"><span class="nav-number">3.</span> <span class="nav-text">简单的部署</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是socket-io"><span class="nav-number">1.</span> <span class="nav-text">什么是socket.io</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-io的特点"><span class="nav-number">2.</span> <span class="nav-text">socket.io的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的部署"><span class="nav-number">3.</span> <span class="nav-text">简单的部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端事件汇总"><span class="nav-number">4.</span> <span class="nav-text">服务端事件汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端事件汇总"><span class="nav-number">5.</span> <span class="nav-text">客户端事件汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#划分房间"><span class="nav-number">6.</span> <span class="nav-text">划分房间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局广播"><span class="nav-number">7.</span> <span class="nav-text">全局广播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#send与emit比较"><span class="nav-number">8.</span> <span class="nav-text">send与emit比较</span></a></li></ol></div>
             
           </div>
         </section>
