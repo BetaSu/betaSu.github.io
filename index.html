@@ -238,6 +238,114 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/22/angular——脏值查询原理/" itemprop="url">
+                  Angular源码解析——作用域、脏值查询
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-22T18:20:11+08:00" content="2016-09-22">
+              2016-09-22
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="数据双向绑定"><a href="#数据双向绑定" class="headerlink" title="数据双向绑定"></a>数据双向绑定</h2><p>在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。</p>
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>首先我们要了解订阅-发布模式（原理见我的另一篇博文<a href="https://betasu.github.io/2016/09/06/node%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E2%80%94%E2%80%94EVENT/">EVENT事件库的原理</a>）。Angular的脏值查询在此基础上实现。<br>这里我们先构建作用域构造函数，并设置事件池<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>数据变动的检测基于$scope作用域两个内置方法$watch和$digest。$watch类似事件库里的on方法，用于在事件池（在Angular中是作用域中的$$watchers属性）中存放事件名和对应回调函数。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$watch=<span class="function"><span class="keyword">function</span>  (<span class="params">watchFn,listenerFn</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;watchFn:watchFn,listenerFn:listenerFn&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>watchFn 为监控函数，返回所监控的数据的值</li>
+<li>listenerFn 为监听函数，当数据发生变化后作出行为<br>一个监控name值的简单监控函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//监控作用域中name属性的值</span></div><div class="line"><span class="function"><span class="keyword">function</span> (<span class="params">scope</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> scope.name;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>$digest类似事件库中的emit方法，用来执行所在作用域中事件池（$$watchers数组）中保存的方法对应的回调函数（即数据的监听函数），并把执行后新的值保存在$watch中。这样我们再次调用$digest，就能比较新值与旧值的变化。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> self=<span class="keyword">this</span>;</div><div class="line">	<span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">watcher</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> newVal=watcher.watchFn(self);</div><div class="line">		<span class="keyword">var</span> oldVal=watcher.last;</div><div class="line">		<span class="keyword">if</span> (newVal!==oldVal) &#123;</div><div class="line">			<span class="comment">//如果发现值变化了就调用监听函数</span></div><div class="line">			watcher.listener(newVal,oldVal,self);</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//每次调用都会更新数据</span></div><div class="line">		watch.last=newVal;</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这就是Angular作用域的本质：添加监听器，在$digest中运行他们。<br>这也揭示了Angular作用域的性能特性：</p>
+<ol>
+<li>在作用域中添加数据并不会带来性能折扣。Angular并不会遍历作用域的数据，只会遍历绑定在$$watchers中的事件。</li>
+<li>$digest会调用每个监控函数。因此，最好关注监听器的数量，还有每个独立的监控函数或者表达式的性能。</li>
+</ol>
+<p>## </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/20/express源码实现————重定向/" itemprop="url">
                   express源码实现6————重定向
                 </a>
@@ -1191,108 +1299,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/06/node源码实现——base64转换/" itemprop="url">
-                  node源码实现——base64转换
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-06T11:32:38+08:00" content="2016-09-06">
-              2016-09-06
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="base64格式文件可以用来存放小容量的文件-如动态生成的验证码-node中实现了各种编码格式的转换-如utf8-base64"><a href="#base64格式文件可以用来存放小容量的文件-如动态生成的验证码-node中实现了各种编码格式的转换-如utf8-base64" class="headerlink" title="base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64)."></a>base64格式文件可以用来存放小容量的文件(如动态生成的验证码).node中实现了各种编码格式的转换(如utf8,base64).</h2><h2 id="字符串转换成base64格式流程"><a href="#字符串转换成base64格式流程" class="headerlink" title="字符串转换成base64格式流程"></a>字符串转换成base64格式流程</h2><ol>
-<li>定义chars=’ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/‘.split(‘’);</li>
-<li>将字符串转换成buffer。</li>
-<li>buffer每一项转换成二进制。</li>
-<li>将得到的二进制拼接成字符串，再以6个为一组截取成段(因为二进制6个为一组转换成十进制最大为2^6-1=63,刚好能和chars一一对应)。</li>
-<li>每一段转换成十进制，该十进制就对应chars中相应的索引。</li>
-<li>将对应的索引拼接在一起就是base64格式内容。</li>
-</ol>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">toBase64</span> (<span class="params">str</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> chars=<span class="string">'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'</span>.split(<span class="string">''</span>);</div><div class="line">    <span class="keyword">var</span> buffer=<span class="keyword">new</span> Buffer(str);</div><div class="line">    <span class="keyword">var</span> str=<span class="string">''</span>;</div><div class="line">    <span class="keyword">var</span> arr=[];</div><div class="line">    <span class="comment">//遍历buffer的每一项，转换成二进制</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;buffer.length;i++) &#123;</div><div class="line">       <span class="keyword">var</span> a= buffer[i].toString(<span class="number">2</span>);</div><div class="line">        str+=a;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//对拼接的二进制6个为一组分割，转换成十进制，去chars中查找索引对应值</span></div><div class="line">    str.replace(<span class="regexp">/\d&#123;6&#125;/g</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        arr.push(chars[<span class="built_in">parseInt</span>(<span class="built_in">arguments</span>[<span class="number">0</span>],<span class="number">2</span>)]);</div><div class="line">    &#125;)  </div><div class="line">    <span class="comment">//将结果拼接并输出</span></div><div class="line">    <span class="keyword">return</span> arr.join(<span class="string">''</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1338,7 +1344,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

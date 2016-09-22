@@ -238,8 +238,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/08/23/我的理解2/" itemprop="url">
-                  angular————方法
+                <a class="post-title-link" href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/" itemprop="url">
+                  angular 自定义指令取得控制器中数据的方法
                 </a>
               
             
@@ -252,8 +252,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-23T22:08:07+08:00" content="2016-08-23">
-              2016-08-23
+            <time itemprop="dateCreated" datetime="2016-08-24T16:20:10+08:00" content="2016-08-24">
+              2016-08-24
             </time>
           </span>
 
@@ -282,78 +282,35 @@
       
         
           
-            <ol>
-<li><p>方法</p>
-<ul>
-<li><p>方法包括内置方法、模块的方法</p>
-<ul>
-<li>常见内置方法</li>
+            <h2 id="这是一个问题"><a href="#这是一个问题" class="headerlink" title="这是一个问题"></a>这是一个问题</h2><pre><code>我们知道$scope作用域中可以定义值、变量、方法。而我们子定义模板中link方法的形参只能取得模板所在作用域的值、变量、方法。我们如何在模板中取得模板所在控制器作用域中的数据呢。
+</code></pre><h2 id="数据大不同"><a href="#数据大不同" class="headerlink" title="数据大不同"></a>数据大不同</h2><ul>
+<li>数据可以分为固定的值、变量、方法。这三者的获取方法是不同的。</li>
 </ul>
+<h2 id="固定值的获取-代码提供"><a href="#固定值的获取-代码提供" class="headerlink" title="固定值的获取,代码提供"></a>固定值的获取,代码提供</h2><pre><code><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html &gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span> <span class="attr">ng-app</span>=<span class="string">"myApp"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>scope 取得控制器作用域中的值<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"myCtrl"</span>&gt;</span></div><div class="line">    myCtrl:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"name"</span>&gt;</span></div><div class="line">    my-dir:<span class="tag">&lt;<span class="name">my-dir</span> <span class="attr">name</span>=<span class="string">"&#123;&#123;name&#125;&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">my-dir</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"angular.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">    <span class="keyword">var</span> myApp=angular.module(<span class="string">'myApp'</span>,[]);</div><div class="line">    myApp.controller(<span class="string">'myCtrl'</span>,[<span class="string">'$scope'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line">        $scope.name=<span class="string">'珠峰培训'</span>;</div><div class="line">    &#125;])</div><div class="line">    myApp.directive(<span class="string">'myDir'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            template:<span class="string">'&lt;input type="text" ng-model="name1"&gt;'</span>,</div><div class="line">            scope:&#123;</div><div class="line">                name1:<span class="string">'@name'</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+</code></pre><ol>
+<li><p>定义name属性，取得上级控制器作用域中的name值</p>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">my-dir:<span class="tag">&lt;<span class="name">my-dir</span> <span class="attr">name</span>=<span class="string">"&#123;&#123;name&#125;&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">my-dir</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>模板scope对象中定义name1属性，其中@name等于上一级取得的name值。这样模板中name1属性就取得了上级控制器作用域中的name属性</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scope:&#123;</div><div class="line">              name1:<span class="string">'@name'</span></div><div class="line">          &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>将第二步保存的name1赋给模板DOM中</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">template:<span class="string">'&lt;input type="text" ng-model="name1"&gt;'</span>,</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>##自定义模板取得控制器中变量的方法</p>
 <ol>
-<li><p>大小写转换</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.uppercase(str)</div><div class="line">angular.lowercase(str)</div></pre></td></tr></table></figure>
-</li>
-<li><p>全等比较    相当于js中的===  坑：NaN===NaN //true</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.equals(value1,value2)</div></pre></td></tr></table></figure>
-</li>
-<li><p>JSON转换</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.toJson()  <span class="comment">//相当于JSON.stringify</span></div><div class="line">angular.fromJson()  <span class="comment">//相当于JSON.parse</span></div></pre></td></tr></table></figure>
-</li>
-<li><p>把value2(或其后的参数)中的值添加到value1中，value1改变，其他值不变</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.extend(value1,value2);</div></pre></td></tr></table></figure>
-</li>
-<li><p>value1的值覆盖value2的值</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.copy(value1,value2);</div></pre></td></tr></table></figure>
-</li>
-<li><p>遍历 参数3 改变this的指向</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.forEach(item,index,参数<span class="number">3</span>)</div></pre></td></tr></table></figure>
-</li>
-<li><p>参数1 改变this指向 参数2 函数体 参数3往后是传参</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.bind()</div></pre></td></tr></table></figure>
-</li>
-<li><p>类型检测</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">angular.isArray();</div><div class="line">angular.isObject();</div><div class="line">angular.isNumber();</div></pre></td></tr></table></figure>
-</li>
-<li><p>原生对象转化为jQuery对象</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.element();</div></pre></td></tr></table></figure>
-</li>
-<li><p>生成模块 参数1 模块名称 参数2 依赖模块</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'name'</span>,[])</div></pre></td></tr></table></figure>
-</li>
+<li>将上面第一步中    name=”“ 改为name=”name”，使得取得的是变量</li>
+<li>将上面第二步中 name1:’@name’ 改为 name:’=name’,取得第一步取得的值</li>
 </ol>
-</li>
-<li><p>模块方法</p>
-<ul>
-<li>模块即angular调用module方法生成的模块</li>
-<li>模块拥有自己的作用域</li>
-<li>常见模块方法</li>
-</ul>
+<p>##自定义模板取得控制器中方法的方法</p>
 <ol>
-<li>生成控制器  产生自己的作用域</li>
+<li>将上面第一步中    name=”“ 改为name=”name”，使得取得的是变量</li>
+<li>将上面第二步中 name1:’@name’ 改为 name:’=name’,取得第一步取得的值</li>
 </ol>
-<ul>
-<li>参数1 模块名</li>
-<li>参数2 数组 索引1为’$scope’ 索引2至n为导入的服务,最后一个索引为定义模块的函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.module(<span class="string">'ctrl'</span>,[<span class="string">'$scope'</span>,<span class="string">'name'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">s,n</span>) </span>&#123;&#125;])</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<ol>
-<li>生成自定义过滤器 方法见过滤器篇</li>
-</ol>
-</li>
-<li><p>$scope作用域方法</p>
-<ol>
-<li>$apply :强制刷新，调用$rootScope.$digest 从根作用域开始进行脏值查询</li>
-<li>$watch :监听数据改变</li>
-<li>$digest :强制刷新，从当前作用域到子作用域</li>
-<li>$emit :发射事件 基于事件驱动</li>
-<li>$broadcast: 广播事件 基于事件驱动</li>
-<li>$on :监听事件</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><pre><code>- name=&quot;{{name}}&quot;中{{name}}保存的是name变量的值，是一个固定的值，无法做到双向绑定
+- name=&quot;name&quot; 中&quot;name&quot; 保存的是指向控制器中$scope.name，不是固定的，可以双向绑定
+</code></pre>
           
         
       
@@ -487,6 +444,170 @@
 <li>参数2 函数(定义过滤器的方法)<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//返回前len项为大写的值的过滤器</span></div><div class="line">mod.filter(<span class="string">'newF'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">// 参数1: input就是要使用该过滤器的数据</span></div><div class="line">		<span class="comment">// 从第二个参数开始就是冒号后面传递的参数</span></div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>  (<span class="params">input,len</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> a=input.slice(<span class="number">0</span>,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		<span class="keyword">var</span> b=input.slice(len);</div><div class="line">		<span class="keyword">return</span> a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"><span class="comment">//数组去重的过滤器</span></div><div class="line">mod.filter(<span class="string">'newF'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>  (<span class="params">input,len</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> newarr=[];</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;input.length;i++) &#123;</div><div class="line">			<span class="keyword">if</span> (newarr.indexOf(input[i])===<span class="number">-1</span>) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	<span class="keyword">return</span> newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 </li>
 </ul>
+</li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/23/我的理解2/" itemprop="url">
+                  angular————方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-23T22:08:07+08:00" content="2016-08-23">
+              2016-08-23
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>方法</p>
+<ul>
+<li><p>方法包括内置方法、模块的方法</p>
+<ul>
+<li>常见内置方法</li>
+</ul>
+<ol>
+<li><p>大小写转换</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.uppercase(str)</div><div class="line">angular.lowercase(str)</div></pre></td></tr></table></figure>
+</li>
+<li><p>全等比较    相当于js中的===  坑：NaN===NaN //true</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.equals(value1,value2)</div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON转换</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">angular.toJson()  <span class="comment">//相当于JSON.stringify</span></div><div class="line">angular.fromJson()  <span class="comment">//相当于JSON.parse</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>把value2(或其后的参数)中的值添加到value1中，value1改变，其他值不变</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.extend(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>value1的值覆盖value2的值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.copy(value1,value2);</div></pre></td></tr></table></figure>
+</li>
+<li><p>遍历 参数3 改变this的指向</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.forEach(item,index,参数<span class="number">3</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>参数1 改变this指向 参数2 函数体 参数3往后是传参</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.bind()</div></pre></td></tr></table></figure>
+</li>
+<li><p>类型检测</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">angular.isArray();</div><div class="line">angular.isObject();</div><div class="line">angular.isNumber();</div></pre></td></tr></table></figure>
+</li>
+<li><p>原生对象转化为jQuery对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">angular.element();</div></pre></td></tr></table></figure>
+</li>
+<li><p>生成模块 参数1 模块名称 参数2 依赖模块</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'name'</span>,[])</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>模块方法</p>
+<ul>
+<li>模块即angular调用module方法生成的模块</li>
+<li>模块拥有自己的作用域</li>
+<li>常见模块方法</li>
+</ul>
+<ol>
+<li>生成控制器  产生自己的作用域</li>
+</ol>
+<ul>
+<li>参数1 模块名</li>
+<li>参数2 数组 索引1为’$scope’ 索引2至n为导入的服务,最后一个索引为定义模块的函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.module(<span class="string">'ctrl'</span>,[<span class="string">'$scope'</span>,<span class="string">'name'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">s,n</span>) </span>&#123;&#125;])</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
+<li>生成自定义过滤器 方法见过滤器篇</li>
+</ol>
+</li>
+<li><p>$scope作用域方法</p>
+<ol>
+<li>$apply :强制刷新，调用$rootScope.$digest 从根作用域开始进行脏值查询</li>
+<li>$watch :监听数据改变</li>
+<li>$digest :强制刷新，从当前作用域到子作用域</li>
+<li>$emit :发射事件 基于事件驱动</li>
+<li>$broadcast: 广播事件 基于事件驱动</li>
+<li>$on :监听事件</li>
+</ol>
 </li>
 </ul>
 </li>
@@ -1067,7 +1188,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

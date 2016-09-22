@@ -84,49 +84,19 @@
 
 
 
-<meta name="description" content="##什么是路由
-
-路由就是不同的路径。不同的路径对应不同的路由angular单页路由的配置
-
-
-需要引入angular-route这个包
-1&amp;lt;script src=&quot;../node_modules/angular-route.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-
-angular模块依赖
-1var mod=angular.module(&apos;app&apos;,[&apos;ngRoute&apos;]);
-
-对服务">
+<meta name="description" content="数据双向绑定在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。
+基本原理首先我们要了解订阅-发布模式（原理见我的另一篇博文EVENT事件库的原理）。Angular的脏值查询在此基础上实现。这里我们先构建作用域构造函数，并设置事件池123function">
 <meta property="og:type" content="article">
-<meta property="og:title" content="angular——单页面路由">
-<meta property="og:url" content="https://betasu.github.io/2016/08/29/angular——单页面路由/index.html">
+<meta property="og:title" content="Angular源码解析——作用域、脏值查询">
+<meta property="og:url" content="https://betasu.github.io/2016/09/22/angular——脏值查询原理/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="##什么是路由
-
-路由就是不同的路径。不同的路径对应不同的路由angular单页路由的配置
-
-
-需要引入angular-route这个包
-1&amp;lt;script src=&quot;../node_modules/angular-route.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-
-angular模块依赖
-1var mod=angular.module(&apos;app&apos;,[&apos;ngRoute&apos;]);
-
-对服务">
-<meta property="og:updated_time" content="2016-09-08T09:20:17.776Z">
+<meta property="og:description" content="数据双向绑定在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。
+基本原理首先我们要了解订阅-发布模式（原理见我的另一篇博文EVENT事件库的原理）。Angular的脏值查询在此基础上实现。这里我们先构建作用域构造函数，并设置事件池123function">
+<meta property="og:updated_time" content="2016-09-22T15:50:56.682Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="angular——单页面路由">
-<meta name="twitter:description" content="##什么是路由
-
-路由就是不同的路径。不同的路径对应不同的路由angular单页路由的配置
-
-
-需要引入angular-route这个包
-1&amp;lt;script src=&quot;../node_modules/angular-route.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-
-angular模块依赖
-1var mod=angular.module(&apos;app&apos;,[&apos;ngRoute&apos;]);
-
-对服务">
+<meta name="twitter:title" content="Angular源码解析——作用域、脏值查询">
+<meta name="twitter:description" content="数据双向绑定在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。
+基本原理首先我们要了解订阅-发布模式（原理见我的另一篇博文EVENT事件库的原理）。Angular的脏值查询在此基础上实现。这里我们先构建作用域构造函数，并设置事件池123function">
 
 
 
@@ -147,9 +117,9 @@ angular模块依赖
 
 
 
-  <link rel="canonical" href="https://betasu.github.io/2016/08/29/angular——单页面路由/"/>
+  <link rel="canonical" href="https://betasu.github.io/2016/09/22/angular——脏值查询原理/"/>
 
-  <title> angular——单页面路由 | 我是卡卡卡颂 </title>
+  <title> Angular源码解析——作用域、脏值查询 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -269,7 +239,7 @@ angular模块依赖
             
             
               
-                angular——单页面路由
+                Angular源码解析——作用域、脏值查询
               
             
           </h1>
@@ -281,8 +251,8 @@ angular模块依赖
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-29T21:56:07+08:00" content="2016-08-29">
-              2016-08-29
+            <time itemprop="dateCreated" datetime="2016-09-22T18:20:11+08:00" content="2016-09-22">
+              2016-09-22
             </time>
           </span>
 
@@ -309,23 +279,21 @@ angular模块依赖
       
 
       
-        <p>##什么是路由</p>
+        <h2 id="数据双向绑定"><a href="#数据双向绑定" class="headerlink" title="数据双向绑定"></a>数据双向绑定</h2><p>在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。</p>
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>首先我们要了解订阅-发布模式（原理见我的另一篇博文<a href="https://betasu.github.io/2016/09/06/node%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E2%80%94%E2%80%94EVENT/">EVENT事件库的原理</a>）。Angular的脏值查询在此基础上实现。<br>这里我们先构建作用域构造函数，并设置事件池<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>数据变动的检测基于$scope作用域两个内置方法$watch和$digest。$watch类似事件库里的on方法，用于在事件池（在Angular中是作用域中的$$watchers属性）中存放事件名和对应回调函数。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$watch=<span class="function"><span class="keyword">function</span>  (<span class="params">watchFn,listenerFn</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;watchFn:watchFn,listenerFn:listenerFn&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <ul>
-<li>路由就是不同的路径。不同的路径对应不同的路由<h2 id="angular单页路由的配置"><a href="#angular单页路由的配置" class="headerlink" title="angular单页路由的配置"></a>angular单页路由的配置</h2></li>
+<li>watchFn 为监控函数，返回所监控的数据的值</li>
+<li>listenerFn 为监听函数，当数据发生变化后作出行为<br>一个监控name值的简单监控函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//监控作用域中name属性的值</span></div><div class="line"><span class="function"><span class="keyword">function</span> (<span class="params">scope</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> scope.name;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
 </ul>
+<p>$digest类似事件库中的emit方法，用来执行所在作用域中事件池（$$watchers数组）中保存的方法对应的回调函数（即数据的监听函数），并把执行后新的值保存在$watch中。这样我们再次调用$digest，就能比较新值与旧值的变化。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> self=<span class="keyword">this</span>;</div><div class="line">	<span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">watcher</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> newVal=watcher.watchFn(self);</div><div class="line">		<span class="keyword">var</span> oldVal=watcher.last;</div><div class="line">		<span class="keyword">if</span> (newVal!==oldVal) &#123;</div><div class="line">			<span class="comment">//如果发现值变化了就调用监听函数</span></div><div class="line">			watcher.listener(newVal,oldVal,self);</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//每次调用都会更新数据</span></div><div class="line">		watch.last=newVal;</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这就是Angular作用域的本质：添加监听器，在$digest中运行他们。<br>这也揭示了Angular作用域的性能特性：</p>
 <ol>
-<li><p>需要引入angular-route这个包</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script src=<span class="string">"../node_modules/angular-route.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div></pre></td></tr></table></figure>
-</li>
-<li><p>angular模块依赖</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'app'</span>,[<span class="string">'ngRoute'</span>]);</div></pre></td></tr></table></figure>
-</li>
-<li><p>对服务暴露出的api进行配置</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mod.config(<span class="function"><span class="keyword">function</span>  (<span class="params">$routeProvider</span>) </span>&#123;</div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
+<li>在作用域中添加数据并不会带来性能折扣。Angular并不会遍历作用域的数据，只会遍历绑定在$$watchers中的事件。</li>
+<li>$digest会调用每个监控函数。因此，最好关注监听器的数量，还有每个独立的监控函数或者表达式的性能。</li>
 </ol>
-<p>##具体流程 一个简单的案例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'app'</span>,[<span class="string">'ngRoute'</span>]);</div><div class="line">  mod.config(<span class="function"><span class="keyword">function</span>  (<span class="params">$routeProvider</span>) </span>&#123;</div><div class="line">  	<span class="comment">//route的每个when方法里设置一个路由</span></div><div class="line">      $routeProvider.when(<span class="string">'/'</span>,&#123;</div><div class="line">          templateUrl:<span class="string">'index.html'</span></div><div class="line">      &#125;).when(<span class="string">'/about'</span>,&#123;</div><div class="line">          templateUrl:<span class="string">'about.html'</span>,</div><div class="line">          controller:<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line"></div><div class="line">          &#125;,</div><div class="line">          <span class="comment">//resolve中定义服务，注意这里会嵌套两层</span></div><div class="line">          resolve:&#123;</div><div class="line">          	add:<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">          		<span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">a,b</span>) </span>&#123;</div><div class="line">          			<span class="keyword">return</span> a+b;</div><div class="line">          		&#125;</div><div class="line">          	&#125;</div><div class="line">          &#125;</div><div class="line">      &#125;).when(<span class="string">'/contact'</span>,&#123;</div><div class="line">          templateUrl:<span class="string">'contact.html'</span></div><div class="line">      &#125;)</div><div class="line">  &#125;)</div></pre></td></tr></table></figure></p>
-<p>在DOM结构中,路由会显示在ng-view指令所在的标签内<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-view</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>## </p>
 
       
     </div>
@@ -351,17 +319,13 @@ angular模块依赖
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/28/node源码实现——pipe/" rel="next" title="node源码实现——pipe">
-                <i class="fa fa-chevron-left"></i> node源码实现——pipe
+              <a href="/2016/09/20/express源码实现————重定向/" rel="next" title="express源码实现6————重定向">
+                <i class="fa fa-chevron-left"></i> express源码实现6————重定向
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/30/angular——表单控件/" rel="prev" title="angular——表单控件">
-                angular——表单控件 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -461,7 +425,7 @@ angular模块依赖
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#angular单页路由的配置"><span class="nav-number">1.</span> <span class="nav-text">angular单页路由的配置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据双向绑定"><span class="nav-number">1.</span> <span class="nav-text">数据双向绑定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本原理"><span class="nav-number">2.</span> <span class="nav-text">基本原理</span></a></li></ol></div>
             
           </div>
         </section>
