@@ -238,8 +238,211 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/27/Angular源码解析3——深度比较、深度克隆/" itemprop="url">
+                  Angular源码解析3——深度比较、深度克隆
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-27T12:29:56+08:00" content="2016-09-27">
+              2016-09-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/27/Angular源码解析2-——作用域、脏值查询2/" itemprop="url">
+                  Angular源码解析2--——脏值查询完善
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-27T10:00:36+08:00" content="2016-09-27">
+              2016-09-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="上一篇提到的问题"><a href="#上一篇提到的问题" class="headerlink" title="上一篇提到的问题"></a>上一篇提到的问题</h2><p>上一篇提到了由于监听函数第三个传参是作用域本身，所以我们可以在监听函数内部改变作用域的值。但是这么做的话，会有另一个监控器来监控值的变化。但是在一次$digest中就无法检测值的变化。所以我们需要实现一种机制——$digest会持续遍历所有监听器，知道他们停止变化。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>我们将$digest改名为$$digestOnce。意思是每调用他一次就会遍历所有监听器一次。他会返回一个状态，表示这次遍历该数据是否发生变化。我们再用一个外层函数包裹$$digestOnce，一旦发现这个状态为true，就再执行一次$$$digestOnce。直到状态不再为true。这表示数据不再发生变化。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$$digestOnce=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> that=<span class="keyword">this</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">watch</span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> oldVal=watch.last;</div><div class="line">		<span class="keyword">var</span> newVal=watch.watchFn(that);</div><div class="line">		<span class="keyword">if</span> (oldVal!=newVal) &#123;</div><div class="line">			watch.listenerFn(newVal,oldVal,that);</div><div class="line">			dirty=<span class="literal">true</span>;</div><div class="line">		&#125;</div><div class="line">		watch.last=newVal;</div><div class="line">	&#125;)</div><div class="line">	<span class="keyword">return</span> dirty;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">	&#125; <span class="keyword">while</span> (dirty)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="重要提示"><a href="#重要提示" class="headerlink" title="重要提示"></a>重要提示</h2><ul>
+<li>其实Angular的源码中并不存在$$digestOnce，而是将其直接封装在$digest中，这里只是为了结构的清晰。</li>
+<li>通过这里我们可以看出，在一次$digest中，监听器可能会执行多次。</li>
+</ul>
+<h2 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h2><p>假设我们有两个监听器，监听器a监听Scope.a的值并且他的监听函数会改变Scope.b的值。监听器b监听Scope.b的值并且他的监听函数会改变Scope.a的值。这样互相监听，最终会导致双方的值永远无法稳定，$digest会无限调用，这肯定是需要被杜绝的。</p>
+<h2 id="应对"><a href="#应对" class="headerlink" title="应对"></a>应对</h2><p>对此，我们需要设定，当$digest执行一定次数以后，如果状态还是无法稳定，我们就宣布他的状态永远无法稳定，并抛出错误。为了性能考虑，Angular对这个次数的设定是10。</p>
+<h2 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> ttl=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp; !(ttl--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'10 digest iterations reached'</span>;</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="基于值的检测与基于地址的检测"><a href="#基于值的检测与基于地址的检测" class="headerlink" title="基于值的检测与基于地址的检测"></a>基于值的检测与基于地址的检测</h2><p>我们之前对比oldVal与newVal时，使用的是’===’操作符，这在检测基本值类型的数据时是完全没有问题的。当检测引用类型的值时比较的是引用的地址。但是有时候我们需要检测对象或数组内部数据的变更，这时候我们就需要基于值的检测，而不是基于地址的检测了。<br>由于基于值的检测时一项比较消耗性能（相对）的操作，所以我们应该提供一个可选参数，让使用者自己决定在什么时候开启（全等比较函数源码见下篇）。</p>
+<h2 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.porototype.$watch=<span class="function"><span class="keyword">function</span> (<span class="params">watchFn,listenerFn,valueEq</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;</div><div class="line">		watchFn:watchFn,</div><div class="line">		listenerFn:listenerFn,</div><div class="line">		<span class="comment">//这里通过两次取反，使得强制转换成布尔类型，如果未传递值undefined会被转换成false</span></div><div class="line">		valueEq:!!valueEq</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>基于值的检测意味着如果数据时对象或数组类型，脏值查询会遍历数据的每一项，如果数据存在嵌套的数组或对象，还会递归的按值进行比较。</p>
+<h2 id="另一个问题"><a href="#另一个问题" class="headerlink" title="另一个问题"></a>另一个问题</h2><p>这里我们的深度检测只发生在newVal与oldVal比较的时候。回忆下，我们的新值会保存在watch.last中。试想如果保存的是一个引用类型的值，那么同一个值通过watchFn取得的和watch.last取得的其实是同一个地址。也就是说watch.fn（旧值）的变化会实时表现在watch.last（新值）中。这样就无法检测到引用类型值的变化了。<br>所以我们保存在watch.last中的数据应该是一个值，而不是一个地址。也就是说我们需要深度克隆一份引用类型的值。（源码分析见下一篇）</p>
+<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$digestOnce = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> that  = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> dirty;</div><div class="line">  <span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">watch</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> newValue = watch.watchFn(that);</div><div class="line">    <span class="keyword">var</span> oldValue = watch.last;</div><div class="line">    <span class="keyword">if</span> (!that.$$areEqual(newValue, oldValue, watch.valueEq)) &#123;</div><div class="line">      watch.listenerFn(newValue, oldValue, that);</div><div class="line">      dirty = <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    watch.last = (watch.valueEq ? <span class="keyword">this</span>.$$cloneDeep(newValue) : newValue);</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> dirty;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="最后一点小问题"><a href="#最后一点小问题" class="headerlink" title="最后一点小问题"></a>最后一点小问题</h2><p>在原生js中NaN!==NaN。如果我们的数据中包含NaN，在进行引用类型检测时（值类型的检测我们封装的$$areEqual已经帮我们处理了）由于NaN!==NaN那么这个值会始终是脏的。所以我们需要手动处理他。</p>
+<h2 id="源码实现-1"><a href="#源码实现-1" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$areEqual = <span class="function"><span class="keyword">function</span>(<span class="params">newValue, oldValue, valueEq</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (valueEq) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.$$isEqual(newValue, oldValue);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> newValue === oldValue ||</div><div class="line">      (<span class="keyword">typeof</span> newValue === <span class="string">'number'</span> &amp;&amp; <span class="keyword">typeof</span> oldValue === <span class="string">'number'</span> &amp;&amp;</div><div class="line">       <span class="built_in">isNaN</span>(newValue) &amp;&amp; <span class="built_in">isNaN</span>(oldValue));</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/22/angular——脏值查询原理/" itemprop="url">
-                  Angular源码解析——作用域、脏值查询
+                  Angular源码解析1——脏值查询的基本原理
                 </a>
               
             
@@ -1094,211 +1297,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/07/node源码实现——嵌套文件夹的创建/" itemprop="url">
-                  node源码实现——嵌套文件夹的创建
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-07T11:03:39+08:00" content="2016-09-07">
-              2016-09-07
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="为什么需要手动实现嵌套文件夹的创建"><a href="#为什么需要手动实现嵌套文件夹的创建" class="headerlink" title="为什么需要手动实现嵌套文件夹的创建"></a>为什么需要手动实现嵌套文件夹的创建</h2><p>node中fs模块原生提供了2种创建文件夹的方法：fs.mkdir (异步) 与fs.mkdirSync (同步)。但是原生的方法在创建嵌套文件夹时(如：a/b/c/d)时，必须在父级文件夹存在的情况下才能创建子级文件夹。所以不能一次创建a/b/c/d这样的嵌套文件夹。只能先创建a，再在a文件夹中创建b······</p>
-<h2 id="嵌套文件夹创建实现原理"><a href="#嵌套文件夹创建实现原理" class="headerlink" title="嵌套文件夹创建实现原理"></a>嵌套文件夹创建实现原理</h2><p>递归调用创建函数，循环遍历路径，一层层判断文件夹是否存在，如果不存在就创建，存在就继续遍历下一层。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>提供2种方法，一种容易理解，一种比较复杂。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//首先引入依赖</span></div><div class="line"><span class="keyword">var</span> fs=<span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> path=<span class="built_in">require</span>(<span class="string">'path'</span>)</div></pre></td></tr></table></figure></p>
-<ul>
-<li><p>简单的版本</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//简单版本</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeDirp</span> (<span class="params">path</span>) </span>&#123;</div><div class="line">	<span class="comment">//分隔符的兼容</span></div><div class="line">    <span class="keyword">var</span> sep=path.sep;</div><div class="line">    path=path.replace(<span class="regexp">/[\\/]/g</span>,sep);</div><div class="line">    <span class="keyword">var</span> dir=path.split(sep);</div><div class="line">    <span class="keyword">var</span> index=<span class="number">1</span>;</div><div class="line">    make();</div><div class="line">    <span class="comment">//递归调用</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">make</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (index&gt;dir.length) <span class="keyword">return</span>;</div><div class="line">        <span class="comment">//每次查找文件夹名+分隔符 是否存在</span></div><div class="line">        <span class="keyword">var</span> subdir=dir.slice(<span class="number">0</span>,index++).join(sep);</div><div class="line">        fs.exists(subdir,<span class="function"><span class="keyword">function</span>  (<span class="params">exist</span>) </span>&#123;</div><div class="line">        	<span class="comment">//存在则继续查找下一级</span></div><div class="line">            <span class="keyword">if</span> (exist) &#123;</div><div class="line">                make()</div><div class="line">                <span class="comment">//不存在则创建后查找下一级</span></div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                fs.mkdir(subdir,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">                    make();</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>复杂的版本</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mkdirp</span> (<span class="params">p,callback</span>) </span>&#123;</div><div class="line">	<span class="comment">//判断路径是否存在</span></div><div class="line">    fs.exists(p,<span class="function"><span class="keyword">function</span>  (<span class="params">exist</span>) </span>&#123;</div><div class="line">    	<span class="comment">//存在则直接调用回调函数</span></div><div class="line">    	<span class="comment">//不存在则递归调用自己，传入当前文件夹所在的文件夹路径</span></div><div class="line">        <span class="keyword">return</span> exist?callback():mkdirp(path.dirname(p),<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            fs.mkdir(p,callback);</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/06/node源码实现——EVENT/" itemprop="url">
-                  node源码实现——EVENT
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-06T21:08:34+08:00" content="2016-09-06">
-              2016-09-06
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="EVENT-事件-的作用"><a href="#EVENT-事件-的作用" class="headerlink" title="EVENT(事件)的作用"></a>EVENT(事件)的作用</h2><p>在node中很多异步方法需要监听事件，比如数据传输时需要监听流是否传输成功(data事件)，数据是否传输完毕(end事件)。所以需要一个模块用来存储事件相关的操作(事件注册、事件监听、事件触发).</p>
-<h2 id="EVENT的机制"><a href="#EVENT的机制" class="headerlink" title="EVENT的机制"></a>EVENT的机制</h2><ol>
-<li>对于需要事件相关操作的函数，只需将其构造函数的原型指向事件的构造函数。这样其实例就能取得事件操作的方法。</li>
-<li>对于事件库本身，提供事件的注册、监听、触发、取消绑定以及事件方法池。<h2 id="EVENT实现原理"><a href="#EVENT实现原理" class="headerlink" title="EVENT实现原理"></a>EVENT实现原理</h2></li>
-<li>设定一个事件方法池。</li>
-<li>当监听事件时，将事件名与其对应回调函数放入方法池。</li>
-<li>触发事件时，从方法池中找到相应事件名，依次执行事件名下保存的回调函数。<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//事件构造函数</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Event</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">//事件方法池</span></div><div class="line">    <span class="keyword">this</span>._events=&#123;&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//事件的监听</span></div><div class="line">Event.prototype.on=<span class="function"><span class="keyword">function</span> (<span class="params">eventName,callback</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> listeners=<span class="keyword">this</span>._events[eventName];</div><div class="line">    <span class="comment">//如果事件方法池中存在对应方法名</span></div><div class="line">    <span class="keyword">if</span> (listeners) &#123;</div><div class="line">        <span class="comment">//在对应方法名数组中新加入一个回调函数</span></div><div class="line">        listeners.push(callback);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//事件方法池中对应方法名赋值为一个含回调函数的数组</span></div><div class="line">        <span class="keyword">this</span>._events[eventName]=[callback];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//事件的触发</span></div><div class="line">Event.prototype.emit=<span class="function"><span class="keyword">function</span> (<span class="params">eventName</span>) </span>&#123;</div><div class="line">    <span class="comment">//第一项传参(也是形参)是事件名，从第二项开始就是传递给回调函数的参数，这里将这些参数保存在数组里</span></div><div class="line">    <span class="keyword">var</span> args=<span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>,<span class="number">1</span>);</div><div class="line">    <span class="keyword">var</span> listeners=<span class="keyword">this</span>._events[eventName];</div><div class="line">    <span class="comment">//如果事件方法池中存在相应的方法名</span></div><div class="line">    <span class="keyword">if</span> (listeners) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;listeners.length;i++) &#123;</div><div class="line">            <span class="comment">//依次执行方法名所对应的回调函数</span></div><div class="line">            listeners[i].apply(<span class="literal">null</span>,args);</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'对应方法不存在'</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//事件的移除</span></div><div class="line">Event.prototype.removeListener=<span class="function"><span class="keyword">function</span> (<span class="params">eventName,callback</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>._events[eventName].filter(<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>)</span>&#123;</div><div class="line">		<span class="keyword">return</span> fn!=callback;</div><div class="line">	&#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//只执行一次的事件</span></div><div class="line">Event.prototype.once=<span class="function"><span class="keyword">function</span> (<span class="params">eventName,callback</span>) </span>&#123;</div><div class="line">	<span class="comment">//原理是执行完回调函数后移除这个事件</span></div><div class="line"></div><div class="line">	<span class="comment">//存储this指向，用以在one函数中调用指向once函数</span></div><div class="line">	<span class="keyword">var</span> that=<span class="keyword">this</span>;</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">one</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">//存储可能的传参</span></div><div class="line">		<span class="keyword">var</span> args=<span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</div><div class="line">		<span class="comment">//执行回调函数</span></div><div class="line">		callback.apply(that,args);</div><div class="line">		<span class="comment">//执行完后移除事件，这里的this指向的是事件实例</span></div><div class="line">		<span class="keyword">this</span>.removeListener(eventName,one);	</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//监听名为one的函数</span></div><div class="line">	<span class="keyword">this</span>.on(eventName,one);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports=Event;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//引入继承模块</span></div><div class="line"><span class="keyword">var</span> util=<span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"></div><div class="line"><span class="comment">//A构造函数的实例继承事件库方法</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//A的实例取得Event的实例属性</span></div><div class="line">	Event.apply(<span class="keyword">this</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">//A.prototype的原型指向Event.prototype</span></div><div class="line">util.inherits(A,Event);</div><div class="line"></div><div class="line"><span class="comment">//这样A的实例就继承了事件库的方法</span></div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1344,7 +1342,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -84,34 +84,16 @@
 
 
 
-<meta name="description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
-多页面路由引入
-引入angular-ui-router.js文件
-模块中注入ui.router
- 1var mod=angular.module(&apos;app&apos;,[&apos;ui.router&apos;]);
-
-配置文件中注入$stateProvider和$url">
+<meta name="description" content="一言不合撸源码">
 <meta property="og:type" content="article">
-<meta property="og:title" content="angular——多页面路由">
-<meta property="og:url" content="https://betasu.github.io/2016/09/01/angular——多页面路由/index.html">
+<meta property="og:title" content="Angular源码解析3——深度比较、深度克隆">
+<meta property="og:url" content="https://betasu.github.io/2016/09/27/Angular源码解析3——深度比较、深度克隆/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
-多页面路由引入
-引入angular-ui-router.js文件
-模块中注入ui.router
- 1var mod=angular.module(&apos;app&apos;,[&apos;ui.router&apos;]);
-
-配置文件中注入$stateProvider和$url">
-<meta property="og:updated_time" content="2016-09-08T09:19:59.058Z">
+<meta property="og:description" content="一言不合撸源码">
+<meta property="og:updated_time" content="2016-09-27T04:29:56.432Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="angular——多页面路由">
-<meta name="twitter:description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
-多页面路由引入
-引入angular-ui-router.js文件
-模块中注入ui.router
- 1var mod=angular.module(&apos;app&apos;,[&apos;ui.router&apos;]);
-
-配置文件中注入$stateProvider和$url">
+<meta name="twitter:title" content="Angular源码解析3——深度比较、深度克隆">
+<meta name="twitter:description" content="一言不合撸源码">
 
 
 
@@ -132,9 +114,9 @@
 
 
 
-  <link rel="canonical" href="https://betasu.github.io/2016/09/01/angular——多页面路由/"/>
+  <link rel="canonical" href="https://betasu.github.io/2016/09/27/Angular源码解析3——深度比较、深度克隆/"/>
 
-  <title> angular——多页面路由 | 我是卡卡卡颂 </title>
+  <title> Angular源码解析3——深度比较、深度克隆 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -254,7 +236,7 @@
             
             
               
-                angular——多页面路由
+                Angular源码解析3——深度比较、深度克隆
               
             
           </h1>
@@ -266,8 +248,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-01T09:03:23+08:00" content="2016-09-01">
-              2016-09-01
+            <time itemprop="dateCreated" datetime="2016-09-27T12:29:56+08:00" content="2016-09-27">
+              2016-09-27
             </time>
           </span>
 
@@ -294,22 +276,7 @@
       
 
       
-        <h2 id="多页面路由与单页面路由的区别"><a href="#多页面路由与单页面路由的区别" class="headerlink" title="多页面路由与单页面路由的区别"></a>多页面路由与单页面路由的区别</h2><p>之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。</p>
-<h2 id="多页面路由引入"><a href="#多页面路由引入" class="headerlink" title="多页面路由引入"></a>多页面路由引入</h2><ol>
-<li>引入angular-ui-router.js文件</li>
-<li><p>模块中注入ui.router</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'app'</span>,[<span class="string">'ui.router'</span>]);</div></pre></td></tr></table></figure>
-</li>
-<li><p>配置文件中注入$stateProvider和$urlRouterProvider,前者实现多页面路由，后者实现单页面路由中otherwise的功能</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.config(<span class="function"><span class="keyword">function</span> (<span class="params">$stateProvider,$urlRouterProvider</span>) </span>&#123;&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>单页路由配置</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//配置未定义的路径</span></div><div class="line">$urlRouterProvider.otherwise(<span class="string">'/'</span>);</div><div class="line"><span class="comment">//配置首页,状态为index</span></div><div class="line"> $stateProvider.state(<span class="string">'index'</span>,&#123;</div><div class="line">           url:<span class="string">''</span>,</div><div class="line">           templateUrl:<span class="string">'./index.html'</span></div><div class="line">       &#125;).state(<span class="string">'about'</span>,&#123;</div><div class="line">           url:<span class="string">'/about'</span>,</div><div class="line">           templateUrl:<span class="string">'./about.html'</span>,</div><div class="line">           controller:<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line">               $scope.books=[&#123;id:<span class="number">1</span>,name:<span class="string">'王子与玫瑰'</span>&#125;,&#123;id:<span class="number">2</span>,name:<span class="string">'夜莺与玫瑰'</span>&#125;,&#123;id:<span class="number">3</span>,name:<span class="string">'王尔德'</span>&#125;]</div><div class="line">           &#125;,</div><div class="line">           <span class="comment">//配置中注入的服务</span></div><div class="line">           resolve:&#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>多页面路由配置</p>
-</li>
-</ol>
-
+        
       
     </div>
 
@@ -334,17 +301,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/30/angular——表单控件/" rel="next" title="angular——表单控件">
-                <i class="fa fa-chevron-left"></i> angular——表单控件
+              <a href="/2016/09/27/Angular源码解析2-——作用域、脏值查询2/" rel="next" title="Angular源码解析2--——脏值查询完善">
+                <i class="fa fa-chevron-left"></i> Angular源码解析2--——脏值查询完善
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/03/express源码实现—1—基础实现/" rel="prev" title="express源码实现1——基础实现">
-                express源码实现1——基础实现 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -444,7 +407,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#多页面路由与单页面路由的区别"><span class="nav-number">1.</span> <span class="nav-text">多页面路由与单页面路由的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多页面路由引入"><span class="nav-number">2.</span> <span class="nav-text">多页面路由引入</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
         </section>

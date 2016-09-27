@@ -87,14 +87,14 @@
 <meta name="description" content="数据双向绑定在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。
 基本原理首先我们要了解订阅-发布模式（原理见我的另一篇博文EVENT事件库的原理）。Angular的脏值查询在此基础上实现。这里我们先构建作用域构造函数，并设置事件池123function">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Angular源码解析——作用域、脏值查询">
+<meta property="og:title" content="Angular源码解析1——脏值查询的基本原理">
 <meta property="og:url" content="https://betasu.github.io/2016/09/22/angular——脏值查询原理/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
 <meta property="og:description" content="数据双向绑定在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。
 基本原理首先我们要了解订阅-发布模式（原理见我的另一篇博文EVENT事件库的原理）。Angular的脏值查询在此基础上实现。这里我们先构建作用域构造函数，并设置事件池123function">
-<meta property="og:updated_time" content="2016-09-25T16:00:16.278Z">
+<meta property="og:updated_time" content="2016-09-27T04:09:02.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Angular源码解析——作用域、脏值查询">
+<meta name="twitter:title" content="Angular源码解析1——脏值查询的基本原理">
 <meta name="twitter:description" content="数据双向绑定在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。
 基本原理首先我们要了解订阅-发布模式（原理见我的另一篇博文EVENT事件库的原理）。Angular的脏值查询在此基础上实现。这里我们先构建作用域构造函数，并设置事件池123function">
 
@@ -119,7 +119,7 @@
 
   <link rel="canonical" href="https://betasu.github.io/2016/09/22/angular——脏值查询原理/"/>
 
-  <title> Angular源码解析——作用域、脏值查询 | 我是卡卡卡颂 </title>
+  <title> Angular源码解析1——脏值查询的基本原理 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +239,7 @@
             
             
               
-                Angular源码解析——作用域、脏值查询
+                Angular源码解析1——脏值查询的基本原理
               
             
           </h1>
@@ -327,6 +327,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2016/09/27/Angular源码解析2-——作用域、脏值查询2/" rel="prev" title="Angular源码解析2--——脏值查询完善">
+                Angular源码解析2--——脏值查询完善 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -393,7 +397,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

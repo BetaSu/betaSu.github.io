@@ -238,6 +238,251 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/25/angular自定义指令取得控制器数据的方法/" itemprop="url">
+                  angular自定义指令取得控制器数据的方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-25T10:10:38+08:00" content="2016-08-25">
+              2016-08-25
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="为什么"><a href="#为什么" class="headerlink" title="为什么"></a>为什么</h2><ul>
+<li>一般我们自定义指令，是为了封装一整段DOM结构或作操作DOM的方法，涉及到编译新DOM树。所以必须获得编译前DOM结构作用域的数据才能对其作出改变。但是我们的自定义指令的作用域并不是DOM结构的作用域，所以必须通过一些方法来获得DOM作用域。接下来是方法总结。<h2 id="通过自定义指令的scope属性"><a href="#通过自定义指令的scope属性" class="headerlink" title="通过自定义指令的scope属性"></a>通过自定义指令的scope属性</h2></li>
+<li>数据按类型可以分为三类：字面量、变量、方法。在directive中的scope属性提供了3种操作符来分别获得这三种数据。获取的流程相同，主要是不同的操作符。</li>
+<li>字面量的获取<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"myCtrl"</span>&gt;</span></div><div class="line">    myCtrl:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"name"</span>&gt;</span></div><div class="line">    my-dir:<span class="tag">&lt;<span class="name">my-dir</span> <span class="attr">name</span>=<span class="string">"&#123;&#123;name&#125;&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">my-dir</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">    <span class="keyword">var</span> myApp=angular.module(<span class="string">'myApp'</span>,[]);</div><div class="line">    myApp.controller(<span class="string">'myCtrl'</span>,[<span class="string">'$scope'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line">        $scope.name=<span class="string">'KOBE'</span>;</div><div class="line">    &#125;])</div><div class="line">    myApp.directive(<span class="string">'myDir'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            template:<span class="string">'&lt;input type="text" ng-model="name1"&gt;'</span>,</div><div class="line">            scope:&#123;</div><div class="line">                name1:<span class="string">'@name'</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol>
+<li><p>首先在编译前的DOM结构中</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"myCtrl"</span>&gt;</span></div><div class="line">    myCtrl:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"name"</span>&gt;</span></div><div class="line">    my-dir:<span class="tag">&lt;<span class="name">my-dir</span> <span class="attr">name</span>=<span class="string">"&#123;&#123;name&#125;&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">my-dir</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>由于my-dir与input同属myCrl控制器，所以my-dir中的name可以取得控制器中的，也就是input标签中ng-model所绑定的name。</p>
+</li>
+<li><p>name保存在自定义指令scope属性中的@name中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">myApp.directive(<span class="string">'myDir'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">       <span class="keyword">return</span> &#123;</div><div class="line">           template:<span class="string">'&lt;input type="text" ng-model="name1"&gt;'</span>,</div><div class="line">           scope:&#123;</div><div class="line">               name1:<span class="string">'@name'</span></div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   &#125;)</div></pre></td></tr></table></figure>
+<p>其中@符号代表该数据是字面量。将其值赋给name1.(这里如果name:’@name’可以简写为name:’@’.)</p>
+</li>
+<li><p>将name1赋给模板中的ng-model属性。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">template:'<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"name1"</span>&gt;</span>',</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这样编译后的DOM结构中ng-model就得到编译前input中保存的name。</p>
+<ul>
+<li>变量的获取</li>
+</ul>
+<p>字面量与变量的区别<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--字面量--&gt;</span></div><div class="line"> my-dir:<span class="tag">&lt;<span class="name">my-dir</span> <span class="attr">name</span>=<span class="string">"&#123;&#123;name&#125;&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">my-dir</span>&gt;</span>  </div><div class="line"> <span class="comment">&lt;!--变量--&gt;</span></div><div class="line">  my-dir:<span class="tag">&lt;<span class="name">my-dir</span> <span class="attr">name</span>=<span class="string">"name"</span>&gt;</span><span class="tag">&lt;/<span class="name">my-dir</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p> 这里my-dir中name获得的是控制器作用域中的$scope.name变量而不是$scope.name所对应的值。<br> 与前面字面量数据的获得唯一的区别在于第二步将’@’符号改为’=’,即<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">myApp.directive(<span class="string">'myDir'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            template:<span class="string">'&lt;input type="text" ng-model="name1"&gt;'</span>,</div><div class="line">            scope:&#123;</div><div class="line">                name1:<span class="string">'=name'</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure></p>
+<p> -方法的获取<br>  方法的获取符号为”&amp;”。有一点坑在于如果方法需要传参，需要用对象的方式来赋值<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">//编译前的模板</span></div><div class="line">my-dir:&lt;my-dir name="nameDir" greet="greetCtrl(d)"&gt;&lt;/my-dir&gt;</div><div class="line"></div><div class="line">//directive中的参数</div><div class="line">template:'&lt;input type="text" ng-model="nameDir"&gt; &lt;button ng-click="greetDir(&#123;d:nameDir&#125;)"&gt;点我&lt;/button&gt;',</div><div class="line">scope:&#123;</div><div class="line">    nameDir:'=name',</div><div class="line">    greetDir:'&amp;greet'</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<h2 id="通过ng-transclude获取数据"><a href="#通过ng-transclude获取数据" class="headerlink" title="通过ng-transclude获取数据"></a>通过ng-transclude获取数据</h2><ul>
+<li>在指令属性中设置transclude:true,</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/25/angular-服务/" itemprop="url">
+                  angular--服务
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-25T09:13:15+08:00" content="2016-08-25">
+              2016-08-25
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是服务"><a href="#什么是服务" class="headerlink" title="什么是服务"></a>什么是服务</h2><ul>
+<li>服务是公用的方法，可以把控制器中相同的部分抽取出来封装成一个服务，需要的时候注入控制器。</li>
+</ul>
+<h2 id="服务的分类"><a href="#服务的分类" class="headerlink" title="服务的分类"></a>服务的分类</h2><ul>
+<li>服务分为内置服务与自定义服务</li>
+</ul>
+<h2 id="常见内置服务"><a href="#常见内置服务" class="headerlink" title="常见内置服务"></a>常见内置服务</h2><ol>
+<li><p>$http服务用来向后台请求数据</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'m'</span>,[]);</div><div class="line">mod.controller(<span class="string">'myCtrl'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,$http</span>) </span>&#123;</div><div class="line">	<span class="comment">// 注入http服务</span></div><div class="line">		<span class="comment">// $http用来向后台请求数据</span></div><div class="line">		$http(&#123;</div><div class="line">			url:<span class="string">'http.json'</span>,</div><div class="line">			method:<span class="string">'GET'</span>,</div><div class="line">			params:&#123;data:<span class="string">'aaaa'</span>&#125; <span class="comment">//只是对于GET请求使用，在问号后面传递参数</span></div><div class="line"></div><div class="line">		<span class="comment">//method:'POST',</span></div><div class="line">		<span class="comment">//data:&#123;&#125;</span></div><div class="line">		&#125;).success(<span class="function"><span class="keyword">function</span>  (<span class="params">data,status,headers,config</span>) </span>&#123;</div><div class="line">			<span class="comment">// 当成功时执行success方法中的回调函数</span></div><div class="line">				<span class="comment">// data 请求回来的数据</span></div><div class="line">				<span class="comment">// status 状态码</span></div><div class="line">				<span class="comment">// headers是一个方法，执行时可看到头部信息</span></div><div class="line">				<span class="comment">// config 配置信息，包含以上三者</span></div><div class="line">				<span class="built_in">console</span>.log(data,status,headers,config);</div><div class="line">		&#125;).error(<span class="function"><span class="keyword">function</span>  (<span class="params">err</span>) </span>&#123;</div><div class="line">			<span class="comment">// 当失败时执行error中的回调函数</span></div><div class="line">			<span class="comment">// err错误信息</span></div><div class="line">		&#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">//$http返回的是一个promise (用来解决异步)</span></div><div class="line"><span class="comment">// 封装的简便方法</span></div><div class="line"><span class="comment">// $http.get()  $http.delete()</span></div><div class="line">	<span class="comment">// 参数1 路径字符串 参数2 config 对象，放配置内容</span></div><div class="line"><span class="comment">// $http.post()  $http.put()</span></div><div class="line">	<span class="comment">// 参数1 路径字符串 参数2 请求体data  参数3 config</span></div><div class="line"><span class="comment">// $http.jsonp() (实现跨域请求,其回调函数名 JSON_CALLBACK)</span></div><div class="line">	<span class="comment">// 参数 请求路径</span></div><div class="line"><span class="comment">// $http.delete()</span></div><div class="line"><span class="comment">// $http.put()</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>\$interval与$timeout 设定计时器，不同于原生计时器在于其可触发脏值查询,调用其cancel方法清除计时器</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> newMod=angular.module(<span class="string">'newm'</span>,[]);</div><div class="line">newMod.controller(<span class="string">'ctrl'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,$interval,$timeout</span>) </span>&#123;</div><div class="line">	$scope.age=<span class="number">8</span>;</div><div class="line">	$interval(<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;&#125;)</div><div class="line">	$scope.fn=<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		$timeout.cancel(timer);</div><div class="line">		<span class="keyword">var</span> timer=$timeout(fn,<span class="number">1000</span>);</div><div class="line">	 <span class="comment">// 未完</span></div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="五种自定义服务"><a href="#五种自定义服务" class="headerlink" title="五种自定义服务"></a>五种自定义服务</h2><ol>
+<li><p>provider是最全面的自定义服务，注入的是服务实例上$get方法的返回值，可以暴露方法作为API，模块的config方法接受服务名+Provider参数，该参数是服务的一个实例，可以对暴露的API进行配置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> myModule = angular.module(<span class="string">'myModule'</span>, []);</div><div class="line"></div><div class="line"><span class="comment">//配置名为myPro的服务</span></div><div class="line">myModule.provider(<span class="string">'myPro'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> currency=<span class="string">'$'</span>;</div><div class="line">    <span class="keyword">this</span>.setCurrency=<span class="function"><span class="keyword">function</span>  (<span class="params">a</span>) </span>&#123;</div><div class="line">        currency=a;</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">this</span>.$get=<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            <span class="string">'+'</span>:<span class="function"><span class="keyword">function</span>  (<span class="params">a,b</span>) </span>&#123;</div><div class="line">                <span class="keyword">return</span> currency+(<span class="built_in">Number</span>(a)+<span class="built_in">Number</span>(b));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">//    配置函数，对服务暴露出来的接口进行配置,函数中传递的参数是</span></div><div class="line"><span class="comment">//    服务名+provider</span></div><div class="line"><span class="comment">//    myProvider是my服务的实例</span></div><div class="line">myModule.config(<span class="function"><span class="keyword">function</span>  (<span class="params">myProProvider</span>) </span>&#123;</div><div class="line">    myProProvider.setCurrency(<span class="string">'￥'</span>);</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">//    注入自定义服务</span></div><div class="line">myModule.controller(<span class="string">'myCtrl'</span>,[<span class="string">'$scope'</span>,<span class="string">'myPro'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,myPro</span>) </span>&#123;</div><div class="line">    <span class="comment">//注入的是服务的实例$get方法的返回值</span></div><div class="line">    $scope.result=myPro[<span class="string">'+'</span>](<span class="number">1</span>,<span class="number">2</span>);</div><div class="line">&#125;])</div></pre></td></tr></table></figure>
+</li>
+<li><p>factory  最常用定义服务的方法.内部封装的也是provider,函数定义部分只要返回值,不能调用config配置函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myModule = angular.module(<span class="string">'myModule'</span>, []);</div><div class="line"></div><div class="line"><span class="comment">//    注入自定义服务 注入的是factory返回值</span></div><div class="line">myModule.factory(<span class="string">'myPro'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        <span class="string">'+'</span>:<span class="function"><span class="keyword">function</span>  (<span class="params">a,b</span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> (<span class="built_in">Number</span>(a)+<span class="built_in">Number</span>(b));</div><div class="line">        &#125;,</div><div class="line">        <span class="string">'-'</span>:<span class="function"><span class="keyword">function</span>  (<span class="params">a,b</span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> (a-b);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;)</div><div class="line"></div><div class="line">myModule.controller(<span class="string">'myCtrl'</span>,[<span class="string">'$scope'</span>,<span class="string">'myPro'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,myPro</span>) </span>&#123;</div><div class="line">    $scope.cal=<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        $scope.result=myPro[$scope.val]($scope.one,$scope.two);</div><div class="line">    &#125;</div><div class="line">&#125;])</div></pre></td></tr></table></figure>
+</li>
+<li><p>service  相当于原生js中的构造函数,向控制器注入服务的时候，注入的是该方法的一个实例,不能调用配置函数config</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myModule = angular.module(<span class="string">'myModule'</span>, []);</div><div class="line"></div><div class="line">myModule.controller(<span class="string">'myCtrl'</span>,[<span class="string">'$scope'</span>,<span class="string">'myPro'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,myPro</span>) </span>&#123;</div><div class="line"></div><div class="line">    $scope.result=myPro[<span class="string">'*'</span>](<span class="number">3</span>,<span class="number">5</span>);</div><div class="line">&#125;])</div><div class="line"></div><div class="line"></div><div class="line">myModule.service(<span class="string">'myPro'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>[<span class="string">'+'</span>]=<span class="function"><span class="keyword">function</span>  (<span class="params">a,b</span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> (<span class="built_in">Number</span>(a)+<span class="built_in">Number</span>(b));</div><div class="line">        &#125;;</div><div class="line">        <span class="comment">//ES6写法 箭头函数</span></div><div class="line">        <span class="keyword">this</span>[<span class="string">'*'</span>]=(a,b)=&gt;a*b;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>value用来定义变量，也可以作为服务注入到控制器中,不能在配置函数中调用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myModule = angular.module(<span class="string">'myModule'</span>, []);</div><div class="line"></div><div class="line"><span class="comment">//相当于把myPro赋值为'123'</span></div><div class="line">myModule.value(<span class="string">'myPro'</span>,<span class="string">'123'</span>);</div><div class="line"></div><div class="line">myModule.controller(<span class="string">'myCtrl'</span>,[<span class="string">'$scope'</span>,<span class="string">'myPro'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,myPro</span>) </span>&#123;</div><div class="line"></div><div class="line">    $scope.result=myPro;</div><div class="line">&#125;])</div></pre></td></tr></table></figure>
+</li>
+<li><p>constant  定义常量,用法同value.与value不同点在于可以注入到配置函数中</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/24/angular 自定义模板取得控制器中数据的方法/" itemprop="url">
                   angular 自定义指令取得控制器中数据的方法
                 </a>
@@ -311,6 +556,144 @@
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><pre><code>- name=&quot;{{name}}&quot;中{{name}}保存的是name变量的值，是一个固定的值，无法做到双向绑定
 - name=&quot;name&quot; 中&quot;name&quot; 保存的是指向控制器中$scope.name，不是固定的，可以双向绑定
 </code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/23/我的理解3/" itemprop="url">
+                  angular————过滤器
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-23T22:08:07+08:00" content="2016-08-23">
+              2016-08-23
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>过滤器</p>
+<ul>
+<li>过滤器的作用是输出经过过滤后的数据</li>
+<li>过滤器分为内置过滤器与自定义过滤器</li>
+<li><p>过滤器有3种使用方法</p>
+<ol>
+<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:<span class="string">'￥'</span>&#125;&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>控制器中注入$filter服务</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(<span class="string">'ctrl'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,$filter</span>) </span>&#123;</div><div class="line">	$scope.name=<span class="string">'aaaaabbbbdddd'</span>;</div><div class="line">	$scope.name=$filter(<span class="string">'uppercase'</span>)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(<span class="string">'ctrl'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,uppercaseFilter</span>) </span>&#123;</div><div class="line">	$scope.name=<span class="string">'aaaaabbbbdddd'</span>;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>常见内置过滤器</p>
+<ol>
+<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
+</li>
+<li><p>uppercase lowercase 大小写过滤器</p>
+</li>
+<li><p>number 限制数字后面小数点位数</p>
+</li>
+<li><p>limitTo 用来限制字符串、数组的长度</p>
+</li>
+<li><p>json 把普通对象转换为JSON对象</p>
+</li>
+<li><p>date 转换时间格式</p>
+</li>
+<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
+<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
+</ol>
+</li>
+<li>如何生成自定义过滤器<ul>
+<li>参数1 过滤器的名字</li>
+<li>参数2 函数(定义过滤器的方法)<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//返回前len项为大写的值的过滤器</span></div><div class="line">mod.filter(<span class="string">'newF'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">// 参数1: input就是要使用该过滤器的数据</span></div><div class="line">		<span class="comment">// 从第二个参数开始就是冒号后面传递的参数</span></div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>  (<span class="params">input,len</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> a=input.slice(<span class="number">0</span>,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		<span class="keyword">var</span> b=input.slice(len);</div><div class="line">		<span class="keyword">return</span> a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"><span class="comment">//数组去重的过滤器</span></div><div class="line">mod.filter(<span class="string">'newF'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>  (<span class="params">input,len</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> newarr=[];</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;input.length;i++) &#123;</div><div class="line">			<span class="keyword">if</span> (newarr.indexOf(input[i])===<span class="number">-1</span>) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	<span class="keyword">return</span> newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
           
         
       
@@ -470,144 +853,6 @@
 <li>$broadcast: 广播事件 基于事件驱动</li>
 <li>$on :监听事件</li>
 </ol>
-</li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/23/我的理解3/" itemprop="url">
-                  angular————过滤器
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-23T22:08:07+08:00" content="2016-08-23">
-              2016-08-23
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>过滤器</p>
-<ul>
-<li>过滤器的作用是输出经过过滤后的数据</li>
-<li>过滤器分为内置过滤器与自定义过滤器</li>
-<li><p>过滤器有3种使用方法</p>
-<ol>
-<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:<span class="string">'￥'</span>&#125;&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>控制器中注入$filter服务</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(<span class="string">'ctrl'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,$filter</span>) </span>&#123;</div><div class="line">	$scope.name=<span class="string">'aaaaabbbbdddd'</span>;</div><div class="line">	$scope.name=$filter(<span class="string">'uppercase'</span>)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(<span class="string">'ctrl'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,uppercaseFilter</span>) </span>&#123;</div><div class="line">	$scope.name=<span class="string">'aaaaabbbbdddd'</span>;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>常见内置过滤器</p>
-<ol>
-<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
-</li>
-<li><p>uppercase lowercase 大小写过滤器</p>
-</li>
-<li><p>number 限制数字后面小数点位数</p>
-</li>
-<li><p>limitTo 用来限制字符串、数组的长度</p>
-</li>
-<li><p>json 把普通对象转换为JSON对象</p>
-</li>
-<li><p>date 转换时间格式</p>
-</li>
-<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
-<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
-</ol>
-</li>
-<li>如何生成自定义过滤器<ul>
-<li>参数1 过滤器的名字</li>
-<li>参数2 函数(定义过滤器的方法)<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//返回前len项为大写的值的过滤器</span></div><div class="line">mod.filter(<span class="string">'newF'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">// 参数1: input就是要使用该过滤器的数据</span></div><div class="line">		<span class="comment">// 从第二个参数开始就是冒号后面传递的参数</span></div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>  (<span class="params">input,len</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> a=input.slice(<span class="number">0</span>,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		<span class="keyword">var</span> b=input.slice(len);</div><div class="line">		<span class="keyword">return</span> a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"><span class="comment">//数组去重的过滤器</span></div><div class="line">mod.filter(<span class="string">'newF'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>  (<span class="params">input,len</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> newarr=[];</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;input.length;i++) &#123;</div><div class="line">			<span class="keyword">if</span> (newarr.indexOf(input[i])===<span class="number">-1</span>) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	<span class="keyword">return</span> newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ul>
 </li>
 </ul>
 </li>
@@ -1188,7 +1433,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">27</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

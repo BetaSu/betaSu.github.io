@@ -1,0 +1,572 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="上一篇提到的问题上一篇提到了由于监听函数第三个传参是作用域本身，所以我们可以在监听函数内部改变作用域的值。但是这么做的话，会有另一个监控器来监控值的变化。但是在一次$digest中就无法检测值的变化。所以我们需要实现一种机制——$digest会持续遍历所有监听器，知道他们停止变化。
+实现原理我们将$digest改名为$$digestOnce。意思是每调用他一次就会遍历所有监听器一次。他会返回一个状">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Angular源码解析2--——脏值查询完善">
+<meta property="og:url" content="https://betasu.github.io/2016/09/27/Angular源码解析2-——作用域、脏值查询2/index.html">
+<meta property="og:site_name" content="我是卡卡卡颂">
+<meta property="og:description" content="上一篇提到的问题上一篇提到了由于监听函数第三个传参是作用域本身，所以我们可以在监听函数内部改变作用域的值。但是这么做的话，会有另一个监控器来监控值的变化。但是在一次$digest中就无法检测值的变化。所以我们需要实现一种机制——$digest会持续遍历所有监听器，知道他们停止变化。
+实现原理我们将$digest改名为$$digestOnce。意思是每调用他一次就会遍历所有监听器一次。他会返回一个状">
+<meta property="og:updated_time" content="2016-09-27T04:48:05.228Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Angular源码解析2--——脏值查询完善">
+<meta name="twitter:description" content="上一篇提到的问题上一篇提到了由于监听函数第三个传参是作用域本身，所以我们可以在监听函数内部改变作用域的值。但是这么做的话，会有另一个监控器来监控值的变化。但是在一次$digest中就无法检测值的变化。所以我们需要实现一种机制——$digest会持续遍历所有监听器，知道他们停止变化。
+实现原理我们将$digest改名为$$digestOnce。意思是每调用他一次就会遍历所有监听器一次。他会返回一个状">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://betasu.github.io/2016/09/27/Angular源码解析2-——作用域、脏值查询2/"/>
+
+  <title> Angular源码解析2--——脏值查询完善 | 我是卡卡卡颂 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">我是卡卡卡颂</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Angular源码解析2--——脏值查询完善
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-27T10:00:36+08:00" content="2016-09-27">
+              2016-09-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="上一篇提到的问题"><a href="#上一篇提到的问题" class="headerlink" title="上一篇提到的问题"></a>上一篇提到的问题</h2><p>上一篇提到了由于监听函数第三个传参是作用域本身，所以我们可以在监听函数内部改变作用域的值。但是这么做的话，会有另一个监控器来监控值的变化。但是在一次$digest中就无法检测值的变化。所以我们需要实现一种机制——$digest会持续遍历所有监听器，知道他们停止变化。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>我们将$digest改名为$$digestOnce。意思是每调用他一次就会遍历所有监听器一次。他会返回一个状态，表示这次遍历该数据是否发生变化。我们再用一个外层函数包裹$$digestOnce，一旦发现这个状态为true，就再执行一次$$$digestOnce。直到状态不再为true。这表示数据不再发生变化。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$$digestOnce=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> that=<span class="keyword">this</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">watch</span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> oldVal=watch.last;</div><div class="line">		<span class="keyword">var</span> newVal=watch.watchFn(that);</div><div class="line">		<span class="keyword">if</span> (oldVal!=newVal) &#123;</div><div class="line">			watch.listenerFn(newVal,oldVal,that);</div><div class="line">			dirty=<span class="literal">true</span>;</div><div class="line">		&#125;</div><div class="line">		watch.last=newVal;</div><div class="line">	&#125;)</div><div class="line">	<span class="keyword">return</span> dirty;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">	&#125; <span class="keyword">while</span> (dirty)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="重要提示"><a href="#重要提示" class="headerlink" title="重要提示"></a>重要提示</h2><ul>
+<li>其实Angular的源码中并不存在$$digestOnce，而是将其直接封装在$digest中，这里只是为了结构的清晰。</li>
+<li>通过这里我们可以看出，在一次$digest中，监听器可能会执行多次。</li>
+</ul>
+<h2 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h2><p>假设我们有两个监听器，监听器a监听Scope.a的值并且他的监听函数会改变Scope.b的值。监听器b监听Scope.b的值并且他的监听函数会改变Scope.a的值。这样互相监听，最终会导致双方的值永远无法稳定，$digest会无限调用，这肯定是需要被杜绝的。</p>
+<h2 id="应对"><a href="#应对" class="headerlink" title="应对"></a>应对</h2><p>对此，我们需要设定，当$digest执行一定次数以后，如果状态还是无法稳定，我们就宣布他的状态永远无法稳定，并抛出错误。为了性能考虑，Angular对这个次数的设定是10。</p>
+<h2 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> ttl=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp; !(ttl--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'10 digest iterations reached'</span>;</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="基于值的检测与基于地址的检测"><a href="#基于值的检测与基于地址的检测" class="headerlink" title="基于值的检测与基于地址的检测"></a>基于值的检测与基于地址的检测</h2><p>我们之前对比oldVal与newVal时，使用的是’===’操作符，这在检测基本值类型的数据时是完全没有问题的。当检测引用类型的值时比较的是引用的地址。但是有时候我们需要检测对象或数组内部数据的变更，这时候我们就需要基于值的检测，而不是基于地址的检测了。<br>由于基于值的检测时一项比较消耗性能（相对）的操作，所以我们应该提供一个可选参数，让使用者自己决定在什么时候开启（全等比较函数源码见下篇）。</p>
+<h2 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.porototype.$watch=<span class="function"><span class="keyword">function</span> (<span class="params">watchFn,listenerFn,valueEq</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;</div><div class="line">		watchFn:watchFn,</div><div class="line">		listenerFn:listenerFn,</div><div class="line">		<span class="comment">//这里通过两次取反，使得强制转换成布尔类型，如果未传递值undefined会被转换成false</span></div><div class="line">		valueEq:!!valueEq</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>基于值的检测意味着如果数据时对象或数组类型，脏值查询会遍历数据的每一项，如果数据存在嵌套的数组或对象，还会递归的按值进行比较。</p>
+<h2 id="另一个问题"><a href="#另一个问题" class="headerlink" title="另一个问题"></a>另一个问题</h2><p>这里我们的深度检测只发生在newVal与oldVal比较的时候。回忆下，我们的新值会保存在watch.last中。试想如果保存的是一个引用类型的值，那么同一个值通过watchFn取得的和watch.last取得的其实是同一个地址。也就是说watch.fn（旧值）的变化会实时表现在watch.last（新值）中。这样就无法检测到引用类型值的变化了。<br>所以我们保存在watch.last中的数据应该是一个值，而不是一个地址。也就是说我们需要深度克隆一份引用类型的值。（源码分析见下一篇）</p>
+<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$digestOnce = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> that  = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> dirty;</div><div class="line">  <span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">watch</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> newValue = watch.watchFn(that);</div><div class="line">    <span class="keyword">var</span> oldValue = watch.last;</div><div class="line">    <span class="keyword">if</span> (!that.$$areEqual(newValue, oldValue, watch.valueEq)) &#123;</div><div class="line">      watch.listenerFn(newValue, oldValue, that);</div><div class="line">      dirty = <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    watch.last = (watch.valueEq ? <span class="keyword">this</span>.$$cloneDeep(newValue) : newValue);</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> dirty;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="最后一点小问题"><a href="#最后一点小问题" class="headerlink" title="最后一点小问题"></a>最后一点小问题</h2><p>在原生js中NaN!==NaN。如果我们的数据中包含NaN，在进行引用类型检测时（值类型的检测我们封装的$$areEqual已经帮我们处理了）由于NaN!==NaN那么这个值会始终是脏的。所以我们需要手动处理他。</p>
+<h2 id="源码实现-1"><a href="#源码实现-1" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$areEqual = <span class="function"><span class="keyword">function</span>(<span class="params">newValue, oldValue, valueEq</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (valueEq) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.$$isEqual(newValue, oldValue);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> newValue === oldValue ||</div><div class="line">      (<span class="keyword">typeof</span> newValue === <span class="string">'number'</span> &amp;&amp; <span class="keyword">typeof</span> oldValue === <span class="string">'number'</span> &amp;&amp;</div><div class="line">       <span class="built_in">isNaN</span>(newValue) &amp;&amp; <span class="built_in">isNaN</span>(oldValue));</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/22/angular——脏值查询原理/" rel="next" title="Angular源码解析1——脏值查询的基本原理">
+                <i class="fa fa-chevron-left"></i> Angular源码解析1——脏值查询的基本原理
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/27/Angular源码解析3——深度比较、深度克隆/" rel="prev" title="Angular源码解析3——深度比较、深度克隆">
+                Angular源码解析3——深度比较、深度克隆 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://p1.so.qhmsg.com/t0104ff6ab349246736.jpg"
+               alt="BetaSu" />
+          <p class="site-author-name" itemprop="name">BetaSu</p>
+          <p class="site-description motion-element" itemprop="description">一言不合撸源码</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#上一篇提到的问题"><span class="nav-number">1.</span> <span class="nav-text">上一篇提到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现原理"><span class="nav-number">2.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重要提示"><span class="nav-number">4.</span> <span class="nav-text">重要提示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞"><span class="nav-number">5.</span> <span class="nav-text">漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应对"><span class="nav-number">6.</span> <span class="nav-text">应对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现-1"><span class="nav-number">7.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于值的检测与基于地址的检测"><span class="nav-number">8.</span> <span class="nav-text">基于值的检测与基于地址的检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现-2"><span class="nav-number">9.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#另一个问题"><span class="nav-number">10.</span> <span class="nav-text">另一个问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码实现"><span class="nav-number">11.</span> <span class="nav-text">源码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后一点小问题"><span class="nav-number">12.</span> <span class="nav-text">最后一点小问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码实现-1"><span class="nav-number">13.</span> <span class="nav-text">源码实现</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BetaSu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
