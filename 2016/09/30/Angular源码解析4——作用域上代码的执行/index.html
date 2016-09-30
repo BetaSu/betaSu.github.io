@@ -84,19 +84,28 @@
 
 
 
-<meta name="description" content="res.send的作用 原生node中res.end()方法中只能传递String和Buffer类型，并且传递中文字符串的时候由于编码的问题会显示乱码。为了解决这个问题，express中通过中间件在res上封装了一个send方法，可以传递字符串、对象(转换成JSON)、状态码。
-源码实现123456789101112131415161718res.send=function (msg) &amp;#123">
+<meta name="description" content="在作用域中执行代码
+$eval
+12345678/***$eval接收2个参数*fn需要在作用中执行的函数*（可选）传入的参数**/Scope.prototype.$eval=function (fn,locals) &amp;#123;	return fn(this,locals);&amp;#125;
+
+$apply有时候我们需要执行与Angular无关的方法（比如window.setInerval），但是这">
 <meta property="og:type" content="article">
-<meta property="og:title" content="express源码实现4——res.send">
-<meta property="og:url" content="https://betasu.github.io/2016/09/09/express源码实现4——res-send/index.html">
+<meta property="og:title" content="Angular源码解析4——作用域上代码的执行">
+<meta property="og:url" content="https://betasu.github.io/2016/09/30/Angular源码解析4——作用域上代码的执行/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="res.send的作用 原生node中res.end()方法中只能传递String和Buffer类型，并且传递中文字符串的时候由于编码的问题会显示乱码。为了解决这个问题，express中通过中间件在res上封装了一个send方法，可以传递字符串、对象(转换成JSON)、状态码。
-源码实现123456789101112131415161718res.send=function (msg) &amp;#123">
-<meta property="og:updated_time" content="2016-09-09T03:40:20.293Z">
+<meta property="og:description" content="在作用域中执行代码
+$eval
+12345678/***$eval接收2个参数*fn需要在作用中执行的函数*（可选）传入的参数**/Scope.prototype.$eval=function (fn,locals) &amp;#123;	return fn(this,locals);&amp;#125;
+
+$apply有时候我们需要执行与Angular无关的方法（比如window.setInerval），但是这">
+<meta property="og:updated_time" content="2016-09-30T13:02:04.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="express源码实现4——res.send">
-<meta name="twitter:description" content="res.send的作用 原生node中res.end()方法中只能传递String和Buffer类型，并且传递中文字符串的时候由于编码的问题会显示乱码。为了解决这个问题，express中通过中间件在res上封装了一个send方法，可以传递字符串、对象(转换成JSON)、状态码。
-源码实现123456789101112131415161718res.send=function (msg) &amp;#123">
+<meta name="twitter:title" content="Angular源码解析4——作用域上代码的执行">
+<meta name="twitter:description" content="在作用域中执行代码
+$eval
+12345678/***$eval接收2个参数*fn需要在作用中执行的函数*（可选）传入的参数**/Scope.prototype.$eval=function (fn,locals) &amp;#123;	return fn(this,locals);&amp;#125;
+
+$apply有时候我们需要执行与Angular无关的方法（比如window.setInerval），但是这">
 
 
 
@@ -117,9 +126,9 @@
 
 
 
-  <link rel="canonical" href="https://betasu.github.io/2016/09/09/express源码实现4——res-send/"/>
+  <link rel="canonical" href="https://betasu.github.io/2016/09/30/Angular源码解析4——作用域上代码的执行/"/>
 
-  <title> express源码实现4——res.send | 我是卡卡卡颂 </title>
+  <title> Angular源码解析4——作用域上代码的执行 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +248,7 @@
             
             
               
-                express源码实现4——res.send
+                Angular源码解析4——作用域上代码的执行
               
             
           </h1>
@@ -251,8 +260,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-09T11:03:18+08:00" content="2016-09-09">
-              2016-09-09
+            <time itemprop="dateCreated" datetime="2016-09-30T19:49:06+08:00" content="2016-09-30">
+              2016-09-30
             </time>
           </span>
 
@@ -279,8 +288,18 @@
       
 
       
-        <h2 id="res-send的作用"><a href="#res-send的作用" class="headerlink" title="res.send的作用"></a>res.send的作用</h2><p> 原生node中res.end()方法中只能传递String和Buffer类型，并且传递中文字符串的时候由于编码的问题会显示乱码。为了解决这个问题，express中通过中间件在res上封装了一个send方法，可以传递字符串、对象(转换成JSON)、状态码。</p>
-<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">res.send=<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">	<span class="comment">//是字符串或buffer</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'string'</span>||Buffer.isBuffer(msg)) &#123;</div><div class="line">		res.setHeader(<span class="string">'content-type'</span>,<span class="string">'text/plain;charset=utf8'</span>);</div><div class="line">		res.end(msg);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//是对象</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'object'</span>) &#123;</div><div class="line">		res.setHeader(<span class="string">'content-type'</span>,<span class="string">'applicaton/json;charset=utf8'</span>);</div><div class="line">		res.end(<span class="built_in">JSON</span>.stringify(msg));</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//是数字类型，转换成状态码</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'number'</span>) &#123;</div><div class="line">		<span class="keyword">var</span> STATUS_CODE=<span class="built_in">require</span>(<span class="string">'http'</span>).STATUS_CODES;</div><div class="line">		res.statusCode=msg;</div><div class="line">		res.end(STATUS_CODE[msg]);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <h2 id="在作用域中执行代码"><a href="#在作用域中执行代码" class="headerlink" title="在作用域中执行代码"></a>在作用域中执行代码</h2><ol>
+<li><p>$eval</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">*$eval接收2个参数</div><div class="line">*fn需要在作用中执行的函数</div><div class="line">*（可选）传入的参数</div><div class="line">**/</div><div class="line">Scope.prototype.$<span class="built_in">eval</span>=<span class="function"><span class="keyword">function</span> (<span class="params">fn,locals</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> fn(<span class="keyword">this</span>,locals);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>$apply<br>有时候我们需要执行与Angular无关的方法（比如window.setInerval），但是这些方法改变了作用域中的数据，我们希望监听到这些变化，这时候我们需要通过$apply传入方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$apply=functin (fn) &#123;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.$<span class="built_in">eval</span>(fn);</div><div class="line">	&#125; <span class="keyword">finally</span> &#123;</div><div class="line">		<span class="comment">//$digest的执行放在finally中，以确保即使报错也会执行</span></div><div class="line">		<span class="keyword">this</span>.$digest();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>延迟执行的函数<br>在angular中我们可以用$apply传递一个计时器（setInterval）来实现延迟执行函数，也可以调用内部的$interval和$timeout。Angular中还有一种延迟执行的方法$evalAsync。</p>
+</li>
+</ol>
+<p>$evalAsync会将一个函数推入计划中。这个函数会在这次$digest或者下次$digest之前执行。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//在Scope中定义任务队列</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue=[];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义$evalAsync,传入需要延迟执行的函数</span></div><div class="line">Scope.prototype.$evalAsync=<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue.push(&#123;scope:<span class="keyword">this</span>,expression:fn&#125;);</div><div class="line">&#125; </div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> time=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		<span class="keyword">while</span> (<span class="keyword">this</span>.$$asyncQueue.length) &#123;</div><div class="line">			<span class="keyword">var</span> task=<span class="keyword">this</span>.$$asyncQueue.shift();</div><div class="line">			<span class="keyword">this</span>.$<span class="built_in">eval</span>(task.expression);</div><div class="line">		&#125;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp;!(time--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'已到10次脏值查询'</span></div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
       
     </div>
 
@@ -305,17 +324,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/08/node源码实现——promise/" rel="next" title="node源码实现——简单的promise实现">
-                <i class="fa fa-chevron-left"></i> node源码实现——简单的promise实现
+              <a href="/2016/09/27/Angular源码解析3——深度比较、深度克隆/" rel="next" title="Angular源码解析3——深度比较、深度克隆">
+                <i class="fa fa-chevron-left"></i> Angular源码解析3——深度比较、深度克隆
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/11/express源码实现现5——静态服务器/" rel="prev" title="express源码实现现5——静态服务器">
-                express源码实现现5——静态服务器 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -415,7 +430,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#res-send的作用"><span class="nav-number">1.</span> <span class="nav-text">res.send的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码实现"><span class="nav-number">2.</span> <span class="nav-text">源码实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#在作用域中执行代码"><span class="nav-number">1.</span> <span class="nav-text">在作用域中执行代码</span></a></li></ol></div>
             
           </div>
         </section>

@@ -238,6 +238,110 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/30/Angular源码解析4——作用域上代码的执行/" itemprop="url">
+                  Angular源码解析4——作用域上代码的执行
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-30T19:49:06+08:00" content="2016-09-30">
+              2016-09-30
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="在作用域中执行代码"><a href="#在作用域中执行代码" class="headerlink" title="在作用域中执行代码"></a>在作用域中执行代码</h2><ol>
+<li><p>$eval</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">*$eval接收2个参数</div><div class="line">*fn需要在作用中执行的函数</div><div class="line">*（可选）传入的参数</div><div class="line">**/</div><div class="line">Scope.prototype.$<span class="built_in">eval</span>=<span class="function"><span class="keyword">function</span> (<span class="params">fn,locals</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> fn(<span class="keyword">this</span>,locals);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>$apply<br>有时候我们需要执行与Angular无关的方法（比如window.setInerval），但是这些方法改变了作用域中的数据，我们希望监听到这些变化，这时候我们需要通过$apply传入方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$apply=functin (fn) &#123;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.$<span class="built_in">eval</span>(fn);</div><div class="line">	&#125; <span class="keyword">finally</span> &#123;</div><div class="line">		<span class="comment">//$digest的执行放在finally中，以确保即使报错也会执行</span></div><div class="line">		<span class="keyword">this</span>.$digest();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>延迟执行的函数<br>在angular中我们可以用$apply传递一个计时器（setInterval）来实现延迟执行函数，也可以调用内部的$interval和$timeout。Angular中还有一种延迟执行的方法$evalAsync。</p>
+</li>
+</ol>
+<p>$evalAsync会将一个函数推入计划中。这个函数会在这次$digest或者下次$digest之前执行。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//在Scope中定义任务队列</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue=[];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义$evalAsync,传入需要延迟执行的函数</span></div><div class="line">Scope.prototype.$evalAsync=<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue.push(&#123;scope:<span class="keyword">this</span>,expression:fn&#125;);</div><div class="line">&#125; </div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> time=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		<span class="keyword">while</span> (<span class="keyword">this</span>.$$asyncQueue.length) &#123;</div><div class="line">			<span class="keyword">var</span> task=<span class="keyword">this</span>.$$asyncQueue.shift();</div><div class="line">			<span class="keyword">this</span>.$<span class="built_in">eval</span>(task.expression);</div><div class="line">		&#125;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp;!(time--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'已到10次脏值查询'</span></div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/27/Angular源码解析3——深度比较、深度克隆/" itemprop="url">
                   Angular源码解析3——深度比较、深度克隆
                 </a>
@@ -1193,112 +1297,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/08/node源码实现——promise/" itemprop="url">
-                  node源码实现——简单的promise实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-08T14:33:31+08:00" content="2016-09-08">
-              2016-09-08
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="promise是什么"><a href="#promise是什么" class="headerlink" title="promise是什么"></a>promise是什么</h2><p> 顾名思义，promise就是一个承诺。承诺需要一段时间后兑现。在node中，这段时间就是异步操作执行到调用回调函数的时间。所以，promise的操作和异步操作有关。</p>
-<h2 id="promise的状态"><a href="#promise的状态" class="headerlink" title="promise的状态"></a>promise的状态</h2><ul>
-<li>Pending Promise对象实例创建时候的初始状态</li>
-<li>Fulfilled 可以理解为成功的状态</li>
-<li>Rejected 可以理解为失败的状态<h2 id="promise的简单应用"><a href="#promise的简单应用" class="headerlink" title="promise的简单应用"></a>promise的简单应用</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义一个Promise实例，实例会立即执行传参。传参接收2个参数</span></div><div class="line"><span class="comment">//resolve参数是一个函数，用以改变promise的状态以及执行成功状态的回调函数</span></div><div class="line"><span class="comment">//reject参数是一个函数，用以改变promise的状态以及执行失败状态的回调函数</span></div><div class="line"><span class="keyword">var</span> promise=<span class="keyword">new</span> <span class="built_in">Promise</span>((resolve,reject)=&gt;&#123;</div><div class="line">	setTimeout(()=&gt;&#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">Math</span>.random&gt;<span class="number">0.5</span>) resolve(<span class="string">'success'</span>);</div><div class="line">		<span class="keyword">else</span> reject(<span class="string">'fail'</span>);</div><div class="line">	&#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div><div class="line"><span class="comment">//promise的实例的then方法接收两个函数参数，是对resolve与reject函数的定义</span></div><div class="line">promise.then(fullfiled,rejected)</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="源码实现思路"><a href="#源码实现思路" class="headerlink" title="源码实现思路"></a>源码实现思路</h2><ol>
-<li>由于要实例化，所以Promise首先是一个类。constructor上有一个记录状态的变量。并且在实例化的过程中会立即执行传参。</li>
-<li>原型上有一个then方法，接受两个参数，分别是成功与失败状态要调用的函数。但是由于这两个函数都有传参，所以还需要包装一下。</li>
-<li>在contructor中定义resolve与reject函数，这两个函数接收传参，执行时会改变实例状态，并把传参赋给then上定义的方法并执行他。</li>
-<li>在constructor中执行Promise中传入的函数，将包装好的resolve与reject传入。</li>
-</ol>
-<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.定义Promise类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Promise</span> </span>&#123;</div><div class="line">	<span class="comment">//2.接收一个函数为参数</span></div><div class="line">	<span class="keyword">constructor</span> (fn) &#123;</div><div class="line">		<span class="comment">//3.保存状态，默认为'unfulfilled'</span></div><div class="line">		<span class="keyword">this</span>._status=<span class="string">'unfulfilled'</span>;</div><div class="line">		</div><div class="line">		<span class="comment">//5.包装好resolve</span></div><div class="line">		<span class="keyword">let</span> resolve=(data)=&gt;&#123;</div><div class="line">			<span class="comment">//改变状态</span></div><div class="line">			<span class="keyword">this</span>._status=<span class="string">'fulfilled'</span>;</div><div class="line">			<span class="keyword">this</span>._resolve(data);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">//6.包装好reject</span></div><div class="line">		<span class="keyword">let</span> reject=(err)=&gt;&#123;</div><div class="line">			<span class="comment">//改变状态</span></div><div class="line">			<span class="keyword">this</span>._status=<span class="string">'failed'</span>;</div><div class="line">			<span class="keyword">this</span>._reject(err);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">//7.立即执行</span></div><div class="line">		fn(resolve,reject);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">//4.Promise.prototype上定义then方法,将传递的函数保存为内部方法</span></div><div class="line">	then (resolve,reject) &#123;</div><div class="line">		<span class="keyword">this</span>._resolve=resolve;</div><div class="line">		<span class="keyword">this</span>._reject=reject;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1344,7 +1342,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">30</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
