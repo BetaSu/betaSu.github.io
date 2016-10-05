@@ -238,6 +238,100 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/09/express源码实现4——res-send/" itemprop="url">
+                  express源码实现4——res.send
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-09T11:03:18+08:00" content="2016-09-09">
+              2016-09-09
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="res-send的作用"><a href="#res-send的作用" class="headerlink" title="res.send的作用"></a>res.send的作用</h2><p> 原生node中res.end()方法中只能传递String和Buffer类型，并且传递中文字符串的时候由于编码的问题会显示乱码。为了解决这个问题，express中通过中间件在res上封装了一个send方法，可以传递字符串、对象(转换成JSON)、状态码。</p>
+<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">res.send=<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">	<span class="comment">//是字符串或buffer</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'string'</span>||Buffer.isBuffer(msg)) &#123;</div><div class="line">		res.setHeader(<span class="string">'content-type'</span>,<span class="string">'text/plain;charset=utf8'</span>);</div><div class="line">		res.end(msg);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//是对象</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'object'</span>) &#123;</div><div class="line">		res.setHeader(<span class="string">'content-type'</span>,<span class="string">'applicaton/json;charset=utf8'</span>);</div><div class="line">		res.end(<span class="built_in">JSON</span>.stringify(msg));</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//是数字类型，转换成状态码</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'number'</span>) &#123;</div><div class="line">		<span class="keyword">var</span> STATUS_CODE=<span class="built_in">require</span>(<span class="string">'http'</span>).STATUS_CODES;</div><div class="line">		res.statusCode=msg;</div><div class="line">		res.end(STATUS_CODE[msg]);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/08/node源码实现——promise/" itemprop="url">
                   node源码实现——简单的promise实现
                 </a>
@@ -1188,121 +1282,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/29/angular——单页面路由/" itemprop="url">
-                  angular——单页面路由
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-29T21:56:07+08:00" content="2016-08-29">
-              2016-08-29
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##什么是路由</p>
-<ul>
-<li>路由就是不同的路径。不同的路径对应不同的路由<h2 id="angular单页路由的配置"><a href="#angular单页路由的配置" class="headerlink" title="angular单页路由的配置"></a>angular单页路由的配置</h2></li>
-</ul>
-<ol>
-<li><p>需要引入angular-route这个包</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script src=<span class="string">"../node_modules/angular-route.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div></pre></td></tr></table></figure>
-</li>
-<li><p>angular模块依赖</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'app'</span>,[<span class="string">'ngRoute'</span>]);</div></pre></td></tr></table></figure>
-</li>
-<li><p>对服务暴露出的api进行配置</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mod.config(<span class="function"><span class="keyword">function</span>  (<span class="params">$routeProvider</span>) </span>&#123;</div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>##具体流程 一个简单的案例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'app'</span>,[<span class="string">'ngRoute'</span>]);</div><div class="line">  mod.config(<span class="function"><span class="keyword">function</span>  (<span class="params">$routeProvider</span>) </span>&#123;</div><div class="line">  	<span class="comment">//route的每个when方法里设置一个路由</span></div><div class="line">      $routeProvider.when(<span class="string">'/'</span>,&#123;</div><div class="line">          templateUrl:<span class="string">'index.html'</span></div><div class="line">      &#125;).when(<span class="string">'/about'</span>,&#123;</div><div class="line">          templateUrl:<span class="string">'about.html'</span>,</div><div class="line">          controller:<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line"></div><div class="line">          &#125;,</div><div class="line">          <span class="comment">//resolve中定义服务，注意这里会嵌套两层</span></div><div class="line">          resolve:&#123;</div><div class="line">          	add:<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">          		<span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">a,b</span>) </span>&#123;</div><div class="line">          			<span class="keyword">return</span> a+b;</div><div class="line">          		&#125;</div><div class="line">          	&#125;</div><div class="line">          &#125;</div><div class="line">      &#125;).when(<span class="string">'/contact'</span>,&#123;</div><div class="line">          templateUrl:<span class="string">'contact.html'</span></div><div class="line">      &#125;)</div><div class="line">  &#125;)</div></pre></td></tr></table></figure></p>
-<p>在DOM结构中,路由会显示在ng-view指令所在的标签内<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-view</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1343,7 +1327,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

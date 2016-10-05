@@ -238,6 +238,99 @@
             
               
                 
+                <a class="post-title-link" href="/2016/10/05/IE条件注释/" itemprop="url">
+                  IE条件注释
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-05T17:13:39+08:00" content="2016-10-05">
+              2016-10-05
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--[if !IE]&gt;除IE外都可识别&lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE]&gt; 所有的IE可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 5.0]&gt; 只有IE5.0可以识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 5]&gt; 仅IE5.0与IE5.5可以识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if gt IE 5.0]&gt; IE5.0以及IE5.0以上版本都可以识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 6]&gt; 仅IE6可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if lt IE 6]&gt; IE6以及IE6以下版本可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if gte IE 6]&gt; IE6以及IE6以上版本可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 7]&gt; 仅IE7可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if lt IE 7]&gt; IE7以及IE7以下版本可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if gte IE 7]&gt; IE7以及IE7以上版本可识别 &lt;![endif]--&gt;</span></div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/30/Angular源码解析4——作用域上代码的执行/" itemprop="url">
                   Angular源码解析4——作用域上代码的执行
                 </a>
@@ -1203,105 +1296,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/09/express源码实现4——res-send/" itemprop="url">
-                  express源码实现4——res.send
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-09T11:03:18+08:00" content="2016-09-09">
-              2016-09-09
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="res-send的作用"><a href="#res-send的作用" class="headerlink" title="res.send的作用"></a>res.send的作用</h2><p> 原生node中res.end()方法中只能传递String和Buffer类型，并且传递中文字符串的时候由于编码的问题会显示乱码。为了解决这个问题，express中通过中间件在res上封装了一个send方法，可以传递字符串、对象(转换成JSON)、状态码。</p>
-<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">res.send=<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">	<span class="comment">//是字符串或buffer</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'string'</span>||Buffer.isBuffer(msg)) &#123;</div><div class="line">		res.setHeader(<span class="string">'content-type'</span>,<span class="string">'text/plain;charset=utf8'</span>);</div><div class="line">		res.end(msg);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//是对象</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'object'</span>) &#123;</div><div class="line">		res.setHeader(<span class="string">'content-type'</span>,<span class="string">'applicaton/json;charset=utf8'</span>);</div><div class="line">		res.end(<span class="built_in">JSON</span>.stringify(msg));</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//是数字类型，转换成状态码</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'number'</span>) &#123;</div><div class="line">		<span class="keyword">var</span> STATUS_CODE=<span class="built_in">require</span>(<span class="string">'http'</span>).STATUS_CODES;</div><div class="line">		res.statusCode=msg;</div><div class="line">		res.end(STATUS_CODE[msg]);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1342,7 +1341,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
