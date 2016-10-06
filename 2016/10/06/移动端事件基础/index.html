@@ -84,19 +84,58 @@
 
 
 
-<meta name="description" content="什么是重定向重定向就是指当访问某个路由时自动跳转到另一个路由（比如注册成功自动跳转到首页）。
-重定向代码实现12345678910//用中间件的形式实现module.exports=function (req,res,next) &amp;#123;	res.redirect=function (url) &amp;#123;		//设置http状态码为302（重定向）		res.statusCode=302;">
+<meta name="description" content="移动端事件
+click:单击事件,不是点击事件（有300ms延迟,是为了确定是否是单击）
+load:加载成功
+scroll:滚动
+blur 
+change  
+input:代替keyup keydown
+TOUCH事件模型:处理单手指操作
+GESTURE事件模型:处理多手指操作
+
+TOUCH事件模型
+touchstart
+touchmove
+touched
+touchcancel GESTURE事">
 <meta property="og:type" content="article">
-<meta property="og:title" content="express源码实现6————重定向">
-<meta property="og:url" content="https://betasu.github.io/2016/09/20/express源码实现————重定向/index.html">
+<meta property="og:title" content="移动端事件基础">
+<meta property="og:url" content="https://betasu.github.io/2016/10/06/移动端事件基础/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="什么是重定向重定向就是指当访问某个路由时自动跳转到另一个路由（比如注册成功自动跳转到首页）。
-重定向代码实现12345678910//用中间件的形式实现module.exports=function (req,res,next) &amp;#123;	res.redirect=function (url) &amp;#123;		//设置http状态码为302（重定向）		res.statusCode=302;">
-<meta property="og:updated_time" content="2016-09-20T04:40:31.568Z">
+<meta property="og:description" content="移动端事件
+click:单击事件,不是点击事件（有300ms延迟,是为了确定是否是单击）
+load:加载成功
+scroll:滚动
+blur 
+change  
+input:代替keyup keydown
+TOUCH事件模型:处理单手指操作
+GESTURE事件模型:处理多手指操作
+
+TOUCH事件模型
+touchstart
+touchmove
+touched
+touchcancel GESTURE事">
+<meta property="og:updated_time" content="2016-10-06T15:02:40.963Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="express源码实现6————重定向">
-<meta name="twitter:description" content="什么是重定向重定向就是指当访问某个路由时自动跳转到另一个路由（比如注册成功自动跳转到首页）。
-重定向代码实现12345678910//用中间件的形式实现module.exports=function (req,res,next) &amp;#123;	res.redirect=function (url) &amp;#123;		//设置http状态码为302（重定向）		res.statusCode=302;">
+<meta name="twitter:title" content="移动端事件基础">
+<meta name="twitter:description" content="移动端事件
+click:单击事件,不是点击事件（有300ms延迟,是为了确定是否是单击）
+load:加载成功
+scroll:滚动
+blur 
+change  
+input:代替keyup keydown
+TOUCH事件模型:处理单手指操作
+GESTURE事件模型:处理多手指操作
+
+TOUCH事件模型
+touchstart
+touchmove
+touched
+touchcancel GESTURE事">
 
 
 
@@ -117,9 +156,9 @@
 
 
 
-  <link rel="canonical" href="https://betasu.github.io/2016/09/20/express源码实现————重定向/"/>
+  <link rel="canonical" href="https://betasu.github.io/2016/10/06/移动端事件基础/"/>
 
-  <title> express源码实现6————重定向 | 我是卡卡卡颂 </title>
+  <title> 移动端事件基础 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -239,7 +278,7 @@
             
             
               
-                express源码实现6————重定向
+                移动端事件基础
               
             
           </h1>
@@ -251,8 +290,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-20T12:34:01+08:00" content="2016-09-20">
-              2016-09-20
+            <time itemprop="dateCreated" datetime="2016-10-06T20:14:51+08:00" content="2016-10-06">
+              2016-10-06
             </time>
           </span>
 
@@ -279,8 +318,25 @@
       
 
       
-        <h2 id="什么是重定向"><a href="#什么是重定向" class="headerlink" title="什么是重定向"></a>什么是重定向</h2><p>重定向就是指当访问某个路由时自动跳转到另一个路由（比如注册成功自动跳转到首页）。</p>
-<h2 id="重定向代码实现"><a href="#重定向代码实现" class="headerlink" title="重定向代码实现"></a>重定向代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//用中间件的形式实现</span></div><div class="line"><span class="built_in">module</span>.exports=<span class="function"><span class="keyword">function</span> (<span class="params">req,res,next</span>) </span>&#123;</div><div class="line">	res.redirect=<span class="function"><span class="keyword">function</span> (<span class="params">url</span>) </span>&#123;</div><div class="line">		<span class="comment">//设置http状态码为302（重定向）</span></div><div class="line">		res.statusCode=<span class="number">302</span>;</div><div class="line">		<span class="comment">//设置响应头,注意状态码与响应头缺一不可</span></div><div class="line">		res.setHeader(<span class="string">'Location'</span>,url);</div><div class="line">		res.end(<span class="string">''</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <h2 id="移动端事件"><a href="#移动端事件" class="headerlink" title="移动端事件"></a>移动端事件</h2><ul>
+<li>click:单击事件,不是点击事件（有300ms延迟,是为了确定是否是单击）</li>
+<li>load:加载成功</li>
+<li>scroll:滚动</li>
+<li>blur </li>
+<li>change  </li>
+<li>input:代替keyup keydown</li>
+<li>TOUCH事件模型:处理单手指操作</li>
+<li>GESTURE事件模型:处理多手指操作</li>
+</ul>
+<h2 id="TOUCH事件模型"><a href="#TOUCH事件模型" class="headerlink" title="TOUCH事件模型"></a>TOUCH事件模型</h2><ul>
+<li>touchstart</li>
+<li>touchmove</li>
+<li>touched</li>
+<li>touchcancel <h2 id="GESTURE事件模型"><a href="#GESTURE事件模型" class="headerlink" title="GESTURE事件模型"></a>GESTURE事件模型</h2></li>
+<li>gesturestart</li>
+<li>gesturechange</li>
+<li>gestureend</li>
+</ul>
 
       
     </div>
@@ -306,17 +362,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/16/socket-io入门/" rel="next" title="socket.io入门">
-                <i class="fa fa-chevron-left"></i> socket.io入门
+              <a href="/2016/10/05/IE条件注释/" rel="next" title="IE条件注释">
+                <i class="fa fa-chevron-left"></i> IE条件注释
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/22/angular——脏值查询原理/" rel="prev" title="Angular源码解析1——脏值查询的基本原理">
-                Angular源码解析1——脏值查询的基本原理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -416,7 +468,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是重定向"><span class="nav-number">1.</span> <span class="nav-text">什么是重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重定向代码实现"><span class="nav-number">2.</span> <span class="nav-text">重定向代码实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#移动端事件"><span class="nav-number">1.</span> <span class="nav-text">移动端事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TOUCH事件模型"><span class="nav-number">2.</span> <span class="nav-text">TOUCH事件模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GESTURE事件模型"><span class="nav-number">3.</span> <span class="nav-text">GESTURE事件模型</span></a></li></ol></div>
             
           </div>
         </section>
