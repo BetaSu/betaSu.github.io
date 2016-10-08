@@ -238,6 +238,114 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/01/angular——多页面路由/" itemprop="url">
+                  angular——多页面路由
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-01T09:03:23+08:00" content="2016-09-01">
+              2016-09-01
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="多页面路由与单页面路由的区别"><a href="#多页面路由与单页面路由的区别" class="headerlink" title="多页面路由与单页面路由的区别"></a>多页面路由与单页面路由的区别</h2><p>之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。</p>
+<h2 id="多页面路由引入"><a href="#多页面路由引入" class="headerlink" title="多页面路由引入"></a>多页面路由引入</h2><ol>
+<li>引入angular-ui-router.js文件</li>
+<li><p>模块中注入ui.router</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'app'</span>,[<span class="string">'ui.router'</span>]);</div></pre></td></tr></table></figure>
+</li>
+<li><p>配置文件中注入$stateProvider和$urlRouterProvider,前者实现多页面路由，后者实现单页面路由中otherwise的功能</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.config(<span class="function"><span class="keyword">function</span> (<span class="params">$stateProvider,$urlRouterProvider</span>) </span>&#123;&#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>单页路由配置</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//配置未定义的路径</span></div><div class="line">$urlRouterProvider.otherwise(<span class="string">'/'</span>);</div><div class="line"><span class="comment">//配置首页,状态为index</span></div><div class="line"> $stateProvider.state(<span class="string">'index'</span>,&#123;</div><div class="line">           url:<span class="string">''</span>,</div><div class="line">           templateUrl:<span class="string">'./index.html'</span></div><div class="line">       &#125;).state(<span class="string">'about'</span>,&#123;</div><div class="line">           url:<span class="string">'/about'</span>,</div><div class="line">           templateUrl:<span class="string">'./about.html'</span>,</div><div class="line">           controller:<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line">               $scope.books=[&#123;id:<span class="number">1</span>,name:<span class="string">'王子与玫瑰'</span>&#125;,&#123;id:<span class="number">2</span>,name:<span class="string">'夜莺与玫瑰'</span>&#125;,&#123;id:<span class="number">3</span>,name:<span class="string">'王尔德'</span>&#125;]</div><div class="line">           &#125;,</div><div class="line">           <span class="comment">//配置中注入的服务</span></div><div class="line">           resolve:&#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+</li>
+<li><p>多页面路由配置</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/30/angular——表单控件/" itemprop="url">
                   angular——表单控件
                 </a>
@@ -1376,119 +1484,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/23/angular ng-model实现/" itemprop="url">
-                  angular ng-model双向绑定的自定义模板实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-23T10:55:10+08:00" content="2016-08-23">
-              2016-08-23
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="angular-ng-model双向绑定的自定义模板实现"><a href="#angular-ng-model双向绑定的自定义模板实现" class="headerlink" title="angular ng-model双向绑定的自定义模板实现"></a>angular ng-model双向绑定的自定义模板实现</h2><h2 id="流程："><a href="#流程：" class="headerlink" title="流程："></a>流程：</h2><ol>
-<li><p>定义模块</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myApp=angular.module(<span class="string">'myApp'</span>,[]);</div></pre></td></tr></table></figure>
-</li>
-<li><p>调用directive 自定义模板方法</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">myApp.directive(<span class="string">'myModel'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		link:<span class="function"><span class="keyword">function</span> (<span class="params">scope,element,attrs</span>) </span>&#123;</div><div class="line"></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>link内部实现，第一步拿到input的内容，因为element是jQ对象，</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">element.val()</div></pre></td></tr></table></figure>
-</li>
-<li><p>link内部实现，第二步拿到my-model对应的变量名</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">attrs[<span class="string">'my-model'</span>]</div></pre></td></tr></table></figure>
-</li>
-<li><p>link内部实现，在scope上定义对象</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scope[attrs[<span class="string">'my-model'</span>]]=element.val();</div></pre></td></tr></table></figure>
-</li>
-<li><p>强制刷新，实现数据双向绑定</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scope.$apply();</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="完整实现代码"><a href="#完整实现代码" class="headerlink" title="完整实现代码:"></a>完整实现代码:</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span> <span class="attr">ng-app</span>=<span class="string">"myApp"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>ng-model双向绑定的自定义模板实现<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">my-model</span>=<span class="string">"value"</span>&gt;</span>&#123;&#123;value&#125;&#125;</div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"angular.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">    <span class="keyword">var</span> myApp=angular.module(<span class="string">'myApp'</span>,[]);</div><div class="line">    myApp.directive(<span class="string">'myModel'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            link:<span class="function"><span class="keyword">function</span>  (<span class="params">scope,element,attrs</span>) </span>&#123;</div><div class="line">                element.on(<span class="string">'keyup'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">                    scope[attrs[<span class="string">'myModel'</span>]]=element.val();</div><div class="line">                    scope.$apply();</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1534,7 +1529,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-count">33</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

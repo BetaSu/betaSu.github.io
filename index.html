@@ -238,6 +238,127 @@
             
               
                 
+                <a class="post-title-link" href="/2016/10/08/DOM盒模型的各种width和height属性/" itemprop="url">
+                  DOM盒模型的各种width和height属性
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-08T13:17:55+08:00" content="2016-10-08">
+              2016-10-08
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="client系列（和内容是否溢出盒子无关）"><a href="#client系列（和内容是否溢出盒子无关）" class="headerlink" title="client系列（和内容是否溢出盒子无关）"></a>client系列（和内容是否溢出盒子无关）</h2><ol>
+<li>clientWidth:内容的宽度+左右padding</li>
+<li>clientHeight:内容的高度+上下padding</li>
+<li>clientLeft:左边框的宽度（border-left-width）</li>
+<li>clientTop:上边框的宽度（border-top-width）</li>
+</ol>
+<h2 id="offset系列（和内容是否溢出盒子无关）"><a href="#offset系列（和内容是否溢出盒子无关）" class="headerlink" title="offset系列（和内容是否溢出盒子无关）"></a>offset系列（和内容是否溢出盒子无关）</h2><ol>
+<li>offsetWidth:clientWidth+左右边框</li>
+<li>offsetHeight:clientHeight+上下边框</li>
+<li>offsetLeft:子元素的外边框相对于父定位元素（没有则指向body）的内边框的偏移量</li>
+<li>offsetTop:子元素的外边框相对于父定位元素（没有则指向body）的内边框的偏移量</li>
+<li>offsetParent: 指向子元素的定位父元素，如果没有就指向body，body指向null。</li>
+</ol>
+<h2 id="scroll系列"><a href="#scroll系列" class="headerlink" title="scroll系列"></a>scroll系列</h2><ol>
+<li>scrollWidth:当内容未溢出容器时等于clientWidth.当溢出时是真实宽度+左右padding</li>
+<li>scrollHeight:当内容未溢出容器时等于clientHeight。当溢出时是真实高度+上下padding</li>
+<li>scrollTop:滚动条卷去的高度</li>
+<li>scrollLeft:滚动条卷去的宽度<br>注：如果设置了overflow:hidden;各浏览器结果不同。</li>
+</ol>
+<h2 id="取值问题"><a href="#取值问题" class="headerlink" title="取值问题"></a>取值问题</h2><p>我们通过这13个属性获取的都是近似的整数。</p>
+<h2 id="浏览器的盒模型"><a href="#浏览器的盒模型" class="headerlink" title="浏览器的盒模型"></a>浏览器的盒模型</h2><ol>
+<li>对于浏览器而言，clientWidth/clientHeight是当前浏览器可视窗口的宽高（一屏幕的宽高）</li>
+<li>对于浏览器而言，scrollWidth/scrollHeight是当前页面的真实宽高（所有屏加起来宽高的近似值）</li>
+</ol>
+<h2 id="浏览器盒模型属性获取-设置方法的封装"><a href="#浏览器盒模型属性获取-设置方法的封装" class="headerlink" title="浏览器盒模型属性获取/设置方法的封装"></a>浏览器盒模型属性获取/设置方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">win</span> (<span class="params">attr,value</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> value !==<span class="string">'undefined'</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">document</span>.documentElement[attr] ||<span class="built_in">document</span>.body[attr];</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">document</span>.documentElement[attr]=value;</div><div class="line">	<span class="built_in">document</span>.body[attr]=value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="获取某元素相对浏览器的偏移量-方法的封装"><a href="#获取某元素相对浏览器的偏移量-方法的封装" class="headerlink" title="获取某元素相对浏览器的偏移量 方法的封装"></a>获取某元素相对浏览器的偏移量 方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">offset</span> (<span class="params">curEle</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> l=curEle.offsetLeft;</div><div class="line">	<span class="keyword">var</span> t=curEle.offsetTop;</div><div class="line">	<span class="keyword">var</span> par=curEle.offsetParent;</div><div class="line">	<span class="comment">//一层层定位祖先向上累加</span></div><div class="line">	<span class="keyword">while</span> (par) &#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">window</span>.navigator.userAgent.indexOf(<span class="string">'MSIE 8.0'</span>)!==<span class="number">-1</span>) &#123;</div><div class="line">				l+=par.clientLeft;</div><div class="line">				t+=par.clientTop;</div><div class="line">		&#125;</div><div class="line">		l+=par.offsetLeft;</div><div class="line">		t+=par.offsetTop;</div><div class="line">		par=par.offsetParent;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> &#123;left:l,top:t&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="计算后的样式值的获取"><a href="#计算后的样式值的获取" class="headerlink" title="计算后的样式值的获取"></a>计算后的样式值的获取</h2><p>一般我们用 元素.style.样式来获取元素的样式。这样获取到的是元素的行内样式。如果想获取元素经过计算后的样式需要使用window.getComputedStyle(ele,null);<br>经过浏览器计算过的样式是指 只要当前标签可以在浏览器中呈现出来，那么他所有样式都是经过浏览器计算过的，哪怕那些样式你没有写也可以获取到。<br>window.getComputedStyle(box,null)接收两个参数。 box指要获取样式的元素，null指伪类。</p>
+<h2 id="获取计算后样式的-方法封装"><a href="#获取计算后样式的-方法封装" class="headerlink" title="获取计算后样式的 方法封装"></a>获取计算后样式的 方法封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCss</span> (<span class="params">curEle,attr</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> val=<span class="literal">null</span>;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		val=<span class="built_in">window</span>.getComputedStyle(curEle,<span class="literal">null</span>)[attr];</div><div class="line">	&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">		val=curEle.currentStyle[attr];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> val;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/06/移动端事件基础/" itemprop="url">
                   移动端事件基础
                 </a>
@@ -1215,104 +1336,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/12/简单的依赖加载器实现/" itemprop="url">
-                  简单的依赖加载器实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-12T17:16:55+08:00" content="2016-09-12">
-              2016-09-12
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"><a href="#为了验证闭包的学习，有必要实现一个简单的依赖加载器。" class="headerlink" title="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"></a>为了验证闭包的学习，有必要实现一个简单的依赖加载器。</h2><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myModules=(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//保存所有定义的模块</span></div><div class="line">	<span class="keyword">var</span> modules=&#123;&#125;;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 *定义新模块，接收3个参数</div><div class="line">	 *name:模块名</div><div class="line">	 *deps:模块依赖的其他模块</div><div class="line">	 *impl:模块的定义</div><div class="line">	**/ </div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">define</span>(<span class="params">name,deps,impl</span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//遍历依赖每一项，取出每个模块</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;deps.length;i++) &#123;</div><div class="line">			deps[i]=modules[deps[i]];</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//将新模块存储进模块池，并注入依赖</span></div><div class="line">		modules[name]=impl.apply(impl,deps);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//从模块池中取出模块</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">get</span> (<span class="params">name</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> modules[name];</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//暴露api</span></div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		define: define,</div><div class="line">		get: get</div><div class="line">	&#125;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">myModules.define(&apos;bar&apos;,[],function () &#123;</div><div class="line">	function hello (who) &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello:hello</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">myModules.define(&apos;foo&apos;,[&apos;bar&apos;],function (bar) &#123;</div><div class="line">	functin hello2 () &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello2:hello2</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">var bar=myModules.get(&apos;bar&apos;);</div><div class="line">var foo=myModules.get(&apos;foo&apos;);</div></pre></td></tr></table></figure>
-<ul>
-<li>内容转自《你不知道的Javascript》</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1358,7 +1381,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">32</span>
+              <span class="site-state-item-count">33</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
