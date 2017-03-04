@@ -102,7 +102,7 @@
  1var mod=angular.module(&apos;app&apos;,[&apos;ui.router&apos;]);
 
 配置文件中注入$stateProvider和$url">
-<meta property="og:updated_time" content="2016-09-08T09:19:59.058Z">
+<meta property="og:updated_time" content="2016-09-08T09:20:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="angular——多页面路由">
 <meta name="twitter:description" content="多页面路由与单页面路由的区别之前的单页面路由是基于路径的路由，只能实现单页路由。接下来介绍基于状态的路由，为每个页面赋予不同的状态，就能实现多页面的路由。
@@ -304,7 +304,7 @@
  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mod.config(<span class="function"><span class="keyword">function</span> (<span class="params">$stateProvider,$urlRouterProvider</span>) </span>&#123;&#125;)</div></pre></td></tr></table></figure>
 </li>
 <li><p>单页路由配置</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//配置未定义的路径</span></div><div class="line">$urlRouterProvider.otherwise(<span class="string">'/'</span>);</div><div class="line"><span class="comment">//配置首页,状态为index</span></div><div class="line"> $stateProvider.state(<span class="string">'index'</span>,&#123;</div><div class="line">           url:<span class="string">''</span>,</div><div class="line">           templateUrl:<span class="string">'./index.html'</span></div><div class="line">       &#125;).state(<span class="string">'about'</span>,&#123;</div><div class="line">           url:<span class="string">'/about'</span>,</div><div class="line">           templateUrl:<span class="string">'./about.html'</span>,</div><div class="line">           controller:<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line">               $scope.books=[&#123;id:<span class="number">1</span>,name:<span class="string">'王子与玫瑰'</span>&#125;,&#123;id:<span class="number">2</span>,name:<span class="string">'夜莺与玫瑰'</span>&#125;,&#123;id:<span class="number">3</span>,name:<span class="string">'王尔德'</span>&#125;]</div><div class="line">           &#125;,</div><div class="line">           <span class="comment">//配置中注入的服务</span></div><div class="line">           resolve:&#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//配置未定义的路径</span></div><div class="line">$urlRouterProvider.otherwise(<span class="string">'/'</span>);</div><div class="line"><span class="comment">//配置首页,状态为index</span></div><div class="line"> $stateProvider.state(<span class="string">'index'</span>,&#123;</div><div class="line">           <span class="attr">url</span>:<span class="string">''</span>,</div><div class="line">           <span class="attr">templateUrl</span>:<span class="string">'./index.html'</span></div><div class="line">       &#125;).state(<span class="string">'about'</span>,&#123;</div><div class="line">           <span class="attr">url</span>:<span class="string">'/about'</span>,</div><div class="line">           <span class="attr">templateUrl</span>:<span class="string">'./about.html'</span>,</div><div class="line">           <span class="attr">controller</span>:<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line">               $scope.books=[&#123;<span class="attr">id</span>:<span class="number">1</span>,<span class="attr">name</span>:<span class="string">'王子与玫瑰'</span>&#125;,&#123;<span class="attr">id</span>:<span class="number">2</span>,<span class="attr">name</span>:<span class="string">'夜莺与玫瑰'</span>&#125;,&#123;<span class="attr">id</span>:<span class="number">3</span>,<span class="attr">name</span>:<span class="string">'王尔德'</span>&#125;]</div><div class="line">           &#125;,</div><div class="line">           <span class="comment">//配置中注入的服务</span></div><div class="line">           resolve:&#123;</div><div class="line"></div><div class="line">           &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
 </li>
 <li><p>多页面路由配置</p>
 </li>
@@ -412,7 +412,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -463,7 +463,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

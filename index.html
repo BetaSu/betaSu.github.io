@@ -238,6 +238,102 @@
             
               
                 
+                <a class="post-title-link" href="/2017/03/04/构造带记忆功能的函数/" itemprop="url">
+                  构造带记忆功能的函数
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-04T15:01:09+08:00" content="2017-03-04">
+              2017-03-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>##构造一个带有之前结果缓存的函数，减少不必要的计算<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">传入 初始缓存记忆的数组memo 和计算公式formula</div><div class="line">返回 一个管理memo存储和在需要时调用formula的函数recur</div><div class="line">*/</div><div class="line"><span class="keyword">var</span> memoizer = <span class="function"><span class="keyword">function</span>(<span class="params">memo,formula</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> recur=<span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> result=memo[n];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> result !==<span class="string">'function'</span>) &#123;</div><div class="line">        result=formula(recur,n);</div><div class="line">        memo[n]=result;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">  &#125;;</div><div class="line">  <span class="keyword">return</span> recur;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>##用我们的memoizer函数定义fibonacci函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fibonacci=memoizer([<span class="number">0</span>,<span class="number">1</span>],<span class="function"><span class="keyword">function</span>(<span class="params">recur,n</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> recur(n<span class="number">-1</span>)+recur(n<span class="number">-2</span>);</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>##用我们的memoizer函数定义阶乘函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fibonacci=memoizer([<span class="number">1</span>,<span class="number">1</span>],<span class="function"><span class="keyword">function</span>(<span class="params">recur,n</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> n*recur(n<span class="number">-1</span>);</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/08/DOM盒模型的各种width和height属性/" itemprop="url">
                   DOM盒模型的各种width和height属性
                 </a>
@@ -307,7 +403,7 @@
 <li>对于浏览器而言，scrollWidth/scrollHeight是当前页面的真实宽高（所有屏加起来宽高的近似值）</li>
 </ol>
 <h2 id="浏览器盒模型属性获取-设置方法的封装"><a href="#浏览器盒模型属性获取-设置方法的封装" class="headerlink" title="浏览器盒模型属性获取/设置方法的封装"></a>浏览器盒模型属性获取/设置方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">win</span> (<span class="params">attr,value</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> value !==<span class="string">'undefined'</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">document</span>.documentElement[attr] ||<span class="built_in">document</span>.body[attr];</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">document</span>.documentElement[attr]=value;</div><div class="line">	<span class="built_in">document</span>.body[attr]=value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="获取某元素相对浏览器的偏移量-方法的封装"><a href="#获取某元素相对浏览器的偏移量-方法的封装" class="headerlink" title="获取某元素相对浏览器的偏移量 方法的封装"></a>获取某元素相对浏览器的偏移量 方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">offset</span> (<span class="params">curEle</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> l=curEle.offsetLeft;</div><div class="line">	<span class="keyword">var</span> t=curEle.offsetTop;</div><div class="line">	<span class="keyword">var</span> par=curEle.offsetParent;</div><div class="line">	<span class="comment">//一层层定位祖先向上累加</span></div><div class="line">	<span class="keyword">while</span> (par) &#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">window</span>.navigator.userAgent.indexOf(<span class="string">'MSIE 8.0'</span>)!==<span class="number">-1</span>) &#123;</div><div class="line">				l+=par.clientLeft;</div><div class="line">				t+=par.clientTop;</div><div class="line">		&#125;</div><div class="line">		l+=par.offsetLeft;</div><div class="line">		t+=par.offsetTop;</div><div class="line">		par=par.offsetParent;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> &#123;left:l,top:t&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="获取某元素相对浏览器的偏移量-方法的封装"><a href="#获取某元素相对浏览器的偏移量-方法的封装" class="headerlink" title="获取某元素相对浏览器的偏移量 方法的封装"></a>获取某元素相对浏览器的偏移量 方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">offset</span> (<span class="params">curEle</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> l=curEle.offsetLeft;</div><div class="line">	<span class="keyword">var</span> t=curEle.offsetTop;</div><div class="line">	<span class="keyword">var</span> par=curEle.offsetParent;</div><div class="line">	<span class="comment">//一层层定位祖先向上累加</span></div><div class="line">	<span class="keyword">while</span> (par) &#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">window</span>.navigator.userAgent.indexOf(<span class="string">'MSIE 8.0'</span>)!==<span class="number">-1</span>) &#123;</div><div class="line">				l+=par.clientLeft;</div><div class="line">				t+=par.clientTop;</div><div class="line">		&#125;</div><div class="line">		l+=par.offsetLeft;</div><div class="line">		t+=par.offsetTop;</div><div class="line">		par=par.offsetParent;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> &#123;<span class="attr">left</span>:l,<span class="attr">top</span>:t&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="计算后的样式值的获取"><a href="#计算后的样式值的获取" class="headerlink" title="计算后的样式值的获取"></a>计算后的样式值的获取</h2><p>一般我们用 元素.style.样式来获取元素的样式。这样获取到的是元素的行内样式。如果想获取元素经过计算后的样式需要使用window.getComputedStyle(ele,null);<br>经过浏览器计算过的样式是指 只要当前标签可以在浏览器中呈现出来，那么他所有样式都是经过浏览器计算过的，哪怕那些样式你没有写也可以获取到。<br>window.getComputedStyle(box,null)接收两个参数。 box指要获取样式的元素，null指伪类。</p>
 <h2 id="获取计算后样式的-方法封装"><a href="#获取计算后样式的-方法封装" class="headerlink" title="获取计算后样式的 方法封装"></a>获取计算后样式的 方法封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCss</span> (<span class="params">curEle,attr</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> val=<span class="literal">null</span>;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		val=<span class="built_in">window</span>.getComputedStyle(curEle,<span class="literal">null</span>)[attr];</div><div class="line">	&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">		val=curEle.currentStyle[attr];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> val;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
@@ -618,7 +714,7 @@
 <li><p>延迟执行的函数<br>在angular中我们可以用$apply传递一个计时器（setInterval）来实现延迟执行函数，也可以调用内部的$interval和$timeout。Angular中还有一种延迟执行的方法$evalAsync。</p>
 </li>
 </ol>
-<p>$evalAsync会将一个函数推入计划中。这个函数会在这次$digest或者下次$digest之前执行。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//在Scope中定义任务队列</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue=[];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义$evalAsync,传入需要延迟执行的函数</span></div><div class="line">Scope.prototype.$evalAsync=<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue.push(&#123;scope:<span class="keyword">this</span>,expression:fn&#125;);</div><div class="line">&#125; </div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> time=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		<span class="keyword">while</span> (<span class="keyword">this</span>.$$asyncQueue.length) &#123;</div><div class="line">			<span class="keyword">var</span> task=<span class="keyword">this</span>.$$asyncQueue.shift();</div><div class="line">			<span class="keyword">this</span>.$<span class="built_in">eval</span>(task.expression);</div><div class="line">		&#125;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp;!(time--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'已到10次脏值查询'</span></div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>$evalAsync会将一个函数推入计划中。这个函数会在这次$digest或者下次$digest之前执行。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//在Scope中定义任务队列</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue=[];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义$evalAsync,传入需要延迟执行的函数</span></div><div class="line">Scope.prototype.$evalAsync=<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue.push(&#123;<span class="attr">scope</span>:<span class="keyword">this</span>,<span class="attr">expression</span>:fn&#125;);</div><div class="line">&#125; </div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> time=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		<span class="keyword">while</span> (<span class="keyword">this</span>.$$asyncQueue.length) &#123;</div><div class="line">			<span class="keyword">var</span> task=<span class="keyword">this</span>.$$asyncQueue.shift();</div><div class="line">			<span class="keyword">this</span>.$<span class="built_in">eval</span>(task.expression);</div><div class="line">		&#125;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp;!(time--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'已到10次脏值查询'</span></div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
           
         
@@ -818,7 +914,7 @@
 <h2 id="应对"><a href="#应对" class="headerlink" title="应对"></a>应对</h2><p>对此，我们需要设定，当$digest执行一定次数以后，如果状态还是无法稳定，我们就宣布他的状态永远无法稳定，并抛出错误。为了性能考虑，Angular对这个次数的设定是10。</p>
 <h2 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> ttl=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp; !(ttl--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'10 digest iterations reached'</span>;</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="基于值的检测与基于地址的检测"><a href="#基于值的检测与基于地址的检测" class="headerlink" title="基于值的检测与基于地址的检测"></a>基于值的检测与基于地址的检测</h2><p>我们之前对比oldVal与newVal时，使用的是’===’操作符，这在检测基本值类型的数据时是完全没有问题的。当检测引用类型的值时比较的是引用的地址。但是有时候我们需要检测对象或数组内部数据的变更，这时候我们就需要基于值的检测，而不是基于地址的检测了。<br>由于基于值的检测时一项比较消耗性能（相对）的操作，所以我们应该提供一个可选参数，让使用者自己决定在什么时候开启（全等比较函数源码见下篇）。</p>
-<h2 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.porototype.$watch=<span class="function"><span class="keyword">function</span> (<span class="params">watchFn,listenerFn,valueEq</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;</div><div class="line">		watchFn:watchFn,</div><div class="line">		listenerFn:listenerFn,</div><div class="line">		<span class="comment">//这里通过两次取反，使得强制转换成布尔类型，如果未传递值undefined会被转换成false</span></div><div class="line">		valueEq:!!valueEq</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.porototype.$watch=<span class="function"><span class="keyword">function</span> (<span class="params">watchFn,listenerFn,valueEq</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;</div><div class="line">		<span class="attr">watchFn</span>:watchFn,</div><div class="line">		<span class="attr">listenerFn</span>:listenerFn,</div><div class="line">		<span class="comment">//这里通过两次取反，使得强制转换成布尔类型，如果未传递值undefined会被转换成false</span></div><div class="line">		valueEq:!!valueEq</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>基于值的检测意味着如果数据时对象或数组类型，脏值查询会遍历数据的每一项，如果数据存在嵌套的数组或对象，还会递归的按值进行比较。</p>
 <h2 id="另一个问题"><a href="#另一个问题" class="headerlink" title="另一个问题"></a>另一个问题</h2><p>这里我们的深度检测只发生在newVal与oldVal比较的时候。回忆下，我们的新值会保存在watch.last中。试想如果保存的是一个引用类型的值，那么同一个值通过watchFn取得的和watch.last取得的其实是同一个地址。也就是说watch.fn（旧值）的变化会实时表现在watch.last（新值）中。这样就无法检测到引用类型值的变化了。<br>所以我们保存在watch.last中的数据应该是一个值，而不是一个地址。也就是说我们需要深度克隆一份引用类型的值。（源码分析见下一篇）</p>
 <h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$digestOnce = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> that  = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> dirty;</div><div class="line">  <span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">watch</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> newValue = watch.watchFn(that);</div><div class="line">    <span class="keyword">var</span> oldValue = watch.last;</div><div class="line">    <span class="keyword">if</span> (!that.$$areEqual(newValue, oldValue, watch.valueEq)) &#123;</div><div class="line">      watch.listenerFn(newValue, oldValue, that);</div><div class="line">      dirty = <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    watch.last = (watch.valueEq ? <span class="keyword">this</span>.$$cloneDeep(newValue) : newValue);</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> dirty;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
@@ -919,7 +1015,7 @@
           
             <h2 id="数据双向绑定"><a href="#数据双向绑定" class="headerlink" title="数据双向绑定"></a>数据双向绑定</h2><p>在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。</p>
 <h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>首先我们要了解订阅-发布模式（原理见我的另一篇博文<a href="https://betasu.github.io/2016/09/06/node%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E2%80%94%E2%80%94EVENT/">EVENT事件库的原理</a>）。Angular的脏值查询在此基础上实现。<br>这里我们先构建作用域构造函数，并设置事件池<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>数据变动的检测基于$scope作用域两个内置方法$watch和$digest。$watch类似事件库里的on方法，用于在事件池（在Angular中是作用域中的$$watchers属性）中存放事件名和对应回调函数。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$watch=<span class="function"><span class="keyword">function</span>  (<span class="params">watchFn,listenerFn</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;watchFn:watchFn,listenerFn:listenerFn&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>数据变动的检测基于$scope作用域两个内置方法$watch和$digest。$watch类似事件库里的on方法，用于在事件池（在Angular中是作用域中的$$watchers属性）中存放事件名和对应回调函数。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$watch=<span class="function"><span class="keyword">function</span>  (<span class="params">watchFn,listenerFn</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;<span class="attr">watchFn</span>:watchFn,<span class="attr">listenerFn</span>:listenerFn&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <ul>
 <li>watchFn 为监控函数，返回所监控的数据的值</li>
 <li>listenerFn 为监听函数，当数据发生变化后作出行为<br>一个监控name值的简单监控函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//监控作用域中name属性的值</span></div><div class="line"><span class="function"><span class="keyword">function</span> (<span class="params">scope</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> scope.name;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -1217,125 +1313,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/16/WebSocket入门/" itemprop="url">
-                  WebSocket入门
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T14:18:22+08:00" content="2016-09-16">
-              2016-09-16
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是WebSocket"><a href="#什么是WebSocket" class="headerlink" title="什么是WebSocket"></a>什么是WebSocket</h2><p>WebSocket是html5提供的一种浏览器和服务器进行全双工通信的技术。要解释全双工通信，首先得介绍一下WebSocket之前浏览器与服务器通信的技术。</p>
-<h2 id="WebSocket之前的通信技术"><a href="#WebSocket之前的通信技术" class="headerlink" title="WebSocket之前的通信技术"></a>WebSocket之前的通信技术</h2><ol>
-<li><p>轮询<br> 为了实时获得数据，浏览器周期性的向服务器发送请求，如果服务器没有新的数据则返回空响应。</p>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">  setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">      xhr.open(<span class="string">'GET'</span>,<span class="string">'/data'</span>,<span class="literal">true</span>);</div><div class="line">      xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">          <span class="keyword">if</span>(xhr.readyState == <span class="number">4</span> &amp;&amp; xhr.status == <span class="number">200</span>)&#123;</div><div class="line">            <span class="built_in">document</span>.querySelector(<span class="string">'#content'</span>).innerHTML = xhr.responseText;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">      xhr.send();</div><div class="line">  &#125;,<span class="number">1000</span>);</div></pre></td></tr></table></figure>
-<p> 缺点:1.大量无意义的请求造成网络压力</p>
-<pre><code>2.不能实时得到新数据
-</code></pre></li>
-<li><p>长轮询<br> 为了弥补轮询的缺陷，浏览器向服务器发送请求，如果服务器有响应新数据，浏览器再在接收响应的时候继续发送请求，使数据随时保持更新。</p>
-<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//封装请求</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">        xhr.open(<span class="string">'GET'</span>, <span class="string">'/data'</span>, <span class="literal">true</span>);</div><div class="line">        xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (xhr.readyState == <span class="number">4</span> &amp;&amp; xhr.status == <span class="number">200</span>) &#123;</div><div class="line">                <span class="built_in">document</span>.querySelector(<span class="string">'#content'</span>).innerHTML = xhr.responseText;</div><div class="line">                <span class="comment">//回调函数中递归调用</span></div><div class="line">                send();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        xhr.send();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">send();</div></pre></td></tr></table></figure>
-<p> 缺点:如果是频繁的发送数据，浏览器会一直处于加载的状态</p>
-</li>
-<li><p>iframe流<br> 利用iframe接收的服务器响应中如果包含脚本就会执行的原理,用iframe标签的src属性向服务器发起请求。</p>
-<h3 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//客户端网页</span></div><div class="line">&lt;iframe src=<span class="string">"http://localhost:1234/time"</span> frameborder=<span class="string">"0"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//服务端</span></div><div class="line">app.get(<span class="string">'/time'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">req,res</span>) </span>&#123;</div><div class="line">    setInterval(<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="comment">//如果调用end、send会结束响应, write方法不会，能实现持续写入</span></div><div class="line">        res.write(<span class="string">`&lt;script&gt;</span></div><div class="line">        	//由于iframe会形成自己的document，所以要用parent.document取得页面</div><div class="line">           parent.document.querySelector('#time').innerHTML= new Date().toLocaleString();</div><div class="line">        &lt;/script&gt;`);</div><div class="line">    &#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="WebSocket的优势"><a href="#WebSocket的优势" class="headerlink" title="WebSocket的优势"></a>WebSocket的优势</h2><p>使用WebSocket，浏览器和服务器只需要要做一个握手的动作，然后，浏览器和服务器之间就形成了一条快速通道，两者之间就直接可以数据互相传送</p>
-<ul>
-<li>节省资源：互相沟通的Header是很小的-大概只有 2 Bytes。</li>
-<li>推送信息：不需要客户端请求,服务器可以主动传送数据给客户端</li>
-<li>支持跨域：WebSocket天生支持跨域<h2 id="解释一下单工、双工"><a href="#解释一下单工、双工" class="headerlink" title="解释一下单工、双工"></a>解释一下单工、双工</h2></li>
-<li>单工指只能由一端向另一端发送数据。</li>
-<li>半双工指客户端、服务器可以互相发送数据，但不能在同一时间。必须有先后顺序。我们平时利用http协议与后台的通信都是半双工。</li>
-<li>双工指服务器和客户端可以随时向对方发送数据与接收对方的数据。</li>
-</ul>
-<h2 id="WebSocket-API"><a href="#WebSocket-API" class="headerlink" title="WebSocket API"></a>WebSocket API</h2><h3 id="服务器端"><a href="#服务器端" class="headerlink" title="服务器端"></a>服务器端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocketServer=<span class="built_in">require</span>(<span class="string">'ws'</span>).Server;</div><div class="line"><span class="keyword">var</span> server=<span class="keyword">new</span> WebSocketServer(&#123;port:<span class="number">8000</span>&#125;);</div><div class="line"></div><div class="line"><span class="comment">//监听客户端请求 ,即与客户端握手</span></div><div class="line">server.on(<span class="string">'connection'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">websocket</span>)</span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//监听从客户端传来的信息</span></div><div class="line">	websocket.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(msg);</div><div class="line">		<span class="comment">//向客户端发送信息</span></div><div class="line">		websocket.send(msg);</div><div class="line">	&#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="Node客户端"><a href="#Node客户端" class="headerlink" title="Node客户端"></a>Node客户端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocket=<span class="built_in">require</span>(<span class="string">'ws'</span>);</div><div class="line"><span class="keyword">var</span> ws=<span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080/'</span>);</div><div class="line"><span class="comment">//检测服务器是否开放，即与服务端握手</span></div><div class="line">ws.on(<span class="string">'open'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//如果服务器开放向服务器发送信息</span></div><div class="line">	ws.send(<span class="string">'hello'</span>)</div><div class="line">&#125;);</div><div class="line"><span class="comment">//监听从服务器传来的数据</span></div><div class="line">ws.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">data,flag</span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(data);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="Web客户端"><a href="#Web客户端" class="headerlink" title="Web客户端"></a>Web客户端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ws=<span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080/'</span>);</div><div class="line"><span class="comment">//监听连接事件</span></div><div class="line">ws.onopen=<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//向服务器发送数据</span></div><div class="line">	ws.send(<span class="number">123</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">//监听服务器传来的数据</span></div><div class="line">ws.onmessage=<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1381,7 +1358,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1421,7 +1398,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

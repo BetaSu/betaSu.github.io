@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="我是卡卡卡颂">
 <meta property="og:description" content="数据双向绑定在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。
 基本原理首先我们要了解订阅-发布模式（原理见我的另一篇博文EVENT事件库的原理）。Angular的脏值查询在此基础上实现。这里我们先构建作用域构造函数，并设置事件池123function">
-<meta property="og:updated_time" content="2016-09-27T04:09:02.271Z">
+<meta property="og:updated_time" content="2016-09-27T04:09:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Angular源码解析1——脏值查询的基本原理">
 <meta name="twitter:description" content="数据双向绑定在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。
@@ -281,7 +281,7 @@
       
         <h2 id="数据双向绑定"><a href="#数据双向绑定" class="headerlink" title="数据双向绑定"></a>数据双向绑定</h2><p>在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。</p>
 <h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>首先我们要了解订阅-发布模式（原理见我的另一篇博文<a href="https://betasu.github.io/2016/09/06/node%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E2%80%94%E2%80%94EVENT/">EVENT事件库的原理</a>）。Angular的脏值查询在此基础上实现。<br>这里我们先构建作用域构造函数，并设置事件池<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>数据变动的检测基于$scope作用域两个内置方法$watch和$digest。$watch类似事件库里的on方法，用于在事件池（在Angular中是作用域中的$$watchers属性）中存放事件名和对应回调函数。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$watch=<span class="function"><span class="keyword">function</span>  (<span class="params">watchFn,listenerFn</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;watchFn:watchFn,listenerFn:listenerFn&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>数据变动的检测基于$scope作用域两个内置方法$watch和$digest。$watch类似事件库里的on方法，用于在事件池（在Angular中是作用域中的$$watchers属性）中存放事件名和对应回调函数。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$watch=<span class="function"><span class="keyword">function</span>  (<span class="params">watchFn,listenerFn</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;<span class="attr">watchFn</span>:watchFn,<span class="attr">listenerFn</span>:listenerFn&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <ul>
 <li>watchFn 为监控函数，返回所监控的数据的值</li>
 <li>listenerFn 为监听函数，当数据发生变化后作出行为<br>一个监控name值的简单监控函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//监控作用域中name属性的值</span></div><div class="line"><span class="function"><span class="keyword">function</span> (<span class="params">scope</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> scope.name;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -397,7 +397,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -448,7 +448,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -238,6 +238,125 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/16/WebSocket入门/" itemprop="url">
+                  WebSocket入门
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-16T14:18:22+08:00" content="2016-09-16">
+              2016-09-16
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="什么是WebSocket"><a href="#什么是WebSocket" class="headerlink" title="什么是WebSocket"></a>什么是WebSocket</h2><p>WebSocket是html5提供的一种浏览器和服务器进行全双工通信的技术。要解释全双工通信，首先得介绍一下WebSocket之前浏览器与服务器通信的技术。</p>
+<h2 id="WebSocket之前的通信技术"><a href="#WebSocket之前的通信技术" class="headerlink" title="WebSocket之前的通信技术"></a>WebSocket之前的通信技术</h2><ol>
+<li><p>轮询<br> 为了实时获得数据，浏览器周期性的向服务器发送请求，如果服务器没有新的数据则返回空响应。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">  setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">      xhr.open(<span class="string">'GET'</span>,<span class="string">'/data'</span>,<span class="literal">true</span>);</div><div class="line">      xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">          <span class="keyword">if</span>(xhr.readyState == <span class="number">4</span> &amp;&amp; xhr.status == <span class="number">200</span>)&#123;</div><div class="line">            <span class="built_in">document</span>.querySelector(<span class="string">'#content'</span>).innerHTML = xhr.responseText;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">      xhr.send();</div><div class="line">  &#125;,<span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<p> 缺点:1.大量无意义的请求造成网络压力</p>
+<pre><code>2.不能实时得到新数据
+</code></pre></li>
+<li><p>长轮询<br> 为了弥补轮询的缺陷，浏览器向服务器发送请求，如果服务器有响应新数据，浏览器再在接收响应的时候继续发送请求，使数据随时保持更新。</p>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//封装请求</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">        xhr.open(<span class="string">'GET'</span>, <span class="string">'/data'</span>, <span class="literal">true</span>);</div><div class="line">        xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (xhr.readyState == <span class="number">4</span> &amp;&amp; xhr.status == <span class="number">200</span>) &#123;</div><div class="line">                <span class="built_in">document</span>.querySelector(<span class="string">'#content'</span>).innerHTML = xhr.responseText;</div><div class="line">                <span class="comment">//回调函数中递归调用</span></div><div class="line">                send();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        xhr.send();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">send();</div></pre></td></tr></table></figure>
+<p> 缺点:如果是频繁的发送数据，浏览器会一直处于加载的状态</p>
+</li>
+<li><p>iframe流<br> 利用iframe接收的服务器响应中如果包含脚本就会执行的原理,用iframe标签的src属性向服务器发起请求。</p>
+<h3 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//客户端网页</span></div><div class="line">&lt;iframe src=<span class="string">"http://localhost:1234/time"</span> frameborder=<span class="string">"0"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//服务端</span></div><div class="line">app.get(<span class="string">'/time'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">req,res</span>) </span>&#123;</div><div class="line">    setInterval(<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="comment">//如果调用end、send会结束响应, write方法不会，能实现持续写入</span></div><div class="line">        res.write(<span class="string">`&lt;script&gt;</span></div><div class="line">        	//由于iframe会形成自己的document，所以要用parent.document取得页面</div><div class="line">           parent.document.querySelector('#time').innerHTML= new Date().toLocaleString();</div><div class="line">        &lt;/script&gt;`);</div><div class="line">    &#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="WebSocket的优势"><a href="#WebSocket的优势" class="headerlink" title="WebSocket的优势"></a>WebSocket的优势</h2><p>使用WebSocket，浏览器和服务器只需要要做一个握手的动作，然后，浏览器和服务器之间就形成了一条快速通道，两者之间就直接可以数据互相传送</p>
+<ul>
+<li>节省资源：互相沟通的Header是很小的-大概只有 2 Bytes。</li>
+<li>推送信息：不需要客户端请求,服务器可以主动传送数据给客户端</li>
+<li>支持跨域：WebSocket天生支持跨域<h2 id="解释一下单工、双工"><a href="#解释一下单工、双工" class="headerlink" title="解释一下单工、双工"></a>解释一下单工、双工</h2></li>
+<li>单工指只能由一端向另一端发送数据。</li>
+<li>半双工指客户端、服务器可以互相发送数据，但不能在同一时间。必须有先后顺序。我们平时利用http协议与后台的通信都是半双工。</li>
+<li>双工指服务器和客户端可以随时向对方发送数据与接收对方的数据。</li>
+</ul>
+<h2 id="WebSocket-API"><a href="#WebSocket-API" class="headerlink" title="WebSocket API"></a>WebSocket API</h2><h3 id="服务器端"><a href="#服务器端" class="headerlink" title="服务器端"></a>服务器端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocketServer=<span class="built_in">require</span>(<span class="string">'ws'</span>).Server;</div><div class="line"><span class="keyword">var</span> server=<span class="keyword">new</span> WebSocketServer(&#123;<span class="attr">port</span>:<span class="number">8000</span>&#125;);</div><div class="line"></div><div class="line"><span class="comment">//监听客户端请求 ,即与客户端握手</span></div><div class="line">server.on(<span class="string">'connection'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">websocket</span>)</span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//监听从客户端传来的信息</span></div><div class="line">	websocket.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(msg);</div><div class="line">		<span class="comment">//向客户端发送信息</span></div><div class="line">		websocket.send(msg);</div><div class="line">	&#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Node客户端"><a href="#Node客户端" class="headerlink" title="Node客户端"></a>Node客户端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocket=<span class="built_in">require</span>(<span class="string">'ws'</span>);</div><div class="line"><span class="keyword">var</span> ws=<span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080/'</span>);</div><div class="line"><span class="comment">//检测服务器是否开放，即与服务端握手</span></div><div class="line">ws.on(<span class="string">'open'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//如果服务器开放向服务器发送信息</span></div><div class="line">	ws.send(<span class="string">'hello'</span>)</div><div class="line">&#125;);</div><div class="line"><span class="comment">//监听从服务器传来的数据</span></div><div class="line">ws.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">data,flag</span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(data);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Web客户端"><a href="#Web客户端" class="headerlink" title="Web客户端"></a>Web客户端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ws=<span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080/'</span>);</div><div class="line"><span class="comment">//监听连接事件</span></div><div class="line">ws.onopen=<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//向服务器发送数据</span></div><div class="line">	ws.send(<span class="number">123</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">//监听服务器传来的数据</span></div><div class="line">ws.onmessage=<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/12/简单的依赖加载器实现/" itemprop="url">
                   简单的依赖加载器实现
                 </a>
@@ -282,7 +401,7 @@
       
         
           
-            <h2 id="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"><a href="#为了验证闭包的学习，有必要实现一个简单的依赖加载器。" class="headerlink" title="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"></a>为了验证闭包的学习，有必要实现一个简单的依赖加载器。</h2><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myModules=(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//保存所有定义的模块</span></div><div class="line">	<span class="keyword">var</span> modules=&#123;&#125;;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 *定义新模块，接收3个参数</div><div class="line">	 *name:模块名</div><div class="line">	 *deps:模块依赖的其他模块</div><div class="line">	 *impl:模块的定义</div><div class="line">	**/ </div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">define</span>(<span class="params">name,deps,impl</span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//遍历依赖每一项，取出每个模块</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;deps.length;i++) &#123;</div><div class="line">			deps[i]=modules[deps[i]];</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//将新模块存储进模块池，并注入依赖</span></div><div class="line">		modules[name]=impl.apply(impl,deps);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//从模块池中取出模块</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">get</span> (<span class="params">name</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> modules[name];</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//暴露api</span></div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		define: define,</div><div class="line">		get: get</div><div class="line">	&#125;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
+            <h2 id="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"><a href="#为了验证闭包的学习，有必要实现一个简单的依赖加载器。" class="headerlink" title="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"></a>为了验证闭包的学习，有必要实现一个简单的依赖加载器。</h2><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myModules=(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//保存所有定义的模块</span></div><div class="line">	<span class="keyword">var</span> modules=&#123;&#125;;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 *定义新模块，接收3个参数</div><div class="line">	 *name:模块名</div><div class="line">	 *deps:模块依赖的其他模块</div><div class="line">	 *impl:模块的定义</div><div class="line">	**/ </div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">define</span>(<span class="params">name,deps,impl</span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//遍历依赖每一项，取出每个模块</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;deps.length;i++) &#123;</div><div class="line">			deps[i]=modules[deps[i]];</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//将新模块存储进模块池，并注入依赖</span></div><div class="line">		modules[name]=impl.apply(impl,deps);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//从模块池中取出模块</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">get</span> (<span class="params">name</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> modules[name];</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//暴露api</span></div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		<span class="attr">define</span>: define,</div><div class="line">		<span class="attr">get</span>: get</div><div class="line">	&#125;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">myModules.define(&apos;bar&apos;,[],function () &#123;</div><div class="line">	function hello (who) &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello:hello</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">myModules.define(&apos;foo&apos;,[&apos;bar&apos;],function (bar) &#123;</div><div class="line">	functin hello2 () &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello2:hello2</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">var bar=myModules.get(&apos;bar&apos;);</div><div class="line">var foo=myModules.get(&apos;foo&apos;);</div></pre></td></tr></table></figure>
 <ul>
 <li>内容转自《你不知道的Javascript》</li>
@@ -573,7 +692,7 @@
 <h2 id="promise的状态"><a href="#promise的状态" class="headerlink" title="promise的状态"></a>promise的状态</h2><ul>
 <li>Pending Promise对象实例创建时候的初始状态</li>
 <li>Fulfilled 可以理解为成功的状态</li>
-<li>Rejected 可以理解为失败的状态<h2 id="promise的简单应用"><a href="#promise的简单应用" class="headerlink" title="promise的简单应用"></a>promise的简单应用</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义一个Promise实例，实例会立即执行传参。传参接收2个参数</span></div><div class="line"><span class="comment">//resolve参数是一个函数，用以改变promise的状态以及执行成功状态的回调函数</span></div><div class="line"><span class="comment">//reject参数是一个函数，用以改变promise的状态以及执行失败状态的回调函数</span></div><div class="line"><span class="keyword">var</span> promise=<span class="keyword">new</span> <span class="built_in">Promise</span>((resolve,reject)=&gt;&#123;</div><div class="line">	setTimeout(()=&gt;&#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">Math</span>.random&gt;<span class="number">0.5</span>) resolve(<span class="string">'success'</span>);</div><div class="line">		<span class="keyword">else</span> reject(<span class="string">'fail'</span>);</div><div class="line">	&#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div><div class="line"><span class="comment">//promise的实例的then方法接收两个函数参数，是对resolve与reject函数的定义</span></div><div class="line">promise.then(fullfiled,rejected)</div></pre></td></tr></table></figure>
+<li>Rejected 可以理解为失败的状态<h2 id="promise的简单应用"><a href="#promise的简单应用" class="headerlink" title="promise的简单应用"></a>promise的简单应用</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义一个Promise实例，实例会立即执行传参。传参接收2个参数</span></div><div class="line"><span class="comment">//resolve参数是一个函数，用以改变promise的状态以及执行成功状态的回调函数</span></div><div class="line"><span class="comment">//reject参数是一个函数，用以改变promise的状态以及执行失败状态的回调函数</span></div><div class="line"><span class="keyword">var</span> promise=<span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</div><div class="line">	setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">Math</span>.random&gt;<span class="number">0.5</span>) resolve(<span class="string">'success'</span>);</div><div class="line">		<span class="keyword">else</span> reject(<span class="string">'fail'</span>);</div><div class="line">	&#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div><div class="line"><span class="comment">//promise的实例的then方法接收两个函数参数，是对resolve与reject函数的定义</span></div><div class="line">promise.then(fullfiled,rejected)</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="源码实现思路"><a href="#源码实现思路" class="headerlink" title="源码实现思路"></a>源码实现思路</h2><ol>
@@ -582,7 +701,7 @@
 <li>在contructor中定义resolve与reject函数，这两个函数接收传参，执行时会改变实例状态，并把传参赋给then上定义的方法并执行他。</li>
 <li>在constructor中执行Promise中传入的函数，将包装好的resolve与reject传入。</li>
 </ol>
-<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.定义Promise类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Promise</span> </span>&#123;</div><div class="line">	<span class="comment">//2.接收一个函数为参数</span></div><div class="line">	<span class="keyword">constructor</span> (fn) &#123;</div><div class="line">		<span class="comment">//3.保存状态，默认为'unfulfilled'</span></div><div class="line">		<span class="keyword">this</span>._status=<span class="string">'unfulfilled'</span>;</div><div class="line">		</div><div class="line">		<span class="comment">//5.包装好resolve</span></div><div class="line">		<span class="keyword">let</span> resolve=(data)=&gt;&#123;</div><div class="line">			<span class="comment">//改变状态</span></div><div class="line">			<span class="keyword">this</span>._status=<span class="string">'fulfilled'</span>;</div><div class="line">			<span class="keyword">this</span>._resolve(data);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">//6.包装好reject</span></div><div class="line">		<span class="keyword">let</span> reject=(err)=&gt;&#123;</div><div class="line">			<span class="comment">//改变状态</span></div><div class="line">			<span class="keyword">this</span>._status=<span class="string">'failed'</span>;</div><div class="line">			<span class="keyword">this</span>._reject(err);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">//7.立即执行</span></div><div class="line">		fn(resolve,reject);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">//4.Promise.prototype上定义then方法,将传递的函数保存为内部方法</span></div><div class="line">	then (resolve,reject) &#123;</div><div class="line">		<span class="keyword">this</span>._resolve=resolve;</div><div class="line">		<span class="keyword">this</span>._reject=reject;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.定义Promise类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Promise</span> </span>&#123;</div><div class="line">	<span class="comment">//2.接收一个函数为参数</span></div><div class="line">	<span class="keyword">constructor</span> (fn) &#123;</div><div class="line">		<span class="comment">//3.保存状态，默认为'unfulfilled'</span></div><div class="line">		<span class="keyword">this</span>._status=<span class="string">'unfulfilled'</span>;</div><div class="line">		</div><div class="line">		<span class="comment">//5.包装好resolve</span></div><div class="line">		<span class="keyword">let</span> resolve=<span class="function">(<span class="params">data</span>)=&gt;</span>&#123;</div><div class="line">			<span class="comment">//改变状态</span></div><div class="line">			<span class="keyword">this</span>._status=<span class="string">'fulfilled'</span>;</div><div class="line">			<span class="keyword">this</span>._resolve(data);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">//6.包装好reject</span></div><div class="line">		<span class="keyword">let</span> reject=<span class="function">(<span class="params">err</span>)=&gt;</span>&#123;</div><div class="line">			<span class="comment">//改变状态</span></div><div class="line">			<span class="keyword">this</span>._status=<span class="string">'failed'</span>;</div><div class="line">			<span class="keyword">this</span>._reject(err);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">//7.立即执行</span></div><div class="line">		fn(resolve,reject);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">//4.Promise.prototype上定义then方法,将传递的函数保存为内部方法</span></div><div class="line">	then (resolve,reject) &#123;</div><div class="line">		<span class="keyword">this</span>._resolve=resolve;</div><div class="line">		<span class="keyword">this</span>._reject=reject;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
           
         
       
@@ -1007,7 +1126,7 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//在next函数中</span></div><div class="line"><span class="keyword">if</span> (err) &#123;</div><div class="line">	<span class="comment">//判断是否是错误中间件， 依据是错误中间件有4个形参</span></div><div class="line">	<span class="keyword">if</span> (route.method==<span class="string">'middleware'</span>&amp;&amp;route.fn.length==<span class="number">4</span>) &#123;</div><div class="line">		route.fn(err,req,res,next);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="comment">//不是错误中间件，将错误继续传递下去</span></div><div class="line">		next(err);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 <li><p>查询参数</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//首先在方法对应函数中设置对查询参数的保存</span></div><div class="line">methods.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">method</span>) </span>&#123;</div><div class="line">	app[method]=<span class="function"><span class="keyword">function</span> (<span class="params">path,fn</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> config=&#123;method:method,path:path,fn:fn&#125;;</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//如果路径中含查询参数</span></div><div class="line">	<span class="keyword">if</span> (path.includes(<span class="string">':'</span>)) &#123;</div><div class="line">		<span class="keyword">var</span> params=[];</div><div class="line">		config.path=path.replace(<span class="regexp">/:([^\/]+)/g</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">			<span class="comment">//保存参数值</span></div><div class="line">			params.push(<span class="built_in">arguments</span>[<span class="number">1</span>]);</div><div class="line">			<span class="comment">//返回一个正则，匹配非/ ,用来在请求中匹配</span></div><div class="line">			<span class="keyword">return</span> <span class="string">'([^\/]+)'</span>;</div><div class="line">		&#125;)</div><div class="line">		config.params=params;</div><div class="line">	&#125;</div><div class="line">	app.routes.push(config);</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">//在next函数中,判断当前路由是否含查询参数</span></div><div class="line"><span class="keyword">if</span> (route.params) &#123;</div><div class="line">	<span class="comment">//当前请求与保存的带正则的路由路径匹配</span></div><div class="line">	<span class="keyword">var</span> matcher=req.path.match(<span class="keyword">new</span> <span class="built_in">RegExp</span>(route.path));</div><div class="line">	<span class="comment">//如果匹配上</span></div><div class="line">	<span class="keyword">if</span> (matcher) &#123;</div><div class="line">		<span class="comment">//创建params对象</span></div><div class="line">		<span class="keyword">var</span> obj=&#123;&#125;;</div><div class="line">		route.params.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">item,index</span>) </span>&#123;</div><div class="line">			obj[item]=matcher[index+<span class="number">1</span>]</div><div class="line">		&#125;)</div><div class="line">		req.params=obj;</div><div class="line">		route.fn(req,res);</div><div class="line">		<span class="comment">//没有匹配上</span></div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">	next();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//首先在方法对应函数中设置对查询参数的保存</span></div><div class="line">methods.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">method</span>) </span>&#123;</div><div class="line">	app[method]=<span class="function"><span class="keyword">function</span> (<span class="params">path,fn</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> config=&#123;<span class="attr">method</span>:method,<span class="attr">path</span>:path,<span class="attr">fn</span>:fn&#125;;</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//如果路径中含查询参数</span></div><div class="line">	<span class="keyword">if</span> (path.includes(<span class="string">':'</span>)) &#123;</div><div class="line">		<span class="keyword">var</span> params=[];</div><div class="line">		config.path=path.replace(<span class="regexp">/:([^\/]+)/g</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">			<span class="comment">//保存参数值</span></div><div class="line">			params.push(<span class="built_in">arguments</span>[<span class="number">1</span>]);</div><div class="line">			<span class="comment">//返回一个正则，匹配非/ ,用来在请求中匹配</span></div><div class="line">			<span class="keyword">return</span> <span class="string">'([^\/]+)'</span>;</div><div class="line">		&#125;)</div><div class="line">		config.params=params;</div><div class="line">	&#125;</div><div class="line">	app.routes.push(config);</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">//在next函数中,判断当前路由是否含查询参数</span></div><div class="line"><span class="keyword">if</span> (route.params) &#123;</div><div class="line">	<span class="comment">//当前请求与保存的带正则的路由路径匹配</span></div><div class="line">	<span class="keyword">var</span> matcher=req.path.match(<span class="keyword">new</span> <span class="built_in">RegExp</span>(route.path));</div><div class="line">	<span class="comment">//如果匹配上</span></div><div class="line">	<span class="keyword">if</span> (matcher) &#123;</div><div class="line">		<span class="comment">//创建params对象</span></div><div class="line">		<span class="keyword">var</span> obj=&#123;&#125;;</div><div class="line">		route.params.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">item,index</span>) </span>&#123;</div><div class="line">			obj[item]=matcher[index+<span class="number">1</span>]</div><div class="line">		&#125;)</div><div class="line">		req.params=obj;</div><div class="line">		route.fn(req,res);</div><div class="line">		<span class="comment">//没有匹配上</span></div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">	next();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
 </ul>
 
           
@@ -1110,119 +1229,11 @@
 </ol>
 <p>从调用方法来看，express是一个函数，我们需要取得的是express的返回值。该返回值上的listen方法启动服务器并监听端口。该返回值有get、post、put等方法用来接收相应方法的请求。</p>
 <ul>
-<li>代码实现<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.定义express函数</span></div><div class="line"><span class="keyword">var</span> express=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//5.定义app函数，因为被作为createServer()的回调函数传入,所以接收req、res两个参数</span></div><div class="line">	<span class="keyword">var</span> app=<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;&#125;</div><div class="line"></div><div class="line">	<span class="comment">//6.路由路由池，存放各种请求，用以在适当时候加载</span></div><div class="line">	app.routes=[];</div><div class="line"></div><div class="line">	<span class="comment">//7.定义各种请求方法对应的函数</span></div><div class="line">	<span class="keyword">var</span> methods=[<span class="string">'get'</span>,<span class="string">'post'</span>,<span class="string">'put'</span>,<span class="string">'options'</span>,<span class="string">'delete'</span>,<span class="string">'all'</span>];</div><div class="line">	methods.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">method</span>) </span>&#123;</div><div class="line">		<span class="comment">//各种方法的函数接收两个参数  路径 与回调函数</span></div><div class="line">		app[method]=<span class="function"><span class="keyword">function</span> (<span class="params">path,fn</span>) </span>&#123;</div><div class="line">			<span class="comment">//将方法，路径与回调函数全部放入方发池</span></div><div class="line">			<span class="keyword">var</span> config=&#123;method:method,path:path,fn:fn&#125;;</div><div class="line">			routes.push(config);</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">	</div><div class="line">	<span class="comment">//4.定义返回值上的listen方法</span></div><div class="line">	app.listen=<span class="function"><span class="keyword">function</span> (<span class="params">port</span>) </span>&#123;</div><div class="line">		<span class="comment">//启动服务器，监听端口，返回值作为createServer()的回调函数传入</span></div><div class="line">		<span class="built_in">require</span>(<span class="string">'http'</span>).createServer(app).listen(port);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//3.返回方法</span></div><div class="line">	<span class="keyword">return</span> app;</div><div class="line">&#125;</div><div class="line"><span class="comment">//2.暴露接口</span></div><div class="line"><span class="built_in">module</span>.exports=express;</div></pre></td></tr></table></figure>
+<li>代码实现<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.定义express函数</span></div><div class="line"><span class="keyword">var</span> express=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//5.定义app函数，因为被作为createServer()的回调函数传入,所以接收req、res两个参数</span></div><div class="line">	<span class="keyword">var</span> app=<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;&#125;</div><div class="line"></div><div class="line">	<span class="comment">//6.路由路由池，存放各种请求，用以在适当时候加载</span></div><div class="line">	app.routes=[];</div><div class="line"></div><div class="line">	<span class="comment">//7.定义各种请求方法对应的函数</span></div><div class="line">	<span class="keyword">var</span> methods=[<span class="string">'get'</span>,<span class="string">'post'</span>,<span class="string">'put'</span>,<span class="string">'options'</span>,<span class="string">'delete'</span>,<span class="string">'all'</span>];</div><div class="line">	methods.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">method</span>) </span>&#123;</div><div class="line">		<span class="comment">//各种方法的函数接收两个参数  路径 与回调函数</span></div><div class="line">		app[method]=<span class="function"><span class="keyword">function</span> (<span class="params">path,fn</span>) </span>&#123;</div><div class="line">			<span class="comment">//将方法，路径与回调函数全部放入方发池</span></div><div class="line">			<span class="keyword">var</span> config=&#123;<span class="attr">method</span>:method,<span class="attr">path</span>:path,<span class="attr">fn</span>:fn&#125;;</div><div class="line">			routes.push(config);</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">	</div><div class="line">	<span class="comment">//4.定义返回值上的listen方法</span></div><div class="line">	app.listen=<span class="function"><span class="keyword">function</span> (<span class="params">port</span>) </span>&#123;</div><div class="line">		<span class="comment">//启动服务器，监听端口，返回值作为createServer()的回调函数传入</span></div><div class="line">		<span class="built_in">require</span>(<span class="string">'http'</span>).createServer(app).listen(port);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//3.返回方法</span></div><div class="line">	<span class="keyword">return</span> app;</div><div class="line">&#125;</div><div class="line"><span class="comment">//2.暴露接口</span></div><div class="line"><span class="built_in">module</span>.exports=express;</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <ol>
 <li>当请求到来时将请求与路由池中保存的请求匹配，匹配上就执行相应回调函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//第5步定义的函数</span></div><div class="line"><span class="keyword">var</span> app=<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;</div><div class="line">	<span class="comment">//取得请求中的方法名和路径</span></div><div class="line">	<span class="keyword">var</span> method=req.method;</div><div class="line">	<span class="keyword">var</span> urlObj=<span class="built_in">require</span>(<span class="string">'url'</span>).parse(req.url,<span class="literal">true</span>);</div><div class="line">	<span class="keyword">var</span> pathname=urlObj.pathname;</div><div class="line"></div><div class="line">	<span class="comment">//将请求的方法名与路径与路由池中保存的匹配</span></div><div class="line">	<span class="keyword">var</span> route=app.routes.find(<span class="function"><span class="keyword">function</span> (<span class="params">route</span>) </span>&#123;</div><div class="line">		<span class="comment">//返回路径与方法都匹配项，其中method=='all'能匹配所有方法,path=="*"能匹配所有路径</span></div><div class="line">		<span class="keyword">return</span> (route.method==method||route.method==<span class="string">"all"</span>)&amp;&amp;(route.path==pathname||route.path==<span class="string">"*"</span>)</div><div class="line">	&#125;)</div><div class="line">	<span class="comment">//如果匹配到，就执行该路由的回调函数，传入req和res</span></div><div class="line">	<span class="keyword">if</span> (route) &#123;</div><div class="line">	route.fn(req,res);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="comment">//未匹配到则在页面上显示相应信息</span></div><div class="line">		res.end(<span class="string">`Cannot <span class="subst">$&#123;method&#125;</span> <span class="subst">$&#123;pathname&#125;</span>`</span>)</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/03/express源码实现2——中间件实现/" itemprop="url">
-                  express源码实现2——中间件实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-03T21:05:00+08:00" content="2016-09-03">
-              2016-09-03
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="上一篇内容"><a href="#上一篇内容" class="headerlink" title="上一篇内容"></a>上一篇内容</h2><p> 实现express中最主要的方法——创建服务器，监听端口，接收各种前端请求。</p>
-<h2 id="中间件是什么"><a href="#中间件是什么" class="headerlink" title="中间件是什么"></a>中间件是什么</h2><ol>
-<li>中间件就是在路由过程中起过渡作用，用以检查权限，检查是否合法，最后再进入我们真正的路由</li>
-<li>中间件有next方法，可以决定是否继续执行 如果调用next方法表示继续执行</li>
-<li>中间件也可以匹配路径 只要路径开头匹配即可,默认是/等同于不写。比如中间件的/add可以匹配请求路径的/add/user</li>
-<li>中间件中的req和res 和路由中的是同一个</li>
-<li>一个页面中可以有多个中间件<h2 id="本篇文章的目的"><a href="#本篇文章的目的" class="headerlink" title="本篇文章的目的"></a>本篇文章的目的</h2>实现express中间件的源码<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2>之前路由的判断原理是将前端发送来的每个请求与路由池里保存的请求匹配，匹配上就执行相应回调函数。现在加入中间件，由于中间件不调用next()方法会阻塞接下来中间件/路由的执行，所以采用的原理是：讲中间件放入路由池，每当接收到前端请求，依次遍历路由池中的值，判断是中间件还是路由，分别处理。</li>
-</ol>
-<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
-<li><p>定义中间件函数</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">app.use=<span class="function"><span class="keyword">function</span> (<span class="params">path,fn</span>) </span>&#123;</div><div class="line">	<span class="comment">//当只传递回调函数不传递路径时</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> fn !=<span class="string">'function'</span>) &#123;</div><div class="line">		fn=path;</div><div class="line">		path=<span class="string">'/'</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> config=&#123;method:<span class="string">'middleware'</span>,path:path,fn:fn&#125;</div><div class="line">	app.routes.push(config);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>定义中间件的next方法</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">express</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//首先在express函数上部定义一个索引</span></div><div class="line">	<span class="keyword">var</span> index=<span class="number">0</span>;</div><div class="line">	<span class="comment">//执行一次next</span></div><div class="line">	next();</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">next</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">//判断是否遍历完都没有匹配到</span></div><div class="line">		<span class="keyword">if</span> (index&gt;=app.routes.length) &#123;</div><div class="line">			res.end(<span class="string">`Cannot <span class="subst">$&#123;method&#125;</span> <span class="subst">$&#123;pathname&#125;</span>`</span>)</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//遍历到的路由项</span></div><div class="line">		<span class="keyword">var</span> route=app.routes[index++];</div><div class="line">		<span class="comment">//如果是中间件	</span></div><div class="line">		<span class="keyword">if</span> (route.method==<span class="string">'middleware'</span>) &#123;</div><div class="line">			<span class="comment">/**判断路径是否匹配</span></div><div class="line">			*第一项匹配所有路径</div><div class="line">			*第二项与请求路径完全匹配</div><div class="line">			*第三项模糊匹配</div><div class="line">			**/</div><div class="line">			<span class="keyword">if</span> (route.path==<span class="string">'/'</span>||route.path==pathname||pathname.startsWith(route.path+<span class="string">'/'</span>)) &#123;</div><div class="line">				<span class="comment">//匹配成功，执行中间件回调函数</span></div><div class="line">				route.fn(req,res,next);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">//没匹配到，进行下一次遍历</span></div><div class="line">				next();</div><div class="line">			&#125;</div><div class="line">		<span class="comment">//如果是路由	</span></div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">//判断路由是否匹配</span></div><div class="line">			<span class="keyword">if</span> ((route.method==method||route.method==<span class="string">'all'</span>)&amp;&amp;(route.path==pathname||route.pathname==<span class="string">'*'</span>)) &#123;</div><div class="line">				<span class="comment">//路由匹配成功</span></div><div class="line">				route.fn(req,res);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">//没匹配到，进行下次遍历</span></div><div class="line">				next();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
 </ol>
 
           
@@ -1297,7 +1308,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1337,7 +1348,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

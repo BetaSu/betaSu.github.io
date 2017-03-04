@@ -104,7 +104,7 @@ clientTop:上边框的宽度（border-top-width）
 
 offset系列（和内容是否溢出盒子无关）
 offsetWidth:clientWidth+左右">
-<meta property="og:updated_time" content="2016-10-08T08:56:46.732Z">
+<meta property="og:updated_time" content="2016-10-08T08:56:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DOM盒模型的各种width和height属性">
 <meta name="twitter:description" content="client系列（和内容是否溢出盒子无关）
@@ -322,7 +322,7 @@ offsetWidth:clientWidth+左右">
 <li>对于浏览器而言，scrollWidth/scrollHeight是当前页面的真实宽高（所有屏加起来宽高的近似值）</li>
 </ol>
 <h2 id="浏览器盒模型属性获取-设置方法的封装"><a href="#浏览器盒模型属性获取-设置方法的封装" class="headerlink" title="浏览器盒模型属性获取/设置方法的封装"></a>浏览器盒模型属性获取/设置方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">win</span> (<span class="params">attr,value</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> value !==<span class="string">'undefined'</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">document</span>.documentElement[attr] ||<span class="built_in">document</span>.body[attr];</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">document</span>.documentElement[attr]=value;</div><div class="line">	<span class="built_in">document</span>.body[attr]=value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="获取某元素相对浏览器的偏移量-方法的封装"><a href="#获取某元素相对浏览器的偏移量-方法的封装" class="headerlink" title="获取某元素相对浏览器的偏移量 方法的封装"></a>获取某元素相对浏览器的偏移量 方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">offset</span> (<span class="params">curEle</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> l=curEle.offsetLeft;</div><div class="line">	<span class="keyword">var</span> t=curEle.offsetTop;</div><div class="line">	<span class="keyword">var</span> par=curEle.offsetParent;</div><div class="line">	<span class="comment">//一层层定位祖先向上累加</span></div><div class="line">	<span class="keyword">while</span> (par) &#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">window</span>.navigator.userAgent.indexOf(<span class="string">'MSIE 8.0'</span>)!==<span class="number">-1</span>) &#123;</div><div class="line">				l+=par.clientLeft;</div><div class="line">				t+=par.clientTop;</div><div class="line">		&#125;</div><div class="line">		l+=par.offsetLeft;</div><div class="line">		t+=par.offsetTop;</div><div class="line">		par=par.offsetParent;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> &#123;left:l,top:t&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="获取某元素相对浏览器的偏移量-方法的封装"><a href="#获取某元素相对浏览器的偏移量-方法的封装" class="headerlink" title="获取某元素相对浏览器的偏移量 方法的封装"></a>获取某元素相对浏览器的偏移量 方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">offset</span> (<span class="params">curEle</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> l=curEle.offsetLeft;</div><div class="line">	<span class="keyword">var</span> t=curEle.offsetTop;</div><div class="line">	<span class="keyword">var</span> par=curEle.offsetParent;</div><div class="line">	<span class="comment">//一层层定位祖先向上累加</span></div><div class="line">	<span class="keyword">while</span> (par) &#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">window</span>.navigator.userAgent.indexOf(<span class="string">'MSIE 8.0'</span>)!==<span class="number">-1</span>) &#123;</div><div class="line">				l+=par.clientLeft;</div><div class="line">				t+=par.clientTop;</div><div class="line">		&#125;</div><div class="line">		l+=par.offsetLeft;</div><div class="line">		t+=par.offsetTop;</div><div class="line">		par=par.offsetParent;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> &#123;<span class="attr">left</span>:l,<span class="attr">top</span>:t&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="计算后的样式值的获取"><a href="#计算后的样式值的获取" class="headerlink" title="计算后的样式值的获取"></a>计算后的样式值的获取</h2><p>一般我们用 元素.style.样式来获取元素的样式。这样获取到的是元素的行内样式。如果想获取元素经过计算后的样式需要使用window.getComputedStyle(ele,null);<br>经过浏览器计算过的样式是指 只要当前标签可以在浏览器中呈现出来，那么他所有样式都是经过浏览器计算过的，哪怕那些样式你没有写也可以获取到。<br>window.getComputedStyle(box,null)接收两个参数。 box指要获取样式的元素，null指伪类。</p>
 <h2 id="获取计算后样式的-方法封装"><a href="#获取计算后样式的-方法封装" class="headerlink" title="获取计算后样式的 方法封装"></a>获取计算后样式的 方法封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCss</span> (<span class="params">curEle,attr</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> val=<span class="literal">null</span>;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		val=<span class="built_in">window</span>.getComputedStyle(curEle,<span class="literal">null</span>)[attr];</div><div class="line">	&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">		val=curEle.currentStyle[attr];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> val;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
@@ -357,6 +357,10 @@ offsetWidth:clientWidth+左右">
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/04/构造带记忆功能的函数/" rel="prev" title="构造带记忆功能的函数">
+                构造带记忆功能的函数 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -424,7 +428,7 @@ offsetWidth:clientWidth+左右">
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">34</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -475,7 +479,7 @@ offsetWidth:clientWidth+左右">
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
