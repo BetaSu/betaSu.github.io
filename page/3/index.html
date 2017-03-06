@@ -238,6 +238,114 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/03/express源码实现2——中间件实现/" itemprop="url">
+                  express源码实现2——中间件实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-03T21:05:00+08:00" content="2016-09-03">
+              2016-09-03
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="上一篇内容"><a href="#上一篇内容" class="headerlink" title="上一篇内容"></a>上一篇内容</h2><p> 实现express中最主要的方法——创建服务器，监听端口，接收各种前端请求。</p>
+<h2 id="中间件是什么"><a href="#中间件是什么" class="headerlink" title="中间件是什么"></a>中间件是什么</h2><ol>
+<li>中间件就是在路由过程中起过渡作用，用以检查权限，检查是否合法，最后再进入我们真正的路由</li>
+<li>中间件有next方法，可以决定是否继续执行 如果调用next方法表示继续执行</li>
+<li>中间件也可以匹配路径 只要路径开头匹配即可,默认是/等同于不写。比如中间件的/add可以匹配请求路径的/add/user</li>
+<li>中间件中的req和res 和路由中的是同一个</li>
+<li>一个页面中可以有多个中间件<h2 id="本篇文章的目的"><a href="#本篇文章的目的" class="headerlink" title="本篇文章的目的"></a>本篇文章的目的</h2>实现express中间件的源码<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2>之前路由的判断原理是将前端发送来的每个请求与路由池里保存的请求匹配，匹配上就执行相应回调函数。现在加入中间件，由于中间件不调用next()方法会阻塞接下来中间件/路由的执行，所以采用的原理是：讲中间件放入路由池，每当接收到前端请求，依次遍历路由池中的值，判断是中间件还是路由，分别处理。</li>
+</ol>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
+<li><p>定义中间件函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">app.use=<span class="function"><span class="keyword">function</span> (<span class="params">path,fn</span>) </span>&#123;</div><div class="line">	<span class="comment">//当只传递回调函数不传递路径时</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> fn !=<span class="string">'function'</span>) &#123;</div><div class="line">		fn=path;</div><div class="line">		path=<span class="string">'/'</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> config=&#123;<span class="attr">method</span>:<span class="string">'middleware'</span>,<span class="attr">path</span>:path,<span class="attr">fn</span>:fn&#125;</div><div class="line">	app.routes.push(config);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>定义中间件的next方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">express</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//首先在express函数上部定义一个索引</span></div><div class="line">	<span class="keyword">var</span> index=<span class="number">0</span>;</div><div class="line">	<span class="comment">//执行一次next</span></div><div class="line">	next();</div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">next</span> (<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">//判断是否遍历完都没有匹配到</span></div><div class="line">		<span class="keyword">if</span> (index&gt;=app.routes.length) &#123;</div><div class="line">			res.end(<span class="string">`Cannot <span class="subst">$&#123;method&#125;</span> <span class="subst">$&#123;pathname&#125;</span>`</span>)</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//遍历到的路由项</span></div><div class="line">		<span class="keyword">var</span> route=app.routes[index++];</div><div class="line">		<span class="comment">//如果是中间件	</span></div><div class="line">		<span class="keyword">if</span> (route.method==<span class="string">'middleware'</span>) &#123;</div><div class="line">			<span class="comment">/**判断路径是否匹配</span></div><div class="line">			*第一项匹配所有路径</div><div class="line">			*第二项与请求路径完全匹配</div><div class="line">			*第三项模糊匹配</div><div class="line">			**/</div><div class="line">			<span class="keyword">if</span> (route.path==<span class="string">'/'</span>||route.path==pathname||pathname.startsWith(route.path+<span class="string">'/'</span>)) &#123;</div><div class="line">				<span class="comment">//匹配成功，执行中间件回调函数</span></div><div class="line">				route.fn(req,res,next);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">//没匹配到，进行下一次遍历</span></div><div class="line">				next();</div><div class="line">			&#125;</div><div class="line">		<span class="comment">//如果是路由	</span></div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">//判断路由是否匹配</span></div><div class="line">			<span class="keyword">if</span> ((route.method==method||route.method==<span class="string">'all'</span>)&amp;&amp;(route.path==pathname||route.pathname==<span class="string">'*'</span>)) &#123;</div><div class="line">				<span class="comment">//路由匹配成功</span></div><div class="line">				route.fn(req,res);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">//没匹配到，进行下次遍历</span></div><div class="line">				next();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/03/express源码实现—1—基础实现/" itemprop="url">
                   express源码实现1——基础实现
                 </a>
@@ -1293,144 +1401,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/23/我的理解3/" itemprop="url">
-                  angular————过滤器
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-23T22:08:07+08:00" content="2016-08-23">
-              2016-08-23
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>过滤器</p>
-<ul>
-<li>过滤器的作用是输出经过过滤后的数据</li>
-<li>过滤器分为内置过滤器与自定义过滤器</li>
-<li><p>过滤器有3种使用方法</p>
-<ol>
-<li><p>在表达式中使用 其中|是分隔符 :后面进行传参</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#123;name|currency:<span class="string">'￥'</span>&#125;&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>控制器中注入$filter服务</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(<span class="string">'ctrl'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,$filter</span>) </span>&#123;</div><div class="line">	$scope.name=<span class="string">'aaaaabbbbdddd'</span>;</div><div class="line">	$scope.name=$filter(<span class="string">'uppercase'</span>)($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-<li><p>过滤器的名字+Filter(如：uppercaseFilter) 如：$filter(‘过滤器名称’)(数据)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mod.controller(<span class="string">'ctrl'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">$scope,uppercaseFilter</span>) </span>&#123;</div><div class="line">	$scope.name=<span class="string">'aaaaabbbbdddd'</span>;</div><div class="line">	$scope.name=uppercaseFilter($scope.name);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>常见内置过滤器</p>
-<ol>
-<li><p>currency 货币过滤器 如果不传参默认是$，也可以自己传递参数</p>
-</li>
-<li><p>uppercase lowercase 大小写过滤器</p>
-</li>
-<li><p>number 限制数字后面小数点位数</p>
-</li>
-<li><p>limitTo 用来限制字符串、数组的长度</p>
-</li>
-<li><p>json 把普通对象转换为JSON对象</p>
-</li>
-<li><p>date 转换时间格式</p>
-</li>
-<li>filter 根据条件过滤数组，将过滤后的内容以一个新数组返回<br> -参数1 可以是字符串，也可以是一个方法,根据返回值进行过滤<br> -参数2 true严格匹配，false不区分大小写，非严格匹配，默认false</li>
-<li>orderBy 数组实现排序，将排序后的数组返回<br> -参数1 可以是字符串，按照哪一项来排序<br> -参数2 true 倒序，false 正序 默认正序</li>
-</ol>
-</li>
-<li>如何生成自定义过滤器<ul>
-<li>参数1 过滤器的名字</li>
-<li>参数2 函数(定义过滤器的方法)<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//返回前len项为大写的值的过滤器</span></div><div class="line">mod.filter(<span class="string">'newF'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="comment">// 参数1: input就是要使用该过滤器的数据</span></div><div class="line">		<span class="comment">// 从第二个参数开始就是冒号后面传递的参数</span></div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>  (<span class="params">input,len</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> a=input.slice(<span class="number">0</span>,len);</div><div class="line">		a=angular.uppercase(a);</div><div class="line">		<span class="keyword">var</span> b=input.slice(len);</div><div class="line">		<span class="keyword">return</span> a+b;</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"><span class="comment">//数组去重的过滤器</span></div><div class="line">mod.filter(<span class="string">'newF'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>  (<span class="params">input,len</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> newarr=[];</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;input.length;i++) &#123;</div><div class="line">			<span class="keyword">if</span> (newarr.indexOf(input[i])===<span class="number">-1</span>) &#123;</div><div class="line">				newarr.push(input[i]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;</div><div class="line">	<span class="keyword">return</span> newarr;	</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1476,7 +1446,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">34</span>
+              <span class="site-state-item-count">35</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
