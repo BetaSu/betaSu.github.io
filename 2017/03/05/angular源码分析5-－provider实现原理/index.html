@@ -1,0 +1,567 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="原生angular中的provider和$injector主要作用是：
+注册组件（controller directive service）
+解决组件间的依赖关系
+初始化组件接下来提供简单的实现12345678910111213141516171819202122232425262728var Provider=&amp;#123;    //保存所有组件对应的工厂函数    _providers:&amp;#1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="angular源码分析5-－provider实现原理">
+<meta property="og:url" content="https://betasu.github.io/2017/03/05/angular源码分析5-－provider实现原理/index.html">
+<meta property="og:site_name" content="我是卡卡卡颂">
+<meta property="og:description" content="原生angular中的provider和$injector主要作用是：
+注册组件（controller directive service）
+解决组件间的依赖关系
+初始化组件接下来提供简单的实现12345678910111213141516171819202122232425262728var Provider=&amp;#123;    //保存所有组件对应的工厂函数    _providers:&amp;#1">
+<meta property="og:updated_time" content="2017-03-05T05:01:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="angular源码分析5-－provider实现原理">
+<meta name="twitter:description" content="原生angular中的provider和$injector主要作用是：
+注册组件（controller directive service）
+解决组件间的依赖关系
+初始化组件接下来提供简单的实现12345678910111213141516171819202122232425262728var Provider=&amp;#123;    //保存所有组件对应的工厂函数    _providers:&amp;#1">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://betasu.github.io/2017/03/05/angular源码分析5-－provider实现原理/"/>
+
+  <title> angular源码分析5-－provider实现原理 | 我是卡卡卡颂 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">我是卡卡卡颂</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                angular源码分析5-－provider实现原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-05T12:16:24+08:00" content="2017-03-05">
+              2017-03-05
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="原生angular中的provider和-injector主要作用是："><a href="#原生angular中的provider和-injector主要作用是：" class="headerlink" title="原生angular中的provider和$injector主要作用是："></a>原生angular中的provider和$injector主要作用是：</h3><ol>
+<li>注册组件（controller directive service）</li>
+<li>解决组件间的依赖关系</li>
+<li>初始化组件<h3 id="接下来提供简单的实现"><a href="#接下来提供简单的实现" class="headerlink" title="接下来提供简单的实现"></a>接下来提供简单的实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Provider=&#123;</div><div class="line"></div><div class="line">    <span class="comment">//保存所有组件对应的工厂函数</span></div><div class="line">    _providers:&#123;&#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//注册组件</span></div><div class="line">    _register: <span class="function"><span class="keyword">function</span>(<span class="params">name,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">this</span>._providers[name]=fn;</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//要来注册service</span></div><div class="line">    service: <span class="function"><span class="keyword">function</span>(<span class="params">name,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>._register(name+Provider.SERVICE_SUFFIX,fn);</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//要来注册directive　</span></div><div class="line">    directive: <span class="function"><span class="keyword">function</span>(<span class="params">name,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>._register(name+Provider.DIRECTIVE_SUFFIX,fn);</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//要来注册controller</span></div><div class="line">    <span class="comment">//初始化controller缓存里保存的是工厂函数，可以多次初始化同一个controller</span></div><div class="line">    controller: <span class="function"><span class="keyword">function</span>(<span class="params">name,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>._register(name,<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> fn;</div><div class="line">      &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖"><a href="#上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖" class="headerlink" title="上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖"></a>上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Provider = &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    </div><div class="line">   <span class="comment">//缓存初始化后的组件</span></div><div class="line">    _cache: &#123;&#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//返回一个数组 数组为当前函数工厂函数的传参，也就是依赖组件的名称</span></div><div class="line">    annotate: <span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> res = fn.toString()</div><div class="line">            .replace(<span class="regexp">/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg</span>, <span class="string">''</span>)</div><div class="line">            .match(<span class="regexp">/\((.*?)\)/</span>);</div><div class="line">        <span class="keyword">if</span> (res &amp;&amp; res[<span class="number">1</span>]) &#123;</div><div class="line">            <span class="keyword">return</span> res[<span class="number">1</span>].split(<span class="string">','</span>).map(<span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">                <span class="keyword">return</span> d.trim();</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> [];</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//接下来两个函数将互相调用，调用组件的初始化工厂函数，并循环遍历解决依赖（以及依赖的依赖）</span></div><div class="line">    <span class="comment">//解决依赖的意思就是将依赖组件的名称转换成对应组件的工厂函数，传入。</span></div><div class="line">    </div><div class="line">    <span class="comment">//传入组件名，locals为所有本地依赖的对象集合，返回初始化后的组件</span></div><div class="line">    get: <span class="function"><span class="keyword">function</span>(<span class="params">name,locals</span>) </span>&#123;</div><div class="line">    </div><div class="line">      <span class="comment">//如果已有缓存的初始化工厂函数，返回他</span></div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>._cache[name]) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="keyword">this</span>._cache[name];</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">var</span> provider=<span class="keyword">this</span>._providers[name];</div><div class="line">      <span class="keyword">if</span> (!provider || <span class="keyword">typeof</span> provider !==<span class="string">'function'</span>) &#123;<span class="keyword">return</span>;&#125;</div><div class="line">      <span class="keyword">return</span> (<span class="keyword">this</span>._cache[name] = <span class="keyword">this</span>.invoke(provider,locals));</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//用于初始化一个组件。如果该组件依赖的组件还未初始化，则会先初始化依赖的组件</span></div><div class="line">    invoke: <span class="function"><span class="keyword">function</span>(<span class="params">fn,locals</span>) </span>&#123;</div><div class="line">      locals= locals || &#123;&#125;;</div><div class="line">      </div><div class="line">        <span class="comment">//通过依赖名找出依赖的工厂函数</span></div><div class="line">      <span class="keyword">var</span> deps=<span class="keyword">this</span>.annotate(fn).map(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> locals[item] || <span class="keyword">this</span>.get(item,locals);</div><div class="line">      &#125;,<span class="keyword">this</span>);</div><div class="line">      <span class="keyword">return</span> fn.apply(<span class="literal">null</span>,deps);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/04/构造带记忆功能的函数/" rel="next" title="构造带记忆功能的函数">
+                <i class="fa fa-chevron-left"></i> 构造带记忆功能的函数
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/09/设计模式－－惰性单例模式/" rel="prev" title="设计模式－－惰性单例模式">
+                设计模式－－惰性单例模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://p1.so.qhmsg.com/t0104ff6ab349246736.jpg"
+               alt="BetaSu" />
+          <p class="site-author-name" itemprop="name">BetaSu</p>
+          <p class="site-description motion-element" itemprop="description">一言不合撸源码</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原生angular中的provider和-injector主要作用是："><span class="nav-number">1.</span> <span class="nav-text">原生angular中的provider和$injector主要作用是：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接下来提供简单的实现"><span class="nav-number">2.</span> <span class="nav-text">接下来提供简单的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖"><span class="nav-number">3.</span> <span class="nav-text">上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BetaSu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
