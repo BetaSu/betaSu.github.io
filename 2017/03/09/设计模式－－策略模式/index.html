@@ -84,49 +84,16 @@
 
 
 
-<meta name="description" content="##什么是路由
-
-路由就是不同的路径。不同的路径对应不同的路由angular单页路由的配置
-
-
-需要引入angular-route这个包
-1&amp;lt;script src=&quot;../node_modules/angular-route.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-
-angular模块依赖
-1var mod=angular.module(&apos;app&apos;,[&apos;ngRoute&apos;]);
-
-对服务">
+<meta name="description" content="策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：1.一组策略类，策略类封装了具体的算法，并负责具体的计算过程。2.环境类context。context接受客户请求，把请求委托给一个策略类。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="angular——单页面路由">
-<meta property="og:url" content="https://betasu.github.io/2016/08/29/angular——单页面路由/index.html">
+<meta property="og:title" content="设计模式－－策略模式">
+<meta property="og:url" content="https://betasu.github.io/2017/03/09/设计模式－－策略模式/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="##什么是路由
-
-路由就是不同的路径。不同的路径对应不同的路由angular单页路由的配置
-
-
-需要引入angular-route这个包
-1&amp;lt;script src=&quot;../node_modules/angular-route.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-
-angular模块依赖
-1var mod=angular.module(&apos;app&apos;,[&apos;ngRoute&apos;]);
-
-对服务">
-<meta property="og:updated_time" content="2016-09-08T09:20:18.000Z">
+<meta property="og:description" content="策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：1.一组策略类，策略类封装了具体的算法，并负责具体的计算过程。2.环境类context。context接受客户请求，把请求委托给一个策略类。">
+<meta property="og:updated_time" content="2017-03-09T03:44:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="angular——单页面路由">
-<meta name="twitter:description" content="##什么是路由
-
-路由就是不同的路径。不同的路径对应不同的路由angular单页路由的配置
-
-
-需要引入angular-route这个包
-1&amp;lt;script src=&quot;../node_modules/angular-route.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
-
-angular模块依赖
-1var mod=angular.module(&apos;app&apos;,[&apos;ngRoute&apos;]);
-
-对服务">
+<meta name="twitter:title" content="设计模式－－策略模式">
+<meta name="twitter:description" content="策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：1.一组策略类，策略类封装了具体的算法，并负责具体的计算过程。2.环境类context。context接受客户请求，把请求委托给一个策略类。">
 
 
 
@@ -147,9 +114,9 @@ angular模块依赖
 
 
 
-  <link rel="canonical" href="https://betasu.github.io/2016/08/29/angular——单页面路由/"/>
+  <link rel="canonical" href="https://betasu.github.io/2017/03/09/设计模式－－策略模式/"/>
 
-  <title> angular——单页面路由 | 我是卡卡卡颂 </title>
+  <title> 设计模式－－策略模式 | 我是卡卡卡颂 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -269,7 +236,7 @@ angular模块依赖
             
             
               
-                angular——单页面路由
+                设计模式－－策略模式
               
             
           </h1>
@@ -281,8 +248,8 @@ angular模块依赖
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-29T21:56:07+08:00" content="2016-08-29">
-              2016-08-29
+            <time itemprop="dateCreated" datetime="2017-03-09T11:33:12+08:00" content="2017-03-09">
+              2017-03-09
             </time>
           </span>
 
@@ -309,23 +276,7 @@ angular模块依赖
       
 
       
-        <p>##什么是路由</p>
-<ul>
-<li>路由就是不同的路径。不同的路径对应不同的路由<h2 id="angular单页路由的配置"><a href="#angular单页路由的配置" class="headerlink" title="angular单页路由的配置"></a>angular单页路由的配置</h2></li>
-</ul>
-<ol>
-<li><p>需要引入angular-route这个包</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script src=<span class="string">"../node_modules/angular-route.js"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></div></pre></td></tr></table></figure>
-</li>
-<li><p>angular模块依赖</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'app'</span>,[<span class="string">'ngRoute'</span>]);</div></pre></td></tr></table></figure>
-</li>
-<li><p>对服务暴露出的api进行配置</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mod.config(<span class="function"><span class="keyword">function</span>  (<span class="params">$routeProvider</span>) </span>&#123;</div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>##具体流程 一个简单的案例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mod=angular.module(<span class="string">'app'</span>,[<span class="string">'ngRoute'</span>]);</div><div class="line">  mod.config(<span class="function"><span class="keyword">function</span>  (<span class="params">$routeProvider</span>) </span>&#123;</div><div class="line">  	<span class="comment">//route的每个when方法里设置一个路由</span></div><div class="line">      $routeProvider.when(<span class="string">'/'</span>,&#123;</div><div class="line">          <span class="attr">templateUrl</span>:<span class="string">'index.html'</span></div><div class="line">      &#125;).when(<span class="string">'/about'</span>,&#123;</div><div class="line">          <span class="attr">templateUrl</span>:<span class="string">'about.html'</span>,</div><div class="line">          <span class="attr">controller</span>:<span class="function"><span class="keyword">function</span>  (<span class="params">$scope</span>) </span>&#123;</div><div class="line"></div><div class="line">          &#125;,</div><div class="line">          <span class="comment">//resolve中定义服务，注意这里会嵌套两层</span></div><div class="line">          resolve:&#123;</div><div class="line">          	<span class="attr">add</span>:<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">          		<span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">a,b</span>) </span>&#123;</div><div class="line">          			<span class="keyword">return</span> a+b;</div><div class="line">          		&#125;</div><div class="line">          	&#125;</div><div class="line">          &#125;</div><div class="line">      &#125;).when(<span class="string">'/contact'</span>,&#123;</div><div class="line">          <span class="attr">templateUrl</span>:<span class="string">'contact.html'</span></div><div class="line">      &#125;)</div><div class="line">  &#125;)</div></pre></td></tr></table></figure></p>
-<p>在DOM结构中,路由会显示在ng-view指令所在的标签内<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-view</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+        <h3 id="策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成："><a href="#策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：" class="headerlink" title="策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成："></a>策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：</h3><p>1.一组策略类，策略类封装了具体的算法，并负责具体的计算过程。<br>2.环境类context。context接受客户请求，把请求委托给一个策略类。</p>
 
       
     </div>
@@ -351,16 +302,16 @@ angular模块依赖
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/28/node源码实现——pipe/" rel="next" title="node源码实现——pipe">
-                <i class="fa fa-chevron-left"></i> node源码实现——pipe
+              <a href="/2017/03/09/设计模式－－惰性单例模式/" rel="next" title="设计模式－－惰性单例模式">
+                <i class="fa fa-chevron-left"></i> 设计模式－－惰性单例模式
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/08/30/angular——表单控件/" rel="prev" title="angular——表单控件">
-                angular——表单控件 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/03/11/设计模式－－代理模式/" rel="prev" title="设计模式－－代理模式">
+                设计模式－－代理模式 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -461,7 +412,7 @@ angular模块依赖
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#angular单页路由的配置"><span class="nav-number">1.</span> <span class="nav-text">angular单页路由的配置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成："><span class="nav-number">1.</span> <span class="nav-text">策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：</span></a></li></ol></div>
             
           </div>
         </section>
