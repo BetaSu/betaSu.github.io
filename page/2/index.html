@@ -238,6 +238,298 @@
             
               
                 
+                <a class="post-title-link" href="/2016/10/05/IE条件注释/" itemprop="url">
+                  IE条件注释
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-05T17:13:39+08:00" content="2016-10-05">
+              2016-10-05
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--[if !IE]&gt;除IE外都可识别&lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE]&gt; 所有的IE可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 5.0]&gt; 只有IE5.0可以识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 5]&gt; 仅IE5.0与IE5.5可以识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if gt IE 5.0]&gt; IE5.0以及IE5.0以上版本都可以识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 6]&gt; 仅IE6可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if lt IE 6]&gt; IE6以及IE6以下版本可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if gte IE 6]&gt; IE6以及IE6以上版本可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 7]&gt; 仅IE7可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if lt IE 7]&gt; IE7以及IE7以下版本可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if gte IE 7]&gt; IE7以及IE7以上版本可识别 &lt;![endif]--&gt;</span></div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/30/Angular源码解析4——作用域上代码的执行/" itemprop="url">
+                  Angular源码解析4——作用域上代码的执行
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-30T19:49:06+08:00" content="2016-09-30">
+              2016-09-30
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="在作用域中执行代码"><a href="#在作用域中执行代码" class="headerlink" title="在作用域中执行代码"></a>在作用域中执行代码</h2><ol>
+<li><p>$eval</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">*$eval接收2个参数</div><div class="line">*fn需要在作用中执行的函数</div><div class="line">*（可选）传入的参数</div><div class="line">**/</div><div class="line">Scope.prototype.$<span class="built_in">eval</span>=<span class="function"><span class="keyword">function</span> (<span class="params">fn,locals</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> fn(<span class="keyword">this</span>,locals);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>$apply<br>有时候我们需要执行与Angular无关的方法（比如window.setInerval），但是这些方法改变了作用域中的数据，我们希望监听到这些变化，这时候我们需要通过$apply传入方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$apply=functin (fn) &#123;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.$<span class="built_in">eval</span>(fn);</div><div class="line">	&#125; <span class="keyword">finally</span> &#123;</div><div class="line">		<span class="comment">//$digest的执行放在finally中，以确保即使报错也会执行</span></div><div class="line">		<span class="keyword">this</span>.$digest();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>延迟执行的函数<br>在angular中我们可以用$apply传递一个计时器（setInterval）来实现延迟执行函数，也可以调用内部的$interval和$timeout。Angular中还有一种延迟执行的方法$evalAsync。</p>
+</li>
+</ol>
+<p>$evalAsync会将一个函数推入计划中。这个函数会在这次$digest或者下次$digest之前执行。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//在Scope中定义任务队列</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue=[];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义$evalAsync,传入需要延迟执行的函数</span></div><div class="line">Scope.prototype.$evalAsync=<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue.push(&#123;<span class="attr">scope</span>:<span class="keyword">this</span>,<span class="attr">expression</span>:fn&#125;);</div><div class="line">&#125; </div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> time=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		<span class="keyword">while</span> (<span class="keyword">this</span>.$$asyncQueue.length) &#123;</div><div class="line">			<span class="keyword">var</span> task=<span class="keyword">this</span>.$$asyncQueue.shift();</div><div class="line">			<span class="keyword">this</span>.$<span class="built_in">eval</span>(task.expression);</div><div class="line">		&#125;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp;!(time--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'已到10次脏值查询'</span></div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/27/Angular源码解析3——深度比较、深度克隆/" itemprop="url">
+                  Angular源码解析3——深度比较、深度克隆
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-27T12:29:56+08:00" content="2016-09-27">
+              2016-09-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="为什么需要深度比较、深度克隆"><a href="#为什么需要深度比较、深度克隆" class="headerlink" title="为什么需要深度比较、深度克隆"></a>为什么需要深度比较、深度克隆</h2><p>详细内容见上一篇。简单的说是为了比较引用类型值（对象、数组）内部数据的变化以触发脏值查询。</p>
+<p>##深度比较 源码实现<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">equals</span>(<span class="params">o1, o2</span>) </span>&#123;</div><div class="line">	<span class="comment">//对基本类型值的比较</span></div><div class="line">  <span class="keyword">if</span> (o1 === o2) <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">  <span class="keyword">if</span> (o1 === <span class="literal">null</span> || o2 === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  <span class="comment">//对NaN特殊处理，使得NaN === NaN</span></div><div class="line">  <span class="keyword">if</span> (o1 !== o1 &amp;&amp; o2 !== o2) <span class="keyword">return</span> <span class="literal">true</span>; </div><div class="line"></div><div class="line">  <span class="keyword">var</span> t1 = <span class="keyword">typeof</span> o1, t2 = <span class="keyword">typeof</span> o2, length, key, keySet;</div><div class="line">  <span class="comment">//如果比较的值都是对象</span></div><div class="line">  <span class="keyword">if</span> (t1 == t2 &amp;&amp; t1 == <span class="string">'object'</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (isArray(o1)) &#123;</div><div class="line">      <span class="keyword">if</span> (!isArray(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      <span class="comment">//都是数组，遍历数组每一项</span></div><div class="line">      <span class="keyword">if</span> ((length = o1.length) == o2.length) &#123;</div><div class="line">        <span class="keyword">for</span> (key = <span class="number">0</span>; key &lt; length; key++) &#123;</div><div class="line">          <span class="keyword">if</span> (!equals(o1[key], o2[key])) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDate(o1)) &#123;</div><div class="line">      <span class="keyword">if</span> (!isDate(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      <span class="keyword">return</span> equals(o1.getTime(), o2.getTime());</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isRegExp(o1)) &#123;</div><div class="line">      <span class="keyword">if</span> (!isRegExp(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      <span class="keyword">return</span> o1.toString() == o2.toString();</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">if</span> (isScope(o1) || isScope(o2) || isWindow(o1) || isWindow(o2) ||</div><div class="line">        isArray(o2) || isDate(o2) || isRegExp(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      keySet = createMap();</div><div class="line">      <span class="keyword">for</span> (key <span class="keyword">in</span> o1) &#123;</div><div class="line">        <span class="keyword">if</span> (key.charAt(<span class="number">0</span>) === <span class="string">'$'</span> || isFunction(o1[key])) <span class="keyword">continue</span>;</div><div class="line">        <span class="keyword">if</span> (!equals(o1[key], o2[key])) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        keySet[key] = <span class="literal">true</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">for</span> (key <span class="keyword">in</span> o2) &#123;</div><div class="line">        <span class="keyword">if</span> (!(key <span class="keyword">in</span> keySet) &amp;&amp;</div><div class="line">            key.charAt(<span class="number">0</span>) !== <span class="string">'$'</span> &amp;&amp;</div><div class="line">            isDefined(o2[key]) &amp;&amp;</div><div class="line">            !isFunction(o2[key])) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="深度克隆-源码实现"><a href="#深度克隆-源码实现" class="headerlink" title="深度克隆 源码实现"></a>深度克隆 源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">clone</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> buf;</div><div class="line">	<span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="built_in">Array</span>) &#123;</div><div class="line">		buf=[];</div><div class="line">		<span class="keyword">var</span> i=obj.length;</div><div class="line">		<span class="keyword">while</span> (i--) &#123;</div><div class="line">			buf[i]=clone(obj[i]);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> buf;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="built_in">Object</span>) &#123;</div><div class="line">		buf=&#123;&#125;;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> obj) &#123;</div><div class="line">			buf[k]=clone(obj[k]);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> buf;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">return</span> obj;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/27/Angular源码解析2-——作用域、脏值查询2/" itemprop="url">
                   Angular源码解析2--——脏值查询完善
                 </a>
@@ -1004,314 +1296,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/09/express源码实现4——res-send/" itemprop="url">
-                  express源码实现4——res.send
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-09T11:03:18+08:00" content="2016-09-09">
-              2016-09-09
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="res-send的作用"><a href="#res-send的作用" class="headerlink" title="res.send的作用"></a>res.send的作用</h2><p> 原生node中res.end()方法中只能传递String和Buffer类型，并且传递中文字符串的时候由于编码的问题会显示乱码。为了解决这个问题，express中通过中间件在res上封装了一个send方法，可以传递字符串、对象(转换成JSON)、状态码。</p>
-<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">res.send=<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">	<span class="comment">//是字符串或buffer</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'string'</span>||Buffer.isBuffer(msg)) &#123;</div><div class="line">		res.setHeader(<span class="string">'content-type'</span>,<span class="string">'text/plain;charset=utf8'</span>);</div><div class="line">		res.end(msg);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//是对象</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'object'</span>) &#123;</div><div class="line">		res.setHeader(<span class="string">'content-type'</span>,<span class="string">'applicaton/json;charset=utf8'</span>);</div><div class="line">		res.end(<span class="built_in">JSON</span>.stringify(msg));</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//是数字类型，转换成状态码</span></div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> msg==<span class="string">'number'</span>) &#123;</div><div class="line">		<span class="keyword">var</span> STATUS_CODE=<span class="built_in">require</span>(<span class="string">'http'</span>).STATUS_CODES;</div><div class="line">		res.statusCode=msg;</div><div class="line">		res.end(STATUS_CODE[msg]);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/08/node源码实现——promise/" itemprop="url">
-                  node源码实现——简单的promise实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-08T14:33:31+08:00" content="2016-09-08">
-              2016-09-08
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="promise是什么"><a href="#promise是什么" class="headerlink" title="promise是什么"></a>promise是什么</h2><p> 顾名思义，promise就是一个承诺。承诺需要一段时间后兑现。在node中，这段时间就是异步操作执行到调用回调函数的时间。所以，promise的操作和异步操作有关。</p>
-<h2 id="promise的状态"><a href="#promise的状态" class="headerlink" title="promise的状态"></a>promise的状态</h2><ul>
-<li>Pending Promise对象实例创建时候的初始状态</li>
-<li>Fulfilled 可以理解为成功的状态</li>
-<li>Rejected 可以理解为失败的状态<h2 id="promise的简单应用"><a href="#promise的简单应用" class="headerlink" title="promise的简单应用"></a>promise的简单应用</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义一个Promise实例，实例会立即执行传参。传参接收2个参数</span></div><div class="line"><span class="comment">//resolve参数是一个函数，用以改变promise的状态以及执行成功状态的回调函数</span></div><div class="line"><span class="comment">//reject参数是一个函数，用以改变promise的状态以及执行失败状态的回调函数</span></div><div class="line"><span class="keyword">var</span> promise=<span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</div><div class="line">	setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">Math</span>.random&gt;<span class="number">0.5</span>) resolve(<span class="string">'success'</span>);</div><div class="line">		<span class="keyword">else</span> reject(<span class="string">'fail'</span>);</div><div class="line">	&#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div><div class="line"><span class="comment">//promise的实例的then方法接收两个函数参数，是对resolve与reject函数的定义</span></div><div class="line">promise.then(fullfiled,rejected)</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="源码实现思路"><a href="#源码实现思路" class="headerlink" title="源码实现思路"></a>源码实现思路</h2><ol>
-<li>由于要实例化，所以Promise首先是一个类。constructor上有一个记录状态的变量。并且在实例化的过程中会立即执行传参。</li>
-<li>原型上有一个then方法，接受两个参数，分别是成功与失败状态要调用的函数。但是由于这两个函数都有传参，所以还需要包装一下。</li>
-<li>在contructor中定义resolve与reject函数，这两个函数接收传参，执行时会改变实例状态，并把传参赋给then上定义的方法并执行他。</li>
-<li>在constructor中执行Promise中传入的函数，将包装好的resolve与reject传入。</li>
-</ol>
-<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.定义Promise类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Promise</span> </span>&#123;</div><div class="line">	<span class="comment">//2.接收一个函数为参数</span></div><div class="line">	<span class="keyword">constructor</span> (fn) &#123;</div><div class="line">		<span class="comment">//3.保存状态，默认为'unfulfilled'</span></div><div class="line">		<span class="keyword">this</span>._status=<span class="string">'unfulfilled'</span>;</div><div class="line">		</div><div class="line">		<span class="comment">//5.包装好resolve</span></div><div class="line">		<span class="keyword">let</span> resolve=<span class="function">(<span class="params">data</span>)=&gt;</span>&#123;</div><div class="line">			<span class="comment">//改变状态</span></div><div class="line">			<span class="keyword">this</span>._status=<span class="string">'fulfilled'</span>;</div><div class="line">			<span class="keyword">this</span>._resolve(data);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">//6.包装好reject</span></div><div class="line">		<span class="keyword">let</span> reject=<span class="function">(<span class="params">err</span>)=&gt;</span>&#123;</div><div class="line">			<span class="comment">//改变状态</span></div><div class="line">			<span class="keyword">this</span>._status=<span class="string">'failed'</span>;</div><div class="line">			<span class="keyword">this</span>._reject(err);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">//7.立即执行</span></div><div class="line">		fn(resolve,reject);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">//4.Promise.prototype上定义then方法,将传递的函数保存为内部方法</span></div><div class="line">	then (resolve,reject) &#123;</div><div class="line">		<span class="keyword">this</span>._resolve=resolve;</div><div class="line">		<span class="keyword">this</span>._reject=reject;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/07/node源码实现——嵌套文件夹的创建/" itemprop="url">
-                  node源码实现——嵌套文件夹的创建
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-07T11:03:39+08:00" content="2016-09-07">
-              2016-09-07
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="为什么需要手动实现嵌套文件夹的创建"><a href="#为什么需要手动实现嵌套文件夹的创建" class="headerlink" title="为什么需要手动实现嵌套文件夹的创建"></a>为什么需要手动实现嵌套文件夹的创建</h2><p>node中fs模块原生提供了2种创建文件夹的方法：fs.mkdir (异步) 与fs.mkdirSync (同步)。但是原生的方法在创建嵌套文件夹时(如：a/b/c/d)时，必须在父级文件夹存在的情况下才能创建子级文件夹。所以不能一次创建a/b/c/d这样的嵌套文件夹。只能先创建a，再在a文件夹中创建b······</p>
-<h2 id="嵌套文件夹创建实现原理"><a href="#嵌套文件夹创建实现原理" class="headerlink" title="嵌套文件夹创建实现原理"></a>嵌套文件夹创建实现原理</h2><p>递归调用创建函数，循环遍历路径，一层层判断文件夹是否存在，如果不存在就创建，存在就继续遍历下一层。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>提供2种方法，一种容易理解，一种比较复杂。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//首先引入依赖</span></div><div class="line"><span class="keyword">var</span> fs=<span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> path=<span class="built_in">require</span>(<span class="string">'path'</span>)</div></pre></td></tr></table></figure></p>
-<ul>
-<li><p>简单的版本</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//简单版本</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeDirp</span> (<span class="params">path</span>) </span>&#123;</div><div class="line">	<span class="comment">//分隔符的兼容</span></div><div class="line">    <span class="keyword">var</span> sep=path.sep;</div><div class="line">    path=path.replace(<span class="regexp">/[\\/]/g</span>,sep);</div><div class="line">    <span class="keyword">var</span> dir=path.split(sep);</div><div class="line">    <span class="keyword">var</span> index=<span class="number">1</span>;</div><div class="line">    make();</div><div class="line">    <span class="comment">//递归调用</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">make</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (index&gt;dir.length) <span class="keyword">return</span>;</div><div class="line">        <span class="comment">//每次查找文件夹名+分隔符 是否存在</span></div><div class="line">        <span class="keyword">var</span> subdir=dir.slice(<span class="number">0</span>,index++).join(sep);</div><div class="line">        fs.exists(subdir,<span class="function"><span class="keyword">function</span>  (<span class="params">exist</span>) </span>&#123;</div><div class="line">        	<span class="comment">//存在则继续查找下一级</span></div><div class="line">            <span class="keyword">if</span> (exist) &#123;</div><div class="line">                make()</div><div class="line">                <span class="comment">//不存在则创建后查找下一级</span></div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                fs.mkdir(subdir,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">                    make();</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>复杂的版本</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mkdirp</span> (<span class="params">p,callback</span>) </span>&#123;</div><div class="line">	<span class="comment">//判断路径是否存在</span></div><div class="line">    fs.exists(p,<span class="function"><span class="keyword">function</span>  (<span class="params">exist</span>) </span>&#123;</div><div class="line">    	<span class="comment">//存在则直接调用回调函数</span></div><div class="line">    	<span class="comment">//不存在则递归调用自己，传入当前文件夹所在的文件夹路径</span></div><div class="line">        <span class="keyword">return</span> exist?callback():mkdirp(path.dirname(p),<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            fs.mkdir(p,callback);</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1352,13 +1341,20 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">38</span>
+              <span class="site-state-item-count">41</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           
 
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
           
 
         </nav>
