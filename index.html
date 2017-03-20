@@ -342,99 +342,6 @@
             
               
                 
-                <a class="post-title-link" href="/2017/03/13/设计模式－－发布订阅模式/" itemprop="url">
-                  设计模式－－发布订阅模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-13T22:23:38+08:00" content="2017-03-13">
-              2017-03-13
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="发布订阅模式的通用实现"><a href="#发布订阅模式的通用实现" class="headerlink" title="发布订阅模式的通用实现"></a>发布订阅模式的通用实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//发布订阅功能</span></div><div class="line"><span class="keyword">var</span> event= &#123;</div><div class="line">    <span class="attr">clientList</span>: [],</div><div class="line">    </div><div class="line">    <span class="comment">//订阅</span></div><div class="line">    listen: <span class="function"><span class="keyword">function</span>(<span class="params">key,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">if</span> (!<span class="keyword">this</span>.clientList[key]) &#123;</div><div class="line">          <span class="keyword">this</span>.clientList[key]=[];</div><div class="line">      &#125;</div><div class="line">      <span class="comment">//订阅的消息进缓存</span></div><div class="line">      <span class="keyword">this</span>.clientList[key].push(fn);</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//发布</span></div><div class="line">    trigger: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> key = <span class="built_in">Array</span>.prototype.shift.call(<span class="built_in">arguments</span>),</div><div class="line">          fns=<span class="keyword">this</span>.clientList[key];</div><div class="line">      <span class="keyword">if</span> (!fns || fns.length===<span class="number">0</span>) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>,fn;fn=fns[i++];) &#123;</div><div class="line">          fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>);</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//取消订阅</span></div><div class="line">    remove:<span class="function"><span class="keyword">function</span>(<span class="params">key,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> fns=<span class="keyword">this</span>.clientList[key];</div><div class="line">      <span class="keyword">if</span> (!fns) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">      <span class="comment">//没有传入回调，表示需要取消key对应的所有回调</span></div><div class="line">      <span class="keyword">if</span> (!fn) &#123;</div><div class="line">          fns &amp;&amp; (fns.length =<span class="number">0</span>);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">          <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;fns.length;i++) &#123;</div><div class="line">              <span class="keyword">var</span> _fn=fns[i];</div><div class="line">              <span class="keyword">if</span> (fn===_fn) &#123;</div><div class="line">                  fns.splice(i,<span class="number">1</span>);</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">//为对象添加发布订阅</span></div><div class="line"><span class="keyword">var</span> installEvent=<span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> event) &#123;</div><div class="line">      <span class="keyword">if</span> (event.hasOwnProperty(i)) &#123;</div><div class="line">          obj[i]=event[i];</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2017/03/11/css学习－－padding/" itemprop="url">
                   css学习－－padding
                 </a>
@@ -486,301 +393,6 @@
 <li>padding不支持任何形式的负值，百分比值是相对于宽度计算的</li>
 <li>inline元素默认的高度宽度细节有差异，  空inline+padding高宽也不等，会出现空白节点（strut），需要设置font-ize:0;</li>
 </ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/11/设计模式－－代理模式/" itemprop="url">
-                  设计模式－－代理模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-11T10:57:56+08:00" content="2017-03-11">
-              2017-03-11
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="代理模式分类"><a href="#代理模式分类" class="headerlink" title="代理模式分类"></a>代理模式分类</h3><ol>
-<li>保护代理<br>控制不同权限对象对目标对象对访问。</li>
-<li>虚拟代理<br>把一些开销很大对对象延迟到真正需要他对时候才去创建。下面用虚拟代理实现图片预加载：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myImage=(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> imgNode=<span class="built_in">document</span>.createNode(<span class="string">'img'</span>);</div><div class="line">  <span class="built_in">document</span>.body.appendChild(imgNode);</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">      <span class="attr">setSrc</span>: <span class="function"><span class="keyword">function</span>(<span class="params">src</span>) </span>&#123;</div><div class="line">        imgNode.src=src;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)()</div><div class="line"></div><div class="line"><span class="keyword">var</span> proxyImage=(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> img=<span class="keyword">new</span> Image;</div><div class="line">  img.onload=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    myImage.setSrc(<span class="keyword">this</span>.src);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">      <span class="attr">setSrc</span>: <span class="function"><span class="keyword">function</span>(<span class="params">src</span>) </span>&#123;</div><div class="line">        myImage.setSrc(<span class="string">'file://loading.jpg'</span>);</div><div class="line">        img.src=src;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)()</div><div class="line"></div><div class="line">proxyImage.setSrc(<span class="string">'src.jpg'</span>);</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h3><ol>
-<li>用户可以放心的请求代理，只关心能否得到想要的结果。</li>
-<li>在任何使用本体的地方都可以替换成使用代理。</li>
-</ol>
-<p>缓存代理<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//用代理模式实现缓存</span></div><div class="line"></div><div class="line"><span class="comment">//先实现一个目标函数 这里是求阶乘</span></div><div class="line"><span class="keyword">var</span> mult=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'开始计算阶乘'</span>);</div><div class="line">  <span class="keyword">var</span> a=<span class="number">1</span>;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>,cur=<span class="built_in">arguments</span>[i];i&lt;<span class="built_in">arguments</span>.length;i++) &#123;</div><div class="line">      a=a*cur;</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'输出：'</span>,a);</div><div class="line">  <span class="keyword">return</span> a;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//缓存结果的代理 调用代理即可</span></div><div class="line"><span class="keyword">var</span> proxyMult=(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> cache=&#123;&#125;;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> args=<span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>,<span class="string">','</span>);</div><div class="line">    <span class="keyword">if</span> (args <span class="keyword">in</span> cache) &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'输出：'</span>,cache[args]);</div><div class="line">        <span class="keyword">return</span> cache[args];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> (cache[args]=mult.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>));</div><div class="line">  &#125;</div><div class="line">&#125;)()</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//这里我们可以更进一步，创建一个 缓存代理的工厂,就可以接受不同的运算规则了</span></div><div class="line"><span class="keyword">var</span> createProxyfactory=<span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> cache=&#123;&#125;;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> args=<span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>,<span class="string">','</span>);</div><div class="line">    <span class="keyword">if</span> (args <span class="keyword">in</span> cache) &#123;</div><div class="line">        <span class="keyword">return</span> cache[args];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> cache[args]=fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/09/设计模式－－策略模式/" itemprop="url">
-                  设计模式－－策略模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-09T11:33:12+08:00" content="2017-03-09">
-              2017-03-09
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成："><a href="#策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：" class="headerlink" title="策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成："></a>策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：</h3><p>1.一组策略类，策略类封装了具体的算法，并负责具体的计算过程。<br>2.环境类context。context接受客户请求，把请求委托给一个策略类。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/09/设计模式－－惰性单例模式/" itemprop="url">
-                  设计模式－－惰性单例模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-09T10:56:20+08:00" content="2017-03-09">
-              2017-03-09
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="单例在ng里即service的实现。"><a href="#单例在ng里即service的实现。" class="headerlink" title="单例在ng里即service的实现。"></a>单例在ng里即service的实现。</h3><h3 id="创建一个通用的惰性单例模式，满足："><a href="#创建一个通用的惰性单例模式，满足：" class="headerlink" title="创建一个通用的惰性单例模式，满足："></a>创建一个通用的惰性单例模式，满足：</h3><ol>
-<li>只有一个实例</li>
-<li>提供全局访问</li>
-<li>符合单一职责原则<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//通用对象 只会返回一个实例</span></div><div class="line"><span class="keyword">var</span> getSingle=<span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> result;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> result || (result=fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>));</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
-</ol>
 
           
         
@@ -1236,11 +848,413 @@
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/10/05/IE条件注释/" itemprop="url">
+                  IE条件注释
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-05T17:13:39+08:00" content="2016-10-05">
+              2016-10-05
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!--[if !IE]&gt;除IE外都可识别&lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE]&gt; 所有的IE可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 5.0]&gt; 只有IE5.0可以识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 5]&gt; 仅IE5.0与IE5.5可以识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if gt IE 5.0]&gt; IE5.0以及IE5.0以上版本都可以识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 6]&gt; 仅IE6可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if lt IE 6]&gt; IE6以及IE6以下版本可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if gte IE 6]&gt; IE6以及IE6以上版本可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if IE 7]&gt; 仅IE7可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if lt IE 7]&gt; IE7以及IE7以下版本可识别 &lt;![endif]--&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--[if gte IE 7]&gt; IE7以及IE7以上版本可识别 &lt;![endif]--&gt;</span></div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/30/Angular源码解析4——作用域上代码的执行/" itemprop="url">
+                  Angular源码解析4——作用域上代码的执行
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-30T19:49:06+08:00" content="2016-09-30">
+              2016-09-30
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="在作用域中执行代码"><a href="#在作用域中执行代码" class="headerlink" title="在作用域中执行代码"></a>在作用域中执行代码</h2><ol>
+<li><p>$eval</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">*$eval接收2个参数</div><div class="line">*fn需要在作用中执行的函数</div><div class="line">*（可选）传入的参数</div><div class="line">**/</div><div class="line">Scope.prototype.$<span class="built_in">eval</span>=<span class="function"><span class="keyword">function</span> (<span class="params">fn,locals</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> fn(<span class="keyword">this</span>,locals);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>$apply<br>有时候我们需要执行与Angular无关的方法（比如window.setInerval），但是这些方法改变了作用域中的数据，我们希望监听到这些变化，这时候我们需要通过$apply传入方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$apply=functin (fn) &#123;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.$<span class="built_in">eval</span>(fn);</div><div class="line">	&#125; <span class="keyword">finally</span> &#123;</div><div class="line">		<span class="comment">//$digest的执行放在finally中，以确保即使报错也会执行</span></div><div class="line">		<span class="keyword">this</span>.$digest();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>延迟执行的函数<br>在angular中我们可以用$apply传递一个计时器（setInterval）来实现延迟执行函数，也可以调用内部的$interval和$timeout。Angular中还有一种延迟执行的方法$evalAsync。</p>
+</li>
+</ol>
+<p>$evalAsync会将一个函数推入计划中。这个函数会在这次$digest或者下次$digest之前执行。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//在Scope中定义任务队列</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue=[];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义$evalAsync,传入需要延迟执行的函数</span></div><div class="line">Scope.prototype.$evalAsync=<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue.push(&#123;<span class="attr">scope</span>:<span class="keyword">this</span>,<span class="attr">expression</span>:fn&#125;);</div><div class="line">&#125; </div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> time=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		<span class="keyword">while</span> (<span class="keyword">this</span>.$$asyncQueue.length) &#123;</div><div class="line">			<span class="keyword">var</span> task=<span class="keyword">this</span>.$$asyncQueue.shift();</div><div class="line">			<span class="keyword">this</span>.$<span class="built_in">eval</span>(task.expression);</div><div class="line">		&#125;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp;!(time--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'已到10次脏值查询'</span></div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/27/Angular源码解析3——深度比较、深度克隆/" itemprop="url">
+                  Angular源码解析3——深度比较、深度克隆
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-27T12:29:56+08:00" content="2016-09-27">
+              2016-09-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="为什么需要深度比较、深度克隆"><a href="#为什么需要深度比较、深度克隆" class="headerlink" title="为什么需要深度比较、深度克隆"></a>为什么需要深度比较、深度克隆</h2><p>详细内容见上一篇。简单的说是为了比较引用类型值（对象、数组）内部数据的变化以触发脏值查询。</p>
+<p>##深度比较 源码实现<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">equals</span>(<span class="params">o1, o2</span>) </span>&#123;</div><div class="line">	<span class="comment">//对基本类型值的比较</span></div><div class="line">  <span class="keyword">if</span> (o1 === o2) <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">  <span class="keyword">if</span> (o1 === <span class="literal">null</span> || o2 === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  <span class="comment">//对NaN特殊处理，使得NaN === NaN</span></div><div class="line">  <span class="keyword">if</span> (o1 !== o1 &amp;&amp; o2 !== o2) <span class="keyword">return</span> <span class="literal">true</span>; </div><div class="line"></div><div class="line">  <span class="keyword">var</span> t1 = <span class="keyword">typeof</span> o1, t2 = <span class="keyword">typeof</span> o2, length, key, keySet;</div><div class="line">  <span class="comment">//如果比较的值都是对象</span></div><div class="line">  <span class="keyword">if</span> (t1 == t2 &amp;&amp; t1 == <span class="string">'object'</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (isArray(o1)) &#123;</div><div class="line">      <span class="keyword">if</span> (!isArray(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      <span class="comment">//都是数组，遍历数组每一项</span></div><div class="line">      <span class="keyword">if</span> ((length = o1.length) == o2.length) &#123;</div><div class="line">        <span class="keyword">for</span> (key = <span class="number">0</span>; key &lt; length; key++) &#123;</div><div class="line">          <span class="keyword">if</span> (!equals(o1[key], o2[key])) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDate(o1)) &#123;</div><div class="line">      <span class="keyword">if</span> (!isDate(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      <span class="keyword">return</span> equals(o1.getTime(), o2.getTime());</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isRegExp(o1)) &#123;</div><div class="line">      <span class="keyword">if</span> (!isRegExp(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      <span class="keyword">return</span> o1.toString() == o2.toString();</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">if</span> (isScope(o1) || isScope(o2) || isWindow(o1) || isWindow(o2) ||</div><div class="line">        isArray(o2) || isDate(o2) || isRegExp(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      keySet = createMap();</div><div class="line">      <span class="keyword">for</span> (key <span class="keyword">in</span> o1) &#123;</div><div class="line">        <span class="keyword">if</span> (key.charAt(<span class="number">0</span>) === <span class="string">'$'</span> || isFunction(o1[key])) <span class="keyword">continue</span>;</div><div class="line">        <span class="keyword">if</span> (!equals(o1[key], o2[key])) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        keySet[key] = <span class="literal">true</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">for</span> (key <span class="keyword">in</span> o2) &#123;</div><div class="line">        <span class="keyword">if</span> (!(key <span class="keyword">in</span> keySet) &amp;&amp;</div><div class="line">            key.charAt(<span class="number">0</span>) !== <span class="string">'$'</span> &amp;&amp;</div><div class="line">            isDefined(o2[key]) &amp;&amp;</div><div class="line">            !isFunction(o2[key])) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="深度克隆-源码实现"><a href="#深度克隆-源码实现" class="headerlink" title="深度克隆 源码实现"></a>深度克隆 源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">clone</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> buf;</div><div class="line">	<span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="built_in">Array</span>) &#123;</div><div class="line">		buf=[];</div><div class="line">		<span class="keyword">var</span> i=obj.length;</div><div class="line">		<span class="keyword">while</span> (i--) &#123;</div><div class="line">			buf[i]=clone(obj[i]);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> buf;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="built_in">Object</span>) &#123;</div><div class="line">		buf=&#123;&#125;;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> obj) &#123;</div><div class="line">			buf[k]=clone(obj[k]);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> buf;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">return</span> obj;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/27/Angular源码解析2-——作用域、脏值查询2/" itemprop="url">
+                  Angular源码解析2--——脏值查询完善
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-27T10:00:36+08:00" content="2016-09-27">
+              2016-09-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="上一篇提到的问题"><a href="#上一篇提到的问题" class="headerlink" title="上一篇提到的问题"></a>上一篇提到的问题</h2><p>上一篇提到了由于监听函数第三个传参是作用域本身，所以我们可以在监听函数内部改变作用域的值。但是这么做的话，会有另一个监控器来监控值的变化。但是在一次$digest中就无法检测值的变化。所以我们需要实现一种机制——$digest会持续遍历所有监听器，知道他们停止变化。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>我们将$digest改名为$$digestOnce。意思是每调用他一次就会遍历所有监听器一次。他会返回一个状态，表示这次遍历该数据是否发生变化。我们再用一个外层函数包裹$$digestOnce，一旦发现这个状态为true，就再执行一次$$$digestOnce。直到状态不再为true。这表示数据不再发生变化。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$$digestOnce=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> that=<span class="keyword">this</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">watch</span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> oldVal=watch.last;</div><div class="line">		<span class="keyword">var</span> newVal=watch.watchFn(that);</div><div class="line">		<span class="keyword">if</span> (oldVal!=newVal) &#123;</div><div class="line">			watch.listenerFn(newVal,oldVal,that);</div><div class="line">			dirty=<span class="literal">true</span>;</div><div class="line">		&#125;</div><div class="line">		watch.last=newVal;</div><div class="line">	&#125;)</div><div class="line">	<span class="keyword">return</span> dirty;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">	&#125; <span class="keyword">while</span> (dirty)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="重要提示"><a href="#重要提示" class="headerlink" title="重要提示"></a>重要提示</h2><ul>
+<li>其实Angular的源码中并不存在$$digestOnce，而是将其直接封装在$digest中，这里只是为了结构的清晰。</li>
+<li>通过这里我们可以看出，在一次$digest中，监听器可能会执行多次。</li>
+</ul>
+<h2 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h2><p>假设我们有两个监听器，监听器a监听Scope.a的值并且他的监听函数会改变Scope.b的值。监听器b监听Scope.b的值并且他的监听函数会改变Scope.a的值。这样互相监听，最终会导致双方的值永远无法稳定，$digest会无限调用，这肯定是需要被杜绝的。</p>
+<h2 id="应对"><a href="#应对" class="headerlink" title="应对"></a>应对</h2><p>对此，我们需要设定，当$digest执行一定次数以后，如果状态还是无法稳定，我们就宣布他的状态永远无法稳定，并抛出错误。为了性能考虑，Angular对这个次数的设定是10。</p>
+<h2 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> ttl=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp; !(ttl--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'10 digest iterations reached'</span>;</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="基于值的检测与基于地址的检测"><a href="#基于值的检测与基于地址的检测" class="headerlink" title="基于值的检测与基于地址的检测"></a>基于值的检测与基于地址的检测</h2><p>我们之前对比oldVal与newVal时，使用的是’===’操作符，这在检测基本值类型的数据时是完全没有问题的。当检测引用类型的值时比较的是引用的地址。但是有时候我们需要检测对象或数组内部数据的变更，这时候我们就需要基于值的检测，而不是基于地址的检测了。<br>由于基于值的检测时一项比较消耗性能（相对）的操作，所以我们应该提供一个可选参数，让使用者自己决定在什么时候开启（全等比较函数源码见下篇）。</p>
+<h2 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.porototype.$watch=<span class="function"><span class="keyword">function</span> (<span class="params">watchFn,listenerFn,valueEq</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;</div><div class="line">		<span class="attr">watchFn</span>:watchFn,</div><div class="line">		<span class="attr">listenerFn</span>:listenerFn,</div><div class="line">		<span class="comment">//这里通过两次取反，使得强制转换成布尔类型，如果未传递值undefined会被转换成false</span></div><div class="line">		valueEq:!!valueEq</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>基于值的检测意味着如果数据时对象或数组类型，脏值查询会遍历数据的每一项，如果数据存在嵌套的数组或对象，还会递归的按值进行比较。</p>
+<h2 id="另一个问题"><a href="#另一个问题" class="headerlink" title="另一个问题"></a>另一个问题</h2><p>这里我们的深度检测只发生在newVal与oldVal比较的时候。回忆下，我们的新值会保存在watch.last中。试想如果保存的是一个引用类型的值，那么同一个值通过watchFn取得的和watch.last取得的其实是同一个地址。也就是说watch.fn（旧值）的变化会实时表现在watch.last（新值）中。这样就无法检测到引用类型值的变化了。<br>所以我们保存在watch.last中的数据应该是一个值，而不是一个地址。也就是说我们需要深度克隆一份引用类型的值。（源码分析见下一篇）</p>
+<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$digestOnce = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> that  = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> dirty;</div><div class="line">  <span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">watch</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> newValue = watch.watchFn(that);</div><div class="line">    <span class="keyword">var</span> oldValue = watch.last;</div><div class="line">    <span class="keyword">if</span> (!that.$$areEqual(newValue, oldValue, watch.valueEq)) &#123;</div><div class="line">      watch.listenerFn(newValue, oldValue, that);</div><div class="line">      dirty = <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    watch.last = (watch.valueEq ? <span class="keyword">this</span>.$$cloneDeep(newValue) : newValue);</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> dirty;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="最后一点小问题"><a href="#最后一点小问题" class="headerlink" title="最后一点小问题"></a>最后一点小问题</h2><p>在原生js中NaN!==NaN。如果我们的数据中包含NaN，在进行引用类型检测时（值类型的检测我们封装的$$areEqual已经帮我们处理了）由于NaN!==NaN那么这个值会始终是脏的。所以我们需要手动处理他。</p>
+<h2 id="源码实现-1"><a href="#源码实现-1" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$areEqual = <span class="function"><span class="keyword">function</span>(<span class="params">newValue, oldValue, valueEq</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (valueEq) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.$$isEqual(newValue, oldValue);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> newValue === oldValue ||</div><div class="line">      (<span class="keyword">typeof</span> newValue === <span class="string">'number'</span> &amp;&amp; <span class="keyword">typeof</span> oldValue === <span class="string">'number'</span> &amp;&amp;</div><div class="line">       <span class="built_in">isNaN</span>(newValue) &amp;&amp; <span class="built_in">isNaN</span>(oldValue));</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1281,7 +1295,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
