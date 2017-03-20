@@ -1173,7 +1173,7 @@
 <p> 缺点:如果是频繁的发送数据，浏览器会一直处于加载的状态</p>
 </li>
 <li><p>iframe流<br> 利用iframe接收的服务器响应中如果包含脚本就会执行的原理,用iframe标签的src属性向服务器发起请求。</p>
-<h3 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//客户端网页</span></div><div class="line">&lt;iframe src=<span class="string">"http://localhost:1234/time"</span> frameborder=<span class="string">"0"</span>&gt;&lt;/iframe&gt;</div><div class="line"></div><div class="line"><span class="comment">//服务端</span></div><div class="line">app.get(<span class="string">'/time'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">req,res</span>) </span>&#123;</div><div class="line">    setInterval(<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="comment">//如果调用end、send会结束响应, write方法不会，能实现持续写入</span></div><div class="line">        res.write(<span class="string">`&lt;script&gt;</span></div><div class="line">        	//由于iframe会形成自己的document，所以要用parent.document取得页面</div><div class="line">           parent.document.querySelector('#time').innerHTML= new Date().toLocaleString();</div><div class="line">        &lt;/script&gt;`);</div><div class="line">    &#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//客户端网页</span></div><div class="line">&lt;iframe src=<span class="string">"http://localhost:1234/time"</span> frameborder=<span class="string">"0"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//服务端</span></div><div class="line">app.get(<span class="string">'/time'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">req,res</span>) </span>&#123;</div><div class="line">    setInterval(<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="comment">//如果调用end、send会结束响应, write方法不会，能实现持续写入</span></div><div class="line">        res.write(<span class="string">`&lt;script&gt;</span></div><div class="line">        	//由于iframe会形成自己的document，所以要用parent.document取得页面</div><div class="line">           parent.document.querySelector('#time').innerHTML= new Date().toLocaleString();</div><div class="line">        &lt;/script&gt;`);</div><div class="line">    &#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <h2 id="WebSocket的优势"><a href="#WebSocket的优势" class="headerlink" title="WebSocket的优势"></a>WebSocket的优势</h2><p>使用WebSocket，浏览器和服务器只需要要做一个握手的动作，然后，浏览器和服务器之间就形成了一条快速通道，两者之间就直接可以数据互相传送</p>
@@ -1365,13 +1365,6 @@
 
           
 
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
           
 
         </nav>
