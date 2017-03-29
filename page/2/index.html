@@ -238,6 +238,616 @@
             
               
                 
+                <a class="post-title-link" href="/2017/03/11/设计模式－－代理模式/" itemprop="url">
+                  设计模式－－代理模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-11T10:57:56+08:00" content="2017-03-11">
+              2017-03-11
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="代理模式分类"><a href="#代理模式分类" class="headerlink" title="代理模式分类"></a>代理模式分类</h3><ol>
+<li>保护代理<br>控制不同权限对象对目标对象对访问。</li>
+<li>虚拟代理<br>把一些开销很大对对象延迟到真正需要他对时候才去创建。下面用虚拟代理实现图片预加载：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myImage=(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> imgNode=<span class="built_in">document</span>.createNode(<span class="string">'img'</span>);</div><div class="line">  <span class="built_in">document</span>.body.appendChild(imgNode);</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">      <span class="attr">setSrc</span>: <span class="function"><span class="keyword">function</span>(<span class="params">src</span>) </span>&#123;</div><div class="line">        imgNode.src=src;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)()</div><div class="line"></div><div class="line"><span class="keyword">var</span> proxyImage=(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> img=<span class="keyword">new</span> Image;</div><div class="line">  img.onload=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    myImage.setSrc(<span class="keyword">this</span>.src);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">      <span class="attr">setSrc</span>: <span class="function"><span class="keyword">function</span>(<span class="params">src</span>) </span>&#123;</div><div class="line">        myImage.setSrc(<span class="string">'file://loading.jpg'</span>);</div><div class="line">        img.src=src;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)()</div><div class="line"></div><div class="line">proxyImage.setSrc(<span class="string">'src.jpg'</span>);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h3><ol>
+<li>用户可以放心的请求代理，只关心能否得到想要的结果。</li>
+<li>在任何使用本体的地方都可以替换成使用代理。</li>
+</ol>
+<p>缓存代理<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//用代理模式实现缓存</span></div><div class="line"></div><div class="line"><span class="comment">//先实现一个目标函数 这里是求阶乘</span></div><div class="line"><span class="keyword">var</span> mult=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'开始计算阶乘'</span>);</div><div class="line">  <span class="keyword">var</span> a=<span class="number">1</span>;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>,cur=<span class="built_in">arguments</span>[i];i&lt;<span class="built_in">arguments</span>.length;i++) &#123;</div><div class="line">      a=a*cur;</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'输出：'</span>,a);</div><div class="line">  <span class="keyword">return</span> a;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//缓存结果的代理 调用代理即可</span></div><div class="line"><span class="keyword">var</span> proxyMult=(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> cache=&#123;&#125;;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> args=<span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>,<span class="string">','</span>);</div><div class="line">    <span class="keyword">if</span> (args <span class="keyword">in</span> cache) &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'输出：'</span>,cache[args]);</div><div class="line">        <span class="keyword">return</span> cache[args];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> (cache[args]=mult.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>));</div><div class="line">  &#125;</div><div class="line">&#125;)()</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//这里我们可以更进一步，创建一个 缓存代理的工厂,就可以接受不同的运算规则了</span></div><div class="line"><span class="keyword">var</span> createProxyfactory=<span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> cache=&#123;&#125;;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> args=<span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>,<span class="string">','</span>);</div><div class="line">    <span class="keyword">if</span> (args <span class="keyword">in</span> cache) &#123;</div><div class="line">        <span class="keyword">return</span> cache[args];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> cache[args]=fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/09/设计模式－－策略模式/" itemprop="url">
+                  设计模式－－策略模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-09T11:33:12+08:00" content="2017-03-09">
+              2017-03-09
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成："><a href="#策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：" class="headerlink" title="策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成："></a>策略模式定义一系列的算法，把他们一个个封装起来，并且使他们可以相互替换。至少由两部分组成：</h3><p>1.一组策略类，策略类封装了具体的算法，并负责具体的计算过程。<br>2.环境类context。context接受客户请求，把请求委托给一个策略类。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/09/设计模式－－惰性单例模式/" itemprop="url">
+                  设计模式－－惰性单例模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-09T10:56:20+08:00" content="2017-03-09">
+              2017-03-09
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="单例在ng里即service的实现。"><a href="#单例在ng里即service的实现。" class="headerlink" title="单例在ng里即service的实现。"></a>单例在ng里即service的实现。</h3><h3 id="创建一个通用的惰性单例模式，满足："><a href="#创建一个通用的惰性单例模式，满足：" class="headerlink" title="创建一个通用的惰性单例模式，满足："></a>创建一个通用的惰性单例模式，满足：</h3><ol>
+<li>只有一个实例</li>
+<li>提供全局访问</li>
+<li>符合单一职责原则<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//通用对象 只会返回一个实例</span></div><div class="line"><span class="keyword">var</span> getSingle=<span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> result;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> result || (result=fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>));</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/05/angular源码分析5-－provider实现原理/" itemprop="url">
+                  angular源码分析5-－provider实现原理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-05T12:16:24+08:00" content="2017-03-05">
+              2017-03-05
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="原生angular中的provider和-injector主要作用是："><a href="#原生angular中的provider和-injector主要作用是：" class="headerlink" title="原生angular中的provider和$injector主要作用是："></a>原生angular中的provider和$injector主要作用是：</h3><ol>
+<li>注册组件（controller directive service）</li>
+<li>解决组件间的依赖关系</li>
+<li>初始化组件<h3 id="接下来提供简单的实现"><a href="#接下来提供简单的实现" class="headerlink" title="接下来提供简单的实现"></a>接下来提供简单的实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Provider=&#123;</div><div class="line"></div><div class="line">    <span class="comment">//保存所有组件对应的工厂函数</span></div><div class="line">    _providers:&#123;&#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//注册组件</span></div><div class="line">    _register: <span class="function"><span class="keyword">function</span>(<span class="params">name,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">this</span>._providers[name]=fn;</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//要来注册service</span></div><div class="line">    service: <span class="function"><span class="keyword">function</span>(<span class="params">name,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>._register(name+Provider.SERVICE_SUFFIX,fn);</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//要来注册directive　</span></div><div class="line">    directive: <span class="function"><span class="keyword">function</span>(<span class="params">name,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>._register(name+Provider.DIRECTIVE_SUFFIX,fn);</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//要来注册controller</span></div><div class="line">    <span class="comment">//初始化controller缓存里保存的是工厂函数，可以多次初始化同一个controller</span></div><div class="line">    controller: <span class="function"><span class="keyword">function</span>(<span class="params">name,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>._register(name,<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> fn;</div><div class="line">      &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖"><a href="#上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖" class="headerlink" title="上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖"></a>上面实现了3种组件的注册过程，接下来实现组件初始化及解决依赖</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Provider = &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    </div><div class="line">   <span class="comment">//缓存初始化后的组件</span></div><div class="line">    _cache: &#123;&#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//返回一个数组 数组为当前函数工厂函数的传参，也就是依赖组件的名称</span></div><div class="line">    annotate: <span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> res = fn.toString()</div><div class="line">            .replace(<span class="regexp">/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg</span>, <span class="string">''</span>)</div><div class="line">            .match(<span class="regexp">/\((.*?)\)/</span>);</div><div class="line">        <span class="keyword">if</span> (res &amp;&amp; res[<span class="number">1</span>]) &#123;</div><div class="line">            <span class="keyword">return</span> res[<span class="number">1</span>].split(<span class="string">','</span>).map(<span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">                <span class="keyword">return</span> d.trim();</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> [];</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//接下来两个函数将互相调用，调用组件的初始化工厂函数，并循环遍历解决依赖（以及依赖的依赖）</span></div><div class="line">    <span class="comment">//解决依赖的意思就是将依赖组件的名称转换成对应组件的工厂函数，传入。</span></div><div class="line">    </div><div class="line">    <span class="comment">//传入组件名，locals为所有本地依赖的对象集合，返回初始化后的组件</span></div><div class="line">    get: <span class="function"><span class="keyword">function</span>(<span class="params">name,locals</span>) </span>&#123;</div><div class="line">    </div><div class="line">      <span class="comment">//如果已有缓存的初始化工厂函数，返回他</span></div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>._cache[name]) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="keyword">this</span>._cache[name];</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">var</span> provider=<span class="keyword">this</span>._providers[name];</div><div class="line">      <span class="keyword">if</span> (!provider || <span class="keyword">typeof</span> provider !==<span class="string">'function'</span>) &#123;<span class="keyword">return</span>;&#125;</div><div class="line">      <span class="keyword">return</span> (<span class="keyword">this</span>._cache[name] = <span class="keyword">this</span>.invoke(provider,locals));</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//用于初始化一个组件。如果该组件依赖的组件还未初始化，则会先初始化依赖的组件</span></div><div class="line">    invoke: <span class="function"><span class="keyword">function</span>(<span class="params">fn,locals</span>) </span>&#123;</div><div class="line">      locals= locals || &#123;&#125;;</div><div class="line">      </div><div class="line">        <span class="comment">//通过依赖名找出依赖的工厂函数</span></div><div class="line">      <span class="keyword">var</span> deps=<span class="keyword">this</span>.annotate(fn).map(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> locals[item] || <span class="keyword">this</span>.get(item,locals);</div><div class="line">      &#125;,<span class="keyword">this</span>);</div><div class="line">      <span class="keyword">return</span> fn.apply(<span class="literal">null</span>,deps);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/04/构造带记忆功能的函数/" itemprop="url">
+                  构造带记忆功能的函数
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-04T15:01:09+08:00" content="2017-03-04">
+              2017-03-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="构造一个带有之前结果缓存的函数，减少不必要的计算"><a href="#构造一个带有之前结果缓存的函数，减少不必要的计算" class="headerlink" title="构造一个带有之前结果缓存的函数，减少不必要的计算"></a>构造一个带有之前结果缓存的函数，减少不必要的计算</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">传入 初始缓存记忆的数组memo 和计算公式formula</div><div class="line">返回 一个管理memo存储和在需要时调用formula的函数recur</div><div class="line">*/</div><div class="line"><span class="keyword">var</span> memoizer = <span class="function"><span class="keyword">function</span>(<span class="params">memo,formula</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> recur=<span class="function"><span class="keyword">function</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> result=memo[n];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> result !==<span class="string">'function'</span>) &#123;</div><div class="line">        result=formula(recur,n);</div><div class="line">        memo[n]=result;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">  &#125;;</div><div class="line">  <span class="keyword">return</span> recur;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="用我们的memoizer函数定义fibonacci函数"><a href="#用我们的memoizer函数定义fibonacci函数" class="headerlink" title="用我们的memoizer函数定义fibonacci函数"></a>用我们的memoizer函数定义fibonacci函数</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fibonacci=memoizer([<span class="number">0</span>,<span class="number">1</span>],<span class="function"><span class="keyword">function</span>(<span class="params">recur,n</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> recur(n<span class="number">-1</span>)+recur(n<span class="number">-2</span>);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="用我们的memoizer函数定义阶乘函数"><a href="#用我们的memoizer函数定义阶乘函数" class="headerlink" title="用我们的memoizer函数定义阶乘函数"></a>用我们的memoizer函数定义阶乘函数</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fibonacci=memoizer([<span class="number">1</span>,<span class="number">1</span>],<span class="function"><span class="keyword">function</span>(<span class="params">recur,n</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> n*recur(n<span class="number">-1</span>);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/10/08/DOM盒模型的各种width和height属性/" itemprop="url">
+                  DOM盒模型的各种width和height属性
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-08T13:17:55+08:00" content="2016-10-08">
+              2016-10-08
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="client系列（和内容是否溢出盒子无关）"><a href="#client系列（和内容是否溢出盒子无关）" class="headerlink" title="client系列（和内容是否溢出盒子无关）"></a>client系列（和内容是否溢出盒子无关）</h2><ol>
+<li>clientWidth:内容的宽度+左右padding</li>
+<li>clientHeight:内容的高度+上下padding</li>
+<li>clientLeft:左边框的宽度（border-left-width）</li>
+<li>clientTop:上边框的宽度（border-top-width）</li>
+</ol>
+<h2 id="offset系列（和内容是否溢出盒子无关）"><a href="#offset系列（和内容是否溢出盒子无关）" class="headerlink" title="offset系列（和内容是否溢出盒子无关）"></a>offset系列（和内容是否溢出盒子无关）</h2><ol>
+<li>offsetWidth:clientWidth+左右边框</li>
+<li>offsetHeight:clientHeight+上下边框</li>
+<li>offsetLeft:子元素的外边框相对于父定位元素（没有则指向body）的内边框的偏移量</li>
+<li>offsetTop:子元素的外边框相对于父定位元素（没有则指向body）的内边框的偏移量</li>
+<li>offsetParent: 指向子元素的定位父元素，如果没有就指向body，body指向null。</li>
+</ol>
+<h2 id="scroll系列"><a href="#scroll系列" class="headerlink" title="scroll系列"></a>scroll系列</h2><ol>
+<li>scrollWidth:当内容未溢出容器时等于clientWidth.当溢出时是真实宽度+左右padding</li>
+<li>scrollHeight:当内容未溢出容器时等于clientHeight。当溢出时是真实高度+上下padding</li>
+<li>scrollTop:滚动条卷去的高度</li>
+<li>scrollLeft:滚动条卷去的宽度<br>注：如果设置了overflow:hidden;各浏览器结果不同。</li>
+</ol>
+<h2 id="取值问题"><a href="#取值问题" class="headerlink" title="取值问题"></a>取值问题</h2><p>我们通过这13个属性获取的都是近似的整数。</p>
+<h2 id="浏览器的盒模型"><a href="#浏览器的盒模型" class="headerlink" title="浏览器的盒模型"></a>浏览器的盒模型</h2><ol>
+<li>对于浏览器而言，clientWidth/clientHeight是当前浏览器可视窗口的宽高（一屏幕的宽高）</li>
+<li>对于浏览器而言，scrollWidth/scrollHeight是当前页面的真实宽高（所有屏加起来宽高的近似值）</li>
+</ol>
+<h2 id="浏览器盒模型属性获取-设置方法的封装"><a href="#浏览器盒模型属性获取-设置方法的封装" class="headerlink" title="浏览器盒模型属性获取/设置方法的封装"></a>浏览器盒模型属性获取/设置方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">win</span> (<span class="params">attr,value</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> value !==<span class="string">'undefined'</span>) &#123;</div><div class="line">		<span class="keyword">return</span> <span class="built_in">document</span>.documentElement[attr] ||<span class="built_in">document</span>.body[attr];</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">document</span>.documentElement[attr]=value;</div><div class="line">	<span class="built_in">document</span>.body[attr]=value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="获取某元素相对浏览器的偏移量-方法的封装"><a href="#获取某元素相对浏览器的偏移量-方法的封装" class="headerlink" title="获取某元素相对浏览器的偏移量 方法的封装"></a>获取某元素相对浏览器的偏移量 方法的封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">offset</span> (<span class="params">curEle</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> l=curEle.offsetLeft;</div><div class="line">	<span class="keyword">var</span> t=curEle.offsetTop;</div><div class="line">	<span class="keyword">var</span> par=curEle.offsetParent;</div><div class="line">	<span class="comment">//一层层定位祖先向上累加</span></div><div class="line">	<span class="keyword">while</span> (par) &#123;</div><div class="line">		<span class="keyword">if</span> (<span class="built_in">window</span>.navigator.userAgent.indexOf(<span class="string">'MSIE 8.0'</span>)!==<span class="number">-1</span>) &#123;</div><div class="line">				l+=par.clientLeft;</div><div class="line">				t+=par.clientTop;</div><div class="line">		&#125;</div><div class="line">		l+=par.offsetLeft;</div><div class="line">		t+=par.offsetTop;</div><div class="line">		par=par.offsetParent;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> &#123;<span class="attr">left</span>:l,<span class="attr">top</span>:t&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="计算后的样式值的获取"><a href="#计算后的样式值的获取" class="headerlink" title="计算后的样式值的获取"></a>计算后的样式值的获取</h2><p>一般我们用 元素.style.样式来获取元素的样式。这样获取到的是元素的行内样式。如果想获取元素经过计算后的样式需要使用window.getComputedStyle(ele,null);<br>经过浏览器计算过的样式是指 只要当前标签可以在浏览器中呈现出来，那么他所有样式都是经过浏览器计算过的，哪怕那些样式你没有写也可以获取到。<br>window.getComputedStyle(box,null)接收两个参数。 box指要获取样式的元素，null指伪类。</p>
+<h2 id="获取计算后样式的-方法封装"><a href="#获取计算后样式的-方法封装" class="headerlink" title="获取计算后样式的 方法封装"></a>获取计算后样式的 方法封装</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCss</span> (<span class="params">curEle,attr</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> val=<span class="literal">null</span>;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		val=<span class="built_in">window</span>.getComputedStyle(curEle,<span class="literal">null</span>)[attr];</div><div class="line">	&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">		val=curEle.currentStyle[attr];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> val;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/06/移动端事件基础/" itemprop="url">
                   移动端事件基础
                 </a>
@@ -621,698 +1231,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/27/Angular源码解析2-——作用域、脏值查询2/" itemprop="url">
-                  Angular源码解析2--——脏值查询完善
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-27T10:00:36+08:00" content="2016-09-27">
-              2016-09-27
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="上一篇提到的问题"><a href="#上一篇提到的问题" class="headerlink" title="上一篇提到的问题"></a>上一篇提到的问题</h2><p>上一篇提到了由于监听函数第三个传参是作用域本身，所以我们可以在监听函数内部改变作用域的值。但是这么做的话，会有另一个监控器来监控值的变化。但是在一次$digest中就无法检测值的变化。所以我们需要实现一种机制——$digest会持续遍历所有监听器，知道他们停止变化。</p>
-<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>我们将$digest改名为$$digestOnce。意思是每调用他一次就会遍历所有监听器一次。他会返回一个状态，表示这次遍历该数据是否发生变化。我们再用一个外层函数包裹$$digestOnce，一旦发现这个状态为true，就再执行一次$$$digestOnce。直到状态不再为true。这表示数据不再发生变化。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$$digestOnce=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> that=<span class="keyword">this</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">watch</span>)</span>&#123;</div><div class="line">		<span class="keyword">var</span> oldVal=watch.last;</div><div class="line">		<span class="keyword">var</span> newVal=watch.watchFn(that);</div><div class="line">		<span class="keyword">if</span> (oldVal!=newVal) &#123;</div><div class="line">			watch.listenerFn(newVal,oldVal,that);</div><div class="line">			dirty=<span class="literal">true</span>;</div><div class="line">		&#125;</div><div class="line">		watch.last=newVal;</div><div class="line">	&#125;)</div><div class="line">	<span class="keyword">return</span> dirty;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">	&#125; <span class="keyword">while</span> (dirty)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="重要提示"><a href="#重要提示" class="headerlink" title="重要提示"></a>重要提示</h2><ul>
-<li>其实Angular的源码中并不存在$$digestOnce，而是将其直接封装在$digest中，这里只是为了结构的清晰。</li>
-<li>通过这里我们可以看出，在一次$digest中，监听器可能会执行多次。</li>
-</ul>
-<h2 id="漏洞"><a href="#漏洞" class="headerlink" title="漏洞"></a>漏洞</h2><p>假设我们有两个监听器，监听器a监听Scope.a的值并且他的监听函数会改变Scope.b的值。监听器b监听Scope.b的值并且他的监听函数会改变Scope.a的值。这样互相监听，最终会导致双方的值永远无法稳定，$digest会无限调用，这肯定是需要被杜绝的。</p>
-<h2 id="应对"><a href="#应对" class="headerlink" title="应对"></a>应对</h2><p>对此，我们需要设定，当$digest执行一定次数以后，如果状态还是无法稳定，我们就宣布他的状态永远无法稳定，并抛出错误。为了性能考虑，Angular对这个次数的设定是10。</p>
-<h2 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> ttl=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp; !(ttl--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'10 digest iterations reached'</span>;</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="基于值的检测与基于地址的检测"><a href="#基于值的检测与基于地址的检测" class="headerlink" title="基于值的检测与基于地址的检测"></a>基于值的检测与基于地址的检测</h2><p>我们之前对比oldVal与newVal时，使用的是’===’操作符，这在检测基本值类型的数据时是完全没有问题的。当检测引用类型的值时比较的是引用的地址。但是有时候我们需要检测对象或数组内部数据的变更，这时候我们就需要基于值的检测，而不是基于地址的检测了。<br>由于基于值的检测时一项比较消耗性能（相对）的操作，所以我们应该提供一个可选参数，让使用者自己决定在什么时候开启（全等比较函数源码见下篇）。</p>
-<h2 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.porototype.$watch=<span class="function"><span class="keyword">function</span> (<span class="params">watchFn,listenerFn,valueEq</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;</div><div class="line">		<span class="attr">watchFn</span>:watchFn,</div><div class="line">		<span class="attr">listenerFn</span>:listenerFn,</div><div class="line">		<span class="comment">//这里通过两次取反，使得强制转换成布尔类型，如果未传递值undefined会被转换成false</span></div><div class="line">		valueEq:!!valueEq</div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>基于值的检测意味着如果数据时对象或数组类型，脏值查询会遍历数据的每一项，如果数据存在嵌套的数组或对象，还会递归的按值进行比较。</p>
-<h2 id="另一个问题"><a href="#另一个问题" class="headerlink" title="另一个问题"></a>另一个问题</h2><p>这里我们的深度检测只发生在newVal与oldVal比较的时候。回忆下，我们的新值会保存在watch.last中。试想如果保存的是一个引用类型的值，那么同一个值通过watchFn取得的和watch.last取得的其实是同一个地址。也就是说watch.fn（旧值）的变化会实时表现在watch.last（新值）中。这样就无法检测到引用类型值的变化了。<br>所以我们保存在watch.last中的数据应该是一个值，而不是一个地址。也就是说我们需要深度克隆一份引用类型的值。（源码分析见下一篇）</p>
-<h2 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$digestOnce = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> that  = <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> dirty;</div><div class="line">  <span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">watch</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> newValue = watch.watchFn(that);</div><div class="line">    <span class="keyword">var</span> oldValue = watch.last;</div><div class="line">    <span class="keyword">if</span> (!that.$$areEqual(newValue, oldValue, watch.valueEq)) &#123;</div><div class="line">      watch.listenerFn(newValue, oldValue, that);</div><div class="line">      dirty = <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    watch.last = (watch.valueEq ? <span class="keyword">this</span>.$$cloneDeep(newValue) : newValue);</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> dirty;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="最后一点小问题"><a href="#最后一点小问题" class="headerlink" title="最后一点小问题"></a>最后一点小问题</h2><p>在原生js中NaN!==NaN。如果我们的数据中包含NaN，在进行引用类型检测时（值类型的检测我们封装的$$areEqual已经帮我们处理了）由于NaN!==NaN那么这个值会始终是脏的。所以我们需要手动处理他。</p>
-<h2 id="源码实现-1"><a href="#源码实现-1" class="headerlink" title="源码实现"></a>源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$$areEqual = <span class="function"><span class="keyword">function</span>(<span class="params">newValue, oldValue, valueEq</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (valueEq) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.$$isEqual(newValue, oldValue);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> newValue === oldValue ||</div><div class="line">      (<span class="keyword">typeof</span> newValue === <span class="string">'number'</span> &amp;&amp; <span class="keyword">typeof</span> oldValue === <span class="string">'number'</span> &amp;&amp;</div><div class="line">       <span class="built_in">isNaN</span>(newValue) &amp;&amp; <span class="built_in">isNaN</span>(oldValue));</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/22/angular——脏值查询原理/" itemprop="url">
-                  Angular源码解析1——脏值查询的基本原理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-22T18:20:11+08:00" content="2016-09-22">
-              2016-09-22
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="数据双向绑定"><a href="#数据双向绑定" class="headerlink" title="数据双向绑定"></a>数据双向绑定</h2><p>在VUE中，通过ES5提供的getter和setter实现单向数据流。而在Angular中通过所谓的脏值查询实现了双向数据绑定，即View层和ViewModel层的双向数据流。具体是如何做到的呢。</p>
-<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>首先我们要了解订阅-发布模式（原理见我的另一篇博文<a href="https://betasu.github.io/2016/09/06/node%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E2%80%94%E2%80%94EVENT/">EVENT事件库的原理</a>）。Angular的脏值查询在此基础上实现。<br>这里我们先构建作用域构造函数，并设置事件池<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>数据变动的检测基于$scope作用域两个内置方法$watch和$digest。$watch类似事件库里的on方法，用于在事件池（在Angular中是作用域中的$$watchers属性）中存放事件名和对应回调函数。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$watch=<span class="function"><span class="keyword">function</span>  (<span class="params">watchFn,listenerFn</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> watcher=&#123;<span class="attr">watchFn</span>:watchFn,<span class="attr">listenerFn</span>:listenerFn&#125;;</div><div class="line">	<span class="keyword">this</span>.$$watchers.push(watcher);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<ul>
-<li>watchFn 为监控函数，返回所监控的数据的值</li>
-<li>listenerFn 为监听函数，当数据发生变化后作出行为<br>一个监控name值的简单监控函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//监控作用域中name属性的值</span></div><div class="line"><span class="function"><span class="keyword">function</span> (<span class="params">scope</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> scope.name;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>$digest类似事件库中的emit方法，用来执行所在作用域中事件池（$$watchers数组）中保存的方法对应的回调函数（即数据的监听函数），并把执行后新的值保存在$watch中。这样我们再次调用$digest，就能比较新值与旧值的变化。<br>类似这样<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> self=<span class="keyword">this</span>;</div><div class="line">	<span class="keyword">this</span>.$$watchers.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">watcher</span>) </span>&#123;</div><div class="line">		<span class="keyword">var</span> newVal=watcher.watchFn(self);</div><div class="line">		<span class="keyword">var</span> oldVal=watcher.last;</div><div class="line">		<span class="keyword">if</span> (newVal!==oldVal) &#123;</div><div class="line">			<span class="comment">//如果发现值变化了就调用监听函数</span></div><div class="line">			watcher.listener(newVal,oldVal,self);</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//每次调用都会更新数据</span></div><div class="line">		watch.last=newVal;</div><div class="line">	&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这就是Angular作用域的本质：添加监听器，在$digest中运行他们。<br>这也揭示了Angular作用域的性能特性：</p>
-<ol>
-<li>在作用域中添加数据并不会带来性能折扣。Angular并不会遍历作用域的数据，只会遍历绑定在$$watchers中的事件。</li>
-<li>$digest会调用每个监控函数。因此，最好关注监听器的数量，还有每个独立的监控函数或者表达式的性能。</li>
-</ol>
-<h2 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h2><p>现在我们的脏值检查还存在很多问题，其中比较重要的一个应用场景咱们就没有实现——当监听函数自身也修改作用域上的属性。如果这个发生了，另外有个监听器在监控被修改的属性，有可能在同一个digest里面检测不到这个变动。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/20/express源码实现————重定向/" itemprop="url">
-                  express源码实现6————重定向
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-20T12:34:01+08:00" content="2016-09-20">
-              2016-09-20
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是重定向"><a href="#什么是重定向" class="headerlink" title="什么是重定向"></a>什么是重定向</h2><p>重定向就是指当访问某个路由时自动跳转到另一个路由（比如注册成功自动跳转到首页）。</p>
-<h2 id="重定向代码实现"><a href="#重定向代码实现" class="headerlink" title="重定向代码实现"></a>重定向代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//用中间件的形式实现</span></div><div class="line"><span class="built_in">module</span>.exports=<span class="function"><span class="keyword">function</span> (<span class="params">req,res,next</span>) </span>&#123;</div><div class="line">	res.redirect=<span class="function"><span class="keyword">function</span> (<span class="params">url</span>) </span>&#123;</div><div class="line">		<span class="comment">//设置http状态码为302（重定向）</span></div><div class="line">		res.statusCode=<span class="number">302</span>;</div><div class="line">		<span class="comment">//设置响应头,注意状态码与响应头缺一不可</span></div><div class="line">		res.setHeader(<span class="string">'Location'</span>,url);</div><div class="line">		res.end(<span class="string">''</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/16/socket-io入门/" itemprop="url">
-                  socket.io入门
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T14:59:50+08:00" content="2016-09-16">
-              2016-09-16
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是socket-io"><a href="#什么是socket-io" class="headerlink" title="什么是socket.io"></a>什么是socket.io</h2><p>一般说法是socket.io是一个websocket库。不过我更喜欢把他称为一个前后端交互库。因为他不仅封装了websocket的方法，在不支持websocket的浏览器中他会调用其他方法（如轮询，长轮询，iframe流）实现交互。</p>
-<h2 id="socket-io的特点"><a href="#socket-io的特点" class="headerlink" title="socket.io的特点"></a>socket.io的特点</h2><ol>
-<li>简易:封装了客户端与服务器端的api。</li>
-<li>跨平台:可以在自己喜欢的平台开发实时应用。</li>
-<li>兼容性:这点开篇已经说过。最低兼容到IE5.5.</li>
-</ol>
-<h2 id="简单的部署"><a href="#简单的部署" class="headerlink" title="简单的部署"></a>简单的部署</h2><p>服务器端<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//与express配合使用</span></div><div class="line"><span class="keyword">var</span> express=<span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> app=express();</div><div class="line"></div><div class="line"><span class="keyword">var</span> server=<span class="built_in">require</span>(<span class="string">'http'</span>).createServer(app);</div><div class="line"><span class="keyword">var</span> io=<span class="built_in">require</span>(<span class="string">'socket.io'</span>)(server);</div><div class="line">server.listen(<span class="number">1234</span>);</div><div class="line"></div><div class="line"><span class="comment">//检测客户端的连接</span></div><div class="line">io.on(<span class="string">'connection'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">socket</span>) </span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//检测连接来的客户端发送的信息</span></div><div class="line">	socket.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line"></div><div class="line">	&#125;)</div><div class="line">	</div><div class="line">	<span class="comment">//向socket客户端发送消息</span></div><div class="line">	socket.send(<span class="string">'123'</span>);</div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<p>客户端</p>
-<ul>
-<li>服务端运行后会在根目录动态生成socket.io的客户端js文件 客户端可以通过固定路径/socket.io/socket.io.js添加引用</li>
-<li>客户端加载socket.io文件后会得到一个全局的对象io</li>
-<li>connect方法可以接受一个url参数，url可以是socket服务的url，也可以是相对路径，如果省略则表示默认连接当前路径 创建index.html文件<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/socket.io/socket.io.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>&gt;</div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">	</div><div class="line">	<span class="keyword">var</span> socket=io.connect(<span class="string">'/'</span>);</div><div class="line">	<span class="comment">//监听是否连接成功</span></div><div class="line">	socket.on(<span class="string">'connect'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//连接成功后向服务器发送消息</span></div><div class="line">		socket.send(<span class="string">'123'</span>);</div><div class="line">	&#125;)</div><div class="line">	<span class="comment">//监听是否与服务器断开连接</span></div><div class="line">	socket.on(<span class="string">'disconnect'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">		</div><div class="line">	&#125;)</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="服务端事件汇总"><a href="#服务端事件汇总" class="headerlink" title="服务端事件汇总"></a>服务端事件汇总</h2><table>
-<thead>
-<tr>
-<th>事件名</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>connection</td>
-<td style="text-align:center">客户端成功连接到服务器</td>
-</tr>
-<tr>
-<td>message</td>
-<td style="text-align:center">接收到客户端发送的消息</td>
-</tr>
-<tr>
-<td>disconnect</td>
-<td style="text-align:center">客户端断开连接</td>
-</tr>
-<tr>
-<td>error</td>
-<td style="text-align:center">监听错误</td>
-</tr>
-</tbody>
-</table>
-<h2 id="客户端事件汇总"><a href="#客户端事件汇总" class="headerlink" title="客户端事件汇总"></a>客户端事件汇总</h2><table>
-<thead>
-<tr>
-<th>事件名</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>connect</td>
-<td style="text-align:center">成功连接到服务器</td>
-</tr>
-<tr>
-<td>message</td>
-<td style="text-align:center">接收到服务器发送的消息</td>
-</tr>
-<tr>
-<td>disconnect</td>
-<td style="text-align:center">客户端断开连接</td>
-</tr>
-<tr>
-<td>error</td>
-<td style="text-align:center">监听错误</td>
-</tr>
-</tbody>
-</table>
-<h2 id="划分房间"><a href="#划分房间" class="headerlink" title="划分房间"></a>划分房间</h2><p> 一个服务端可以有很多不同的房间，客户端可以进入不同的房间，在房间内通信不会影响到房间非该房间的客户端<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">socket.join(<span class="string">'chatroom'</span>);   <span class="comment">//客户端进入chatroom房间</span></div><div class="line">socket.leave(<span class="string">'chatroom'</span>);   <span class="comment">//客户端立刻chatroom房间</span></div></pre></td></tr></table></figure></p>
-<h2 id="全局广播"><a href="#全局广播" class="headerlink" title="全局广播"></a>全局广播</h2><p>服务端发送信息有send和emit方法 事件。其中send方法只有房间内的客户端能监听到。而emit（广播）所有客户端都可以监听到。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">io.emit(<span class="string">'message'</span>,<span class="string">'全局广播'</span>);</div></pre></td></tr></table></figure></p>
-<h2 id="send与emit比较"><a href="#send与emit比较" class="headerlink" title="send与emit比较"></a>send与emit比较</h2><p>send只是emit封装后的方法<br>emit源码如下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Socket.prototype.send = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//ES6方法，类数组转数组</span></div><div class="line">  <span class="keyword">var</span> args = toArray(<span class="built_in">arguments</span>);</div><div class="line">  <span class="comment">//推入事件名message</span></div><div class="line">  args.unshift(<span class="string">'message'</span>);</div><div class="line">  <span class="comment">//执行</span></div><div class="line">  <span class="keyword">this</span>.emit.apply(<span class="keyword">this</span>, args);</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/16/WebSocket入门/" itemprop="url">
-                  WebSocket入门
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-16T14:18:22+08:00" content="2016-09-16">
-              2016-09-16
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是WebSocket"><a href="#什么是WebSocket" class="headerlink" title="什么是WebSocket"></a>什么是WebSocket</h2><p>WebSocket是html5提供的一种浏览器和服务器进行全双工通信的技术。要解释全双工通信，首先得介绍一下WebSocket之前浏览器与服务器通信的技术。</p>
-<h2 id="WebSocket之前的通信技术"><a href="#WebSocket之前的通信技术" class="headerlink" title="WebSocket之前的通信技术"></a>WebSocket之前的通信技术</h2><ol>
-<li><p>轮询<br> 为了实时获得数据，浏览器周期性的向服务器发送请求，如果服务器没有新的数据则返回空响应。</p>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">  setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">      xhr.open(<span class="string">'GET'</span>,<span class="string">'/data'</span>,<span class="literal">true</span>);</div><div class="line">      xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">          <span class="keyword">if</span>(xhr.readyState == <span class="number">4</span> &amp;&amp; xhr.status == <span class="number">200</span>)&#123;</div><div class="line">            <span class="built_in">document</span>.querySelector(<span class="string">'#content'</span>).innerHTML = xhr.responseText;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">      xhr.send();</div><div class="line">  &#125;,<span class="number">1000</span>);</div></pre></td></tr></table></figure>
-<p> 缺点:1.大量无意义的请求造成网络压力</p>
-<pre><code>2.不能实时得到新数据
-</code></pre></li>
-<li><p>长轮询<br> 为了弥补轮询的缺陷，浏览器向服务器发送请求，如果服务器有响应新数据，浏览器再在接收响应的时候继续发送请求，使数据随时保持更新。</p>
-<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//封装请求</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">        xhr.open(<span class="string">'GET'</span>, <span class="string">'/data'</span>, <span class="literal">true</span>);</div><div class="line">        xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (xhr.readyState == <span class="number">4</span> &amp;&amp; xhr.status == <span class="number">200</span>) &#123;</div><div class="line">                <span class="built_in">document</span>.querySelector(<span class="string">'#content'</span>).innerHTML = xhr.responseText;</div><div class="line">                <span class="comment">//回调函数中递归调用</span></div><div class="line">                send();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        xhr.send();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">send();</div></pre></td></tr></table></figure>
-<p> 缺点:如果是频繁的发送数据，浏览器会一直处于加载的状态</p>
-</li>
-<li><p>iframe流<br> 利用iframe接收的服务器响应中如果包含脚本就会执行的原理,用iframe标签的src属性向服务器发起请求。</p>
-<h3 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h3> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//客户端网页</span></div><div class="line">&lt;iframe src=<span class="string">"http://localhost:1234/time"</span> frameborder=<span class="string">"0"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//服务端</span></div><div class="line">app.get(<span class="string">'/time'</span>,<span class="function"><span class="keyword">function</span>  (<span class="params">req,res</span>) </span>&#123;</div><div class="line">    setInterval(<span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="comment">//如果调用end、send会结束响应, write方法不会，能实现持续写入</span></div><div class="line">        res.write(<span class="string">`&lt;script&gt;</span></div><div class="line">        	//由于iframe会形成自己的document，所以要用parent.document取得页面</div><div class="line">           parent.document.querySelector('#time').innerHTML= new Date().toLocaleString();</div><div class="line">        &lt;/script&gt;`);</div><div class="line">    &#125;,<span class="number">1000</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="WebSocket的优势"><a href="#WebSocket的优势" class="headerlink" title="WebSocket的优势"></a>WebSocket的优势</h2><p>使用WebSocket，浏览器和服务器只需要要做一个握手的动作，然后，浏览器和服务器之间就形成了一条快速通道，两者之间就直接可以数据互相传送</p>
-<ul>
-<li>节省资源：互相沟通的Header是很小的-大概只有 2 Bytes。</li>
-<li>推送信息：不需要客户端请求,服务器可以主动传送数据给客户端</li>
-<li>支持跨域：WebSocket天生支持跨域<h2 id="解释一下单工、双工"><a href="#解释一下单工、双工" class="headerlink" title="解释一下单工、双工"></a>解释一下单工、双工</h2></li>
-<li>单工指只能由一端向另一端发送数据。</li>
-<li>半双工指客户端、服务器可以互相发送数据，但不能在同一时间。必须有先后顺序。我们平时利用http协议与后台的通信都是半双工。</li>
-<li>双工指服务器和客户端可以随时向对方发送数据与接收对方的数据。</li>
-</ul>
-<h2 id="WebSocket-API"><a href="#WebSocket-API" class="headerlink" title="WebSocket API"></a>WebSocket API</h2><h3 id="服务器端"><a href="#服务器端" class="headerlink" title="服务器端"></a>服务器端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocketServer=<span class="built_in">require</span>(<span class="string">'ws'</span>).Server;</div><div class="line"><span class="keyword">var</span> server=<span class="keyword">new</span> WebSocketServer(&#123;<span class="attr">port</span>:<span class="number">8000</span>&#125;);</div><div class="line"></div><div class="line"><span class="comment">//监听客户端请求 ,即与客户端握手</span></div><div class="line">server.on(<span class="string">'connection'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">websocket</span>)</span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//监听从客户端传来的信息</span></div><div class="line">	websocket.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(msg);</div><div class="line">		<span class="comment">//向客户端发送信息</span></div><div class="line">		websocket.send(msg);</div><div class="line">	&#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="Node客户端"><a href="#Node客户端" class="headerlink" title="Node客户端"></a>Node客户端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> WebSocket=<span class="built_in">require</span>(<span class="string">'ws'</span>);</div><div class="line"><span class="keyword">var</span> ws=<span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080/'</span>);</div><div class="line"><span class="comment">//检测服务器是否开放，即与服务端握手</span></div><div class="line">ws.on(<span class="string">'open'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="comment">//如果服务器开放向服务器发送信息</span></div><div class="line">	ws.send(<span class="string">'hello'</span>)</div><div class="line">&#125;);</div><div class="line"><span class="comment">//监听从服务器传来的数据</span></div><div class="line">ws.on(<span class="string">'message'</span>,<span class="function"><span class="keyword">function</span> (<span class="params">data,flag</span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(data);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="Web客户端"><a href="#Web客户端" class="headerlink" title="Web客户端"></a>Web客户端</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ws=<span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080/'</span>);</div><div class="line"><span class="comment">//监听连接事件</span></div><div class="line">ws.onopen=<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//向服务器发送数据</span></div><div class="line">	ws.send(<span class="number">123</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">//监听服务器传来的数据</span></div><div class="line">ws.onmessage=<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/12/简单的依赖加载器实现/" itemprop="url">
-                  简单的依赖加载器实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-12T17:16:55+08:00" content="2016-09-12">
-              2016-09-12
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"><a href="#为了验证闭包的学习，有必要实现一个简单的依赖加载器。" class="headerlink" title="为了验证闭包的学习，有必要实现一个简单的依赖加载器。"></a>为了验证闭包的学习，有必要实现一个简单的依赖加载器。</h2><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myModules=(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	</div><div class="line">	<span class="comment">//保存所有定义的模块</span></div><div class="line">	<span class="keyword">var</span> modules=&#123;&#125;;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">	 *定义新模块，接收3个参数</div><div class="line">	 *name:模块名</div><div class="line">	 *deps:模块依赖的其他模块</div><div class="line">	 *impl:模块的定义</div><div class="line">	**/ </div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">define</span>(<span class="params">name,deps,impl</span>) </span>&#123;</div><div class="line">		</div><div class="line">		<span class="comment">//遍历依赖每一项，取出每个模块</span></div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;deps.length;i++) &#123;</div><div class="line">			deps[i]=modules[deps[i]];</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//将新模块存储进模块池，并注入依赖</span></div><div class="line">		modules[name]=impl.apply(impl,deps);</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//从模块池中取出模块</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">get</span> (<span class="params">name</span>) </span>&#123;</div><div class="line">		<span class="keyword">return</span> modules[name];</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//暴露api</span></div><div class="line">	<span class="keyword">return</span> &#123;</div><div class="line">		<span class="attr">define</span>: define,</div><div class="line">		<span class="attr">get</span>: get</div><div class="line">	&#125;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">myModules.define(&apos;bar&apos;,[],function () &#123;</div><div class="line">	function hello (who) &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello:hello</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">myModules.define(&apos;foo&apos;,[&apos;bar&apos;],function (bar) &#123;</div><div class="line">	functin hello2 () &#123;</div><div class="line">		//代码体</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		hello2:hello2</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">var bar=myModules.get(&apos;bar&apos;);</div><div class="line">var foo=myModules.get(&apos;foo&apos;);</div></pre></td></tr></table></figure>
-<ul>
-<li>内容转自《你不知道的Javascript》</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1358,7 +1276,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-count">48</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
