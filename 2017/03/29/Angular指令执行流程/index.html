@@ -1,0 +1,573 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="流程概览整个流程分为两个阶段：$compile  和 nodeLinkFn12345678910111213141516//总体流程// The compile phaseparent (compile)..first-child (compile)..second-child (compile)// The link phase   parent (controller)parent (pre-">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Angular指令执行流程">
+<meta property="og:url" content="https://betasu.github.io/2017/03/29/Angular指令执行流程/index.html">
+<meta property="og:site_name" content="我是卡卡卡颂">
+<meta property="og:description" content="流程概览整个流程分为两个阶段：$compile  和 nodeLinkFn12345678910111213141516//总体流程// The compile phaseparent (compile)..first-child (compile)..second-child (compile)// The link phase   parent (controller)parent (pre-">
+<meta property="og:updated_time" content="2017-03-30T02:11:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Angular指令执行流程">
+<meta name="twitter:description" content="流程概览整个流程分为两个阶段：$compile  和 nodeLinkFn12345678910111213141516//总体流程// The compile phaseparent (compile)..first-child (compile)..second-child (compile)// The link phase   parent (controller)parent (pre-">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://betasu.github.io/2017/03/29/Angular指令执行流程/"/>
+
+  <title> Angular指令执行流程 | 我是卡卡卡颂 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">我是卡卡卡颂</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Angular指令执行流程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-29T21:54:38+08:00" content="2017-03-29">
+              2017-03-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="流程概览"><a href="#流程概览" class="headerlink" title="流程概览"></a>流程概览</h3><p>整个流程分为两个阶段：$compile  和 nodeLinkFn<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//总体流程</span></div><div class="line"><span class="comment">// The compile phase</span></div><div class="line">parent (compile)</div><div class="line">..first-child (compile)</div><div class="line">..second-child (compile)</div><div class="line"></div><div class="line"><span class="comment">// The link phase   </span></div><div class="line">parent (controller)</div><div class="line">parent (pre-link)</div><div class="line">..first-child (controller)</div><div class="line">..first-child (pre-link)</div><div class="line">..first-child (post-link)</div><div class="line">..second-child (controller)</div><div class="line">..second-child (pre-link)</div><div class="line">..second-child (post-link)</div><div class="line">parent (post-link)</div></pre></td></tr></table></figure></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">//例子</div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-repeat</span>=<span class="string">"i in [0,1,2]"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">my-element</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Inner content<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">my-element</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">//指令如下</div><div class="line">myApp.directive( 'myElement', function() &#123;</div><div class="line">    return &#123;</div><div class="line">        restrict:   'EA',</div><div class="line">        transclude: true,</div><div class="line">        template:   '<span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123;label&#125;&#125;<span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-transclude</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span>'</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<ol>
+<li><p>首先进入$compile。其中tElement和tAttributes为指令传入的属性。如果指令内部有嵌套的子指令（如ng-repeat），<br>则会遍历调用所有子指令的compile。在我们的例子里，三个子source template（通过ng-repeat）会被创建，所以compile会调用一共4次。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个compile函数API类似</span></div><div class="line">compile: <span class="function"><span class="keyword">function</span> <span class="title">compile</span>(<span class="params"> tElement, tAttributes </span>) </span>&#123; ... &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>接下来进入nodeLinkFn阶段（link阶段）。经由$compile返回的link函数被提供一个scope。<br>首先link函数创建一个子scope（scope:true），或者一个隔离作用域(scope:{…})。接着执行controller函数，传入scope。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个controller函数API类似</span></div><div class="line">controller: <span class="function"><span class="keyword">function</span> <span class="title">controller</span>(<span class="params">$scope, $element, $attrs,$transclude </span>) </span>&#123; ... &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>接下来进入pre-link阶段，基本上在controller和preLink之间不会执行其他函数。在父级preLink被调用，紧接着会遍历调用子级preLink。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个preLink函数API类似</span></div><div class="line">preLink: <span class="function"><span class="keyword">function</span> <span class="title">preLink</span>(<span class="params">scope, element, attrs,controller </span>) </span>&#123; ... &#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//postLink与preLink API类似</span></div><div class="line">postLink: <span class="function"><span class="keyword">function</span> <span class="title">postLink</span>(<span class="params">scope, element, attrs,controller </span>) </span>&#123; ... &#125;</div></pre></td></tr></table></figure>
+<p>注意当一个<br>子级preLink函数执行完后会继续执行该子子级的postLink函数，接着再执行下一个子级的preLink与postLink。也就说当父级执行postLink时，其所有子级的link函数都已执行完毕。这意味着子级已经完成：</p>
+<ul>
+<li>数据绑定</li>
+<li>transclusion已经应用</li>
+<li>scope形成<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//这个阶段的DOM结构看起来如下</div><div class="line"><span class="tag">&lt;<span class="name">my-element</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ng-binding"</span>&gt;</span></div><div class="line">        "&#123;&#123;label&#125;&#125;"</div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-transclude</span>&gt;</span>                </div><div class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ng-scope"</span>&gt;</span>Inner content<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">my-element</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/29/js学习－－事件循环机制/" rel="next" title="js学习－－事件循环机制">
+                <i class="fa fa-chevron-left"></i> js学习－－事件循环机制
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/30/angular－－用mock模拟数据/" rel="prev" title="angular－－用mock模拟数据">
+                angular－－用mock模拟数据 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://p1.so.qhmsg.com/t0104ff6ab349246736.jpg"
+               alt="BetaSu" />
+          <p class="site-author-name" itemprop="name">BetaSu</p>
+          <p class="site-description motion-element" itemprop="description">一言不合撸源码</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">50</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程概览"><span class="nav-number">1.</span> <span class="nav-text">流程概览</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">BetaSu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

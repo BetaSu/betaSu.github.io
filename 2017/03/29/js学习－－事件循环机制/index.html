@@ -84,16 +84,31 @@
 
 
 
-<meta name="description" content="基本概念-">
+<meta name="description" content="基本概念
+js作为单线程语言，线程中只拥有一个事件循环。
+代码的运行顺序取决于函数调用栈和队列。
+一个线程中，事件循环是唯一的，但是任务队列可以有多个。
+任务队列分为宏任务（macro-task，新标准中叫做task）和微任务（micro-task，新标准中叫做jobs）
+macro-task包括：script（整体代码）、setInterval/setTimeout">
 <meta property="og:type" content="article">
 <meta property="og:title" content="js学习－－事件循环机制">
 <meta property="og:url" content="https://betasu.github.io/2017/03/29/js学习－－事件循环机制/index.html">
 <meta property="og:site_name" content="我是卡卡卡颂">
-<meta property="og:description" content="基本概念-">
-<meta property="og:updated_time" content="2017-03-29T03:54:47.000Z">
+<meta property="og:description" content="基本概念
+js作为单线程语言，线程中只拥有一个事件循环。
+代码的运行顺序取决于函数调用栈和队列。
+一个线程中，事件循环是唯一的，但是任务队列可以有多个。
+任务队列分为宏任务（macro-task，新标准中叫做task）和微任务（micro-task，新标准中叫做jobs）
+macro-task包括：script（整体代码）、setInterval/setTimeout">
+<meta property="og:updated_time" content="2017-03-29T04:31:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="js学习－－事件循环机制">
-<meta name="twitter:description" content="基本概念-">
+<meta name="twitter:description" content="基本概念
+js作为单线程语言，线程中只拥有一个事件循环。
+代码的运行顺序取决于函数调用栈和队列。
+一个线程中，事件循环是唯一的，但是任务队列可以有多个。
+任务队列分为宏任务（macro-task，新标准中叫做task）和微任务（micro-task，新标准中叫做jobs）
+macro-task包括：script（整体代码）、setInterval/setTimeout">
 
 
 
@@ -276,7 +291,13 @@
       
 
       
-        <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>- </p>
+        <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ul>
+<li>js作为单线程语言，线程中只拥有一个事件循环。</li>
+<li>代码的运行顺序取决于函数调用栈和队列。</li>
+<li>一个线程中，事件循环是唯一的，但是任务队列可以有多个。</li>
+<li>任务队列分为宏任务（macro-task，新标准中叫做task）和微任务（micro-task，新标准中叫做jobs）</li>
+<li>macro-task包括：script（整体代码）、setInterval/setTimeout</li>
+</ul>
 
       
     </div>
@@ -309,6 +330,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/29/Angular指令执行流程/" rel="prev" title="Angular指令执行流程">
+                Angular指令执行流程 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -376,7 +401,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-count">50</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

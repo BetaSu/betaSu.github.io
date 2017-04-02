@@ -238,6 +238,326 @@
             
               
                 
+                <a class="post-title-link" href="/2017/04/02/angular－－ngDialog最佳实践/" itemprop="url">
+                  angular－－ngDialog最佳实践
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-04-02T15:55:53+08:00" content="2017-04-02">
+              2017-04-02
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="ngDialog是什么"><a href="#ngDialog是什么" class="headerlink" title="ngDialog是什么"></a>ngDialog是什么</h3><p>ngDialog是一款ng1.*的第三方浮窗插件，其正确的使用方法可以说是MVVM思想的浓缩体现。</p>
+<h3 id="实现目标"><a href="#实现目标" class="headerlink" title="实现目标"></a>实现目标</h3><ul>
+<li>提供一个弹窗</li>
+<li>弹窗提供必要的模板，该模板（HTML结构）可复用</li>
+<li>对于具体业务逻辑（新增还是修改，在不同的controller中实现）</li>
+</ul>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><ol>
+<li><p>首先我们定义一个打开操作弹窗的服务，或者在服务中定义一个打开弹窗的方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//可以用来新增 的弹窗</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">addDialog</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> defer=$q.defer();</div><div class="line">  ngDialog.open(&#123;</div><div class="line">      <span class="comment">//模板地址</span></div><div class="line">      templateUrl:<span class="string">'xxx.html'</span>,</div><div class="line">      <span class="attr">className</span>: <span class="string">'ngdialog-theme-default'</span>,</div><div class="line">      <span class="attr">width</span>: <span class="number">640</span>,</div><div class="line">      <span class="attr">closeByDocument</span>: <span class="literal">false</span>,</div><div class="line">      <span class="attr">showClose</span>: <span class="literal">true</span>,</div><div class="line">      <span class="comment">//用来新增的ngDialog的controller</span></div><div class="line">      controller: <span class="string">'AddCtrl'</span>,</div><div class="line">      <span class="comment">//传入ngDialog controller的依赖</span></div><div class="line">      resolve: &#123;</div><div class="line">          <span class="comment">//依赖名为dep，依赖的对象为传入的参数  </span></div><div class="line">          dep: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> data;</div><div class="line">          &#125;</div><div class="line">      &#125;,</div><div class="line">      <span class="comment">/**</span></div><div class="line">      * 关闭弹窗前的回调</div><div class="line">      * 区分是点击关闭按钮 还是保存按钮，返回promise的不同状态</div><div class="line">        */</div><div class="line">      preCloseCallback: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (data===<span class="string">'$closeButton'</span>) &#123;</div><div class="line">            defer.reject();</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            defer.resolve(data);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">  &#125;)</div><div class="line">  <span class="keyword">return</span> defer.promise;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>接下来定义新增的dialog的控制器</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">angular.module(<span class="string">'app'</span>).controller(<span class="string">'AddCtrl'</span>,AddCtrl);</div><div class="line">AddCtrl.$inject=[<span class="string">'$scope'</span>,<span class="string">'dep'</span>,<span class="string">'ngDialog'</span>];</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">AddCtrl</span>(<span class="params">$scope,dep,ngDialog</span>) </span>&#123;</div><div class="line">  </div><div class="line">    initStatus();</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">initStatus</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    </div><div class="line">      <span class="comment">/*取到依赖的数据，也就是调用addDialog服务时传入的参数  </span></div><div class="line">      *浮窗中所有数据与$scope.data下的数据双向绑定</div><div class="line">      * 所以可以通过传入的初始配置项改变模板中的数据（比如传入title字段 改变弹窗的title）</div><div class="line">      */</div><div class="line">      $scope.data=&#123;</div><div class="line">          <span class="attr">params</span>:dep</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">/**</span></div><div class="line">    * 点击保存设置时触发</div><div class="line">    * close的传参将传给preCloseCallback，</div><div class="line">    * preCloseCallback再根据关闭窗口的类型（关闭还是保存）处理</div><div class="line">    * 当为保存配置时，配置参数作为传参传给promise的resolve状态</div><div class="line">    */</div><div class="line">    $scope.submitForm=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      ngDialog.close($scope.ngDialogId,$scope.data.params);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>在需要打开浮窗的控制器中调用addDialog服务，传入初始配置项</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">angular.module(<span class="string">'app'</span>).controller(<span class="string">'PermissionProjectCtrl'</span>,PermissionProjectCtrl);</div><div class="line">PermissionProjectCtrl.$inject=[<span class="string">'$scope'</span>,<span class="string">'ngDialog'</span>,<span class="string">'permissionService'</span>];</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">PermissionProjectCtrl</span>(<span class="params">$scope,ngDialog,permissionService</span>) </span>&#123;</div><div class="line">  </div><div class="line">    </div><div class="line">    $scope.createNewPermission=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      </div><div class="line">        <span class="comment">//初始配置项</span></div><div class="line">        <span class="keyword">var</span> params=&#123;</div><div class="line">            <span class="attr">title</span>:<span class="string">'新增项目权限'</span>,</div><div class="line">            <span class="attr">type</span>:<span class="string">'project'</span></div><div class="line">        &#125;</div><div class="line">        permissionService.addDialog(params).then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">            <span class="comment">//表单处理完成后 传出处理后的数据  data 这里再调用新建对应 对接口 所在的服务，继续后续处理</span></div><div class="line">           </div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/30/angular－－用mock模拟数据/" itemprop="url">
+                  angular－－用mock模拟数据
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-30T23:36:37+08:00" content="2017-03-30">
+              2017-03-30
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>当前端写好页面，而后台没有提供接口和数据时，可以先把获取数据的service做好，传入json类型的mock数据<br>来模拟调取数据的情况。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//模拟权限角色数据的获取</span></div><div class="line">angular.module(<span class="string">'app'</span>).factory(<span class="string">'authRoleService'</span>, authRoleService);</div><div class="line">    authRoleService.$inject = [<span class="string">'$q'</span>, <span class="string">'iHttpService'</span>];</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">authRoleService</span>(<span class="params">$q, iHttpService</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            <span class="comment">//根据类型获取角色列表</span></div><div class="line">            getRolesByType: getRolesByType,</div><div class="line">        &#125;;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">getRolesByType</span>(<span class="params">_type</span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> defer = $q.defer();</div><div class="line">            <span class="comment">//var url = "/api/v1/lawOffice/"+window.localStorage.officeid;</span></div><div class="line">            <span class="keyword">var</span> url = <span class="string">"auth/mock/roles.json"</span>;</div><div class="line">            iHttpService.mockServer(url, &#123;&#125;, <span class="string">"get"</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line">                defer.resolve(data.data);</div><div class="line">            &#125;, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">                defer.reject();</div><div class="line">            &#125;);</div><div class="line">            <span class="keyword">return</span> defer.promise;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>接下来提供mock数据<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"data"</span>: [</div><div class="line">    &#123;</div><div class="line">      <span class="attr">"description"</span>: <span class="string">"我是负责人的描述"</span>,</div><div class="line">      <span class="attr">"id"</span>: <span class="number">0</span>,</div><div class="line">      <span class="attr">"name"</span>: <span class="string">"负责人"</span>,</div><div class="line">      <span class="attr">"officeId"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"permission"</span>: &#123;&#125;,</div><div class="line">      <span class="attr">"subjectId"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"subjectType"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"type"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"valid"</span>: <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      <span class="attr">"description"</span>: <span class="string">"我是参与人的描述"</span>,</div><div class="line">      <span class="attr">"id"</span>: <span class="number">1</span>,</div><div class="line">      <span class="attr">"name"</span>: <span class="string">"参与人"</span>,</div><div class="line">      <span class="attr">"officeId"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"permission"</span>: &#123;&#125;,</div><div class="line">      <span class="attr">"subjectId"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"subjectType"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"type"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"valid"</span>: <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      <span class="attr">"description"</span>: <span class="string">"我是实习生的描述"</span>,</div><div class="line">      <span class="attr">"id"</span>: <span class="number">2</span>,</div><div class="line">      <span class="attr">"name"</span>: <span class="string">"实习生"</span>,</div><div class="line">      <span class="attr">"officeId"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"permission"</span>: &#123;&#125;,</div><div class="line">      <span class="attr">"subjectId"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"subjectType"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"type"</span>: <span class="string">"string"</span>,</div><div class="line">      <span class="attr">"valid"</span>: <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">  ],</div><div class="line">  <span class="attr">"resultCode"</span>: <span class="string">"string"</span>,</div><div class="line">  <span class="attr">"resultMessage"</span>: <span class="string">"string"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>最后，我们只需要调用相应的服务，获取请求成功状态的数据就行了</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/29/Angular指令执行流程/" itemprop="url">
+                  Angular指令执行流程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-29T21:54:38+08:00" content="2017-03-29">
+              2017-03-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="流程概览"><a href="#流程概览" class="headerlink" title="流程概览"></a>流程概览</h3><p>整个流程分为两个阶段：$compile  和 nodeLinkFn<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//总体流程</span></div><div class="line"><span class="comment">// The compile phase</span></div><div class="line">parent (compile)</div><div class="line">..first-child (compile)</div><div class="line">..second-child (compile)</div><div class="line"></div><div class="line"><span class="comment">// The link phase   </span></div><div class="line">parent (controller)</div><div class="line">parent (pre-link)</div><div class="line">..first-child (controller)</div><div class="line">..first-child (pre-link)</div><div class="line">..first-child (post-link)</div><div class="line">..second-child (controller)</div><div class="line">..second-child (pre-link)</div><div class="line">..second-child (post-link)</div><div class="line">parent (post-link)</div></pre></td></tr></table></figure></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">//例子</div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-repeat</span>=<span class="string">"i in [0,1,2]"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">my-element</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>Inner content<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">my-element</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">//指令如下</div><div class="line">myApp.directive( 'myElement', function() &#123;</div><div class="line">    return &#123;</div><div class="line">        restrict:   'EA',</div><div class="line">        transclude: true,</div><div class="line">        template:   '<span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123;label&#125;&#125;<span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-transclude</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span>'</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<ol>
+<li><p>首先进入$compile。其中tElement和tAttributes为指令传入的属性。如果指令内部有嵌套的子指令（如ng-repeat），<br>则会遍历调用所有子指令的compile。在我们的例子里，三个子source template（通过ng-repeat）会被创建，所以compile会调用一共4次。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个compile函数API类似</span></div><div class="line">compile: <span class="function"><span class="keyword">function</span> <span class="title">compile</span>(<span class="params"> tElement, tAttributes </span>) </span>&#123; ... &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>接下来进入nodeLinkFn阶段（link阶段）。经由$compile返回的link函数被提供一个scope。<br>首先link函数创建一个子scope（scope:true），或者一个隔离作用域(scope:{…})。接着执行controller函数，传入scope。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个controller函数API类似</span></div><div class="line">controller: <span class="function"><span class="keyword">function</span> <span class="title">controller</span>(<span class="params">$scope, $element, $attrs,$transclude </span>) </span>&#123; ... &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>接下来进入pre-link阶段，基本上在controller和preLink之间不会执行其他函数。在父级preLink被调用，紧接着会遍历调用子级preLink。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一个preLink函数API类似</span></div><div class="line">preLink: <span class="function"><span class="keyword">function</span> <span class="title">preLink</span>(<span class="params">scope, element, attrs,controller </span>) </span>&#123; ... &#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//postLink与preLink API类似</span></div><div class="line">postLink: <span class="function"><span class="keyword">function</span> <span class="title">postLink</span>(<span class="params">scope, element, attrs,controller </span>) </span>&#123; ... &#125;</div></pre></td></tr></table></figure>
+<p>注意当一个<br>子级preLink函数执行完后会继续执行该子子级的postLink函数，接着再执行下一个子级的preLink与postLink。也就说当父级执行postLink时，其所有子级的link函数都已执行完毕。这意味着子级已经完成：</p>
+<ul>
+<li>数据绑定</li>
+<li>transclusion已经应用</li>
+<li>scope形成<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//这个阶段的DOM结构看起来如下</div><div class="line"><span class="tag">&lt;<span class="name">my-element</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ng-binding"</span>&gt;</span></div><div class="line">        "&#123;&#123;label&#125;&#125;"</div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-transclude</span>&gt;</span>                </div><div class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ng-scope"</span>&gt;</span>Inner content<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">my-element</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/03/29/js学习－－事件循环机制/" itemprop="url">
                   js学习－－事件循环机制
                 </a>
@@ -282,7 +602,13 @@
       
         
           
-            <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>- </p>
+            <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ul>
+<li>js作为单线程语言，线程中只拥有一个事件循环。</li>
+<li>代码的运行顺序取决于函数调用栈和队列。</li>
+<li>一个线程中，事件循环是唯一的，但是任务队列可以有多个。</li>
+<li>任务队列分为宏任务（macro-task，新标准中叫做task）和微任务（micro-task，新标准中叫做jobs）</li>
+<li>macro-task包括：script（整体代码）、setInterval/setTimeout</li>
+</ul>
 
           
         
@@ -473,145 +799,6 @@
           
             <h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>动态的给某个对象添加一些额外的职责，而不会影响从这个类中派生的其他对象。</p>
 <h3 id="简单的例子"><a href="#简单的例子" class="headerlink" title="简单的例子"></a>简单的例子</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Plane=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  </div><div class="line">&#125;</div><div class="line">Plane.prototype.fire=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'fire!'</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> MissileDecorator=<span class="function"><span class="keyword">function</span>(<span class="params">plane</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.plane=plane;</div><div class="line">&#125;</div><div class="line">MissileDecorator.prototype.fire=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'missile!!'</span>);</div><div class="line">  <span class="keyword">this</span>.plane.fire();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> plane=<span class="keyword">new</span> Plane();</div><div class="line">plane=<span class="keyword">new</span> MissileDecorator(plane);</div><div class="line">plane.fire();</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/22/test/" itemprop="url">
-                  未命名
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-22T14:47:00+08:00" content="2017-03-22">
-              2017-03-22
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-<script>
-    var Chain=function(fn) {
-        this.fn=fn;
-        this.successor=null;
-    }
-
-    Chain.prototype.setNextSuccessor=function(successor) {
-        return this.successor=successor;
-    }
-
-    Chain.prototype.passRequest=function() {
-        var ret=this.fn.apply(this,arguments);
-        if (ret==='nextSuccessor' && this.successor) {
-            return this.successor.passRequest.apply(this.successor,arguments);
-        }
-        return ret;
-    }
-
-    //使用
-    var fn1=new Chain(function() {
-        console.log(1);
-        return 'nextSuccessor';
-    })
-
-    var fn2=new Chain(function() {
-        console.log(2);
-        return 'nextSuccessor';
-    })
-
-    var fn3=new Chain(function() {
-        console.log(3);
-    })
-
-    fn1.setNextSuccessor(fn2);
-    fn2.setNextSuccessor(fn3);
-    fn1.passRequest();
-</script>
-</body>
-</html>
           
         
       
@@ -1051,207 +1238,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/13/设计模式－－发布订阅模式/" itemprop="url">
-                  设计模式－－发布订阅模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-13T22:23:38+08:00" content="2017-03-13">
-              2017-03-13
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="简单的发布订阅模式的通用实现"><a href="#简单的发布订阅模式的通用实现" class="headerlink" title="简单的发布订阅模式的通用实现"></a>简单的发布订阅模式的通用实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//发布订阅功能</span></div><div class="line"><span class="keyword">var</span> event= &#123;</div><div class="line">    <span class="attr">clientList</span>: [],</div><div class="line">    </div><div class="line">    <span class="comment">//订阅</span></div><div class="line">    listen: <span class="function"><span class="keyword">function</span>(<span class="params">key,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">if</span> (!<span class="keyword">this</span>.clientList[key]) &#123;</div><div class="line">          <span class="keyword">this</span>.clientList[key]=[];</div><div class="line">      &#125;</div><div class="line">      <span class="comment">//订阅的消息进缓存</span></div><div class="line">      <span class="keyword">this</span>.clientList[key].push(fn);</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//发布</span></div><div class="line">    trigger: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> key = <span class="built_in">Array</span>.prototype.shift.call(<span class="built_in">arguments</span>),</div><div class="line">          fns=<span class="keyword">this</span>.clientList[key];</div><div class="line">      <span class="keyword">if</span> (!fns || fns.length===<span class="number">0</span>) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>,fn;fn=fns[i++];) &#123;</div><div class="line">          fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>);</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//取消订阅</span></div><div class="line">    remove:<span class="function"><span class="keyword">function</span>(<span class="params">key,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> fns=<span class="keyword">this</span>.clientList[key];</div><div class="line">      <span class="keyword">if</span> (!fns) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">      <span class="comment">//没有传入回调，表示需要取消key对应的所有回调</span></div><div class="line">      <span class="keyword">if</span> (!fn) &#123;</div><div class="line">          fns &amp;&amp; (fns.length =<span class="number">0</span>);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">          <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;fns.length;i++) &#123;</div><div class="line">              <span class="keyword">var</span> _fn=fns[i];</div><div class="line">              <span class="keyword">if</span> (fn===_fn) &#123;</div><div class="line">                  fns.splice(i,<span class="number">1</span>);</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">//为对象添加发布订阅</span></div><div class="line"><span class="keyword">var</span> installEvent=<span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> event) &#123;</div><div class="line">      <span class="keyword">if</span> (event.hasOwnProperty(i)) &#123;</div><div class="line">          obj[i]=event[i];</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>生成多个发布订阅对象会有多余的浪费。 </li>
-<li>考虑到有些异步请求，有可能发布了消息，而对该消息订阅的代码还没加载出，所以应该允许先订阅再发布。（设立一个存放离线事件的堆栈）</li>
-<li>对于还没有被订阅的事件，在堆栈中保存发布的动作。等有对象来订阅事件时重新遍历发布堆栈里的事件。</li>
-<li>对于离线事件，生命周期只有一次。</li>
-<li>当订阅的事件多了也能产生命名冲突，应该允许创建命名空间。</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//先发布后订阅</span></div><div class="line">Event.trigger(<span class="string">'click'</span>,<span class="number">1</span>);</div><div class="line">Event.listen(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(a);</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">//使用命名空间</span></div><div class="line">Event.create(<span class="string">'namespace1'</span>).listen(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(a);</div><div class="line">&#125;)</div><div class="line">Event.create(<span class="string">'namespace1'</span>).trigger(<span class="string">'click'</span>,<span class="number">1</span>);</div><div class="line"></div><div class="line"><span class="comment">//代码实现</span></div><div class="line"><span class="keyword">var</span> Event=(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  </div><div class="line">    <span class="keyword">var</span> global=<span class="keyword">this</span>,</div><div class="line">     Event,</div><div class="line">     _default=<span class="string">'default'</span>;</div><div class="line">    </div><div class="line">    Event=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> _listen,</div><div class="line">      _trigger,</div><div class="line">      _remove,</div><div class="line">      _slice=[].slice,</div><div class="line">      _shift=[].shift,</div><div class="line">      _unshift=[],unshift,</div><div class="line">      namespaceCache=&#123;&#125;,</div><div class="line">      _create,</div><div class="line">      find,</div><div class="line">      each=<span class="function"><span class="keyword">function</span>(<span class="params">ary,fn</span>) </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;ary.length;i++) &#123;</div><div class="line">            <span class="keyword">var</span> cur=ary[i];</div><div class="line">            fn.call(cur,cur,i);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">      &#125;;</div><div class="line">      </div><div class="line">      _listen=<span class="function"><span class="keyword">function</span>(<span class="params">key,fn,cache</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!cache[key]) &#123;</div><div class="line">            </div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/11/css学习－－padding/" itemprop="url">
-                  css学习－－padding
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-03-11T14:44:31+08:00" content="2017-03-11">
-              2017-03-11
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li>对于block水平元素， 当box-sizing:border-box;或width非auto; padding大小超过宽高时影响尺寸。</li>
-<li>对于inline水平元素，垂直padding不影响尺寸，但是影响背景色（会占据空间）。当超过父级盒子高度，改元素scrollHeight改变</li>
-<li>可以用 span  border 加padding实现高度可控的 分割线   a ｜ b</li>
-<li>padding不支持任何形式的负值，百分比值是相对于宽度计算的</li>
-<li>inline元素默认的高度宽度细节有差异，  空inline+padding高宽也不等，会出现空白节点（strut），需要设置font-ize:0;</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1297,7 +1283,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-count">50</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -238,6 +238,207 @@
             
               
                 
+                <a class="post-title-link" href="/2017/03/13/设计模式－－发布订阅模式/" itemprop="url">
+                  设计模式－－发布订阅模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-13T22:23:38+08:00" content="2017-03-13">
+              2017-03-13
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="简单的发布订阅模式的通用实现"><a href="#简单的发布订阅模式的通用实现" class="headerlink" title="简单的发布订阅模式的通用实现"></a>简单的发布订阅模式的通用实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//发布订阅功能</span></div><div class="line"><span class="keyword">var</span> event= &#123;</div><div class="line">    <span class="attr">clientList</span>: [],</div><div class="line">    </div><div class="line">    <span class="comment">//订阅</span></div><div class="line">    listen: <span class="function"><span class="keyword">function</span>(<span class="params">key,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">if</span> (!<span class="keyword">this</span>.clientList[key]) &#123;</div><div class="line">          <span class="keyword">this</span>.clientList[key]=[];</div><div class="line">      &#125;</div><div class="line">      <span class="comment">//订阅的消息进缓存</span></div><div class="line">      <span class="keyword">this</span>.clientList[key].push(fn);</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//发布</span></div><div class="line">    trigger: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> key = <span class="built_in">Array</span>.prototype.shift.call(<span class="built_in">arguments</span>),</div><div class="line">          fns=<span class="keyword">this</span>.clientList[key];</div><div class="line">      <span class="keyword">if</span> (!fns || fns.length===<span class="number">0</span>) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>,fn;fn=fns[i++];) &#123;</div><div class="line">          fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>);</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    </div><div class="line">    <span class="comment">//取消订阅</span></div><div class="line">    remove:<span class="function"><span class="keyword">function</span>(<span class="params">key,fn</span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> fns=<span class="keyword">this</span>.clientList[key];</div><div class="line">      <span class="keyword">if</span> (!fns) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">      <span class="comment">//没有传入回调，表示需要取消key对应的所有回调</span></div><div class="line">      <span class="keyword">if</span> (!fn) &#123;</div><div class="line">          fns &amp;&amp; (fns.length =<span class="number">0</span>);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">          <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;fns.length;i++) &#123;</div><div class="line">              <span class="keyword">var</span> _fn=fns[i];</div><div class="line">              <span class="keyword">if</span> (fn===_fn) &#123;</div><div class="line">                  fns.splice(i,<span class="number">1</span>);</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">//为对象添加发布订阅</span></div><div class="line"><span class="keyword">var</span> installEvent=<span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> event) &#123;</div><div class="line">      <span class="keyword">if</span> (event.hasOwnProperty(i)) &#123;</div><div class="line">          obj[i]=event[i];</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>生成多个发布订阅对象会有多余的浪费。 </li>
+<li>考虑到有些异步请求，有可能发布了消息，而对该消息订阅的代码还没加载出，所以应该允许先订阅再发布。（设立一个存放离线事件的堆栈）</li>
+<li>对于还没有被订阅的事件，在堆栈中保存发布的动作。等有对象来订阅事件时重新遍历发布堆栈里的事件。</li>
+<li>对于离线事件，生命周期只有一次。</li>
+<li>当订阅的事件多了也能产生命名冲突，应该允许创建命名空间。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//先发布后订阅</span></div><div class="line">Event.trigger(<span class="string">'click'</span>,<span class="number">1</span>);</div><div class="line">Event.listen(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(a);</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">//使用命名空间</span></div><div class="line">Event.create(<span class="string">'namespace1'</span>).listen(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(a);</div><div class="line">&#125;)</div><div class="line">Event.create(<span class="string">'namespace1'</span>).trigger(<span class="string">'click'</span>,<span class="number">1</span>);</div><div class="line"></div><div class="line"><span class="comment">//代码实现</span></div><div class="line"><span class="keyword">var</span> Event=(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  </div><div class="line">    <span class="keyword">var</span> global=<span class="keyword">this</span>,</div><div class="line">     Event,</div><div class="line">     _default=<span class="string">'default'</span>;</div><div class="line">    </div><div class="line">    Event=<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> _listen,</div><div class="line">      _trigger,</div><div class="line">      _remove,</div><div class="line">      _slice=[].slice,</div><div class="line">      _shift=[].shift,</div><div class="line">      _unshift=[],unshift,</div><div class="line">      namespaceCache=&#123;&#125;,</div><div class="line">      _create,</div><div class="line">      find,</div><div class="line">      each=<span class="function"><span class="keyword">function</span>(<span class="params">ary,fn</span>) </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;ary.length;i++) &#123;</div><div class="line">            <span class="keyword">var</span> cur=ary[i];</div><div class="line">            fn.call(cur,cur,i);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">      &#125;;</div><div class="line">      </div><div class="line">      _listen=<span class="function"><span class="keyword">function</span>(<span class="params">key,fn,cache</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!cache[key]) &#123;</div><div class="line">            </div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/11/css学习－－padding/" itemprop="url">
+                  css学习－－padding
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-11T14:44:31+08:00" content="2017-03-11">
+              2017-03-11
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li>对于block水平元素， 当box-sizing:border-box;或width非auto; padding大小超过宽高时影响尺寸。</li>
+<li>对于inline水平元素，垂直padding不影响尺寸，但是影响背景色（会占据空间）。当超过父级盒子高度，改元素scrollHeight改变</li>
+<li>可以用 span  border 加padding实现高度可控的 分割线   a ｜ b</li>
+<li>padding不支持任何形式的负值，百分比值是相对于宽度计算的</li>
+<li>inline元素默认的高度宽度细节有差异，  空inline+padding高宽也不等，会出现空白节点（strut），需要设置font-ize:0;</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/03/11/设计模式－－代理模式/" itemprop="url">
                   设计模式－－代理模式
                 </a>
@@ -1032,205 +1233,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/30/Angular源码解析4——作用域上代码的执行/" itemprop="url">
-                  Angular源码解析4——作用域上代码的执行
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-30T19:49:06+08:00" content="2016-09-30">
-              2016-09-30
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="在作用域中执行代码"><a href="#在作用域中执行代码" class="headerlink" title="在作用域中执行代码"></a>在作用域中执行代码</h2><ol>
-<li><p>$eval</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">*$eval接收2个参数</div><div class="line">*fn需要在作用中执行的函数</div><div class="line">*（可选）传入的参数</div><div class="line">**/</div><div class="line">Scope.prototype.$<span class="built_in">eval</span>=<span class="function"><span class="keyword">function</span> (<span class="params">fn,locals</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> fn(<span class="keyword">this</span>,locals);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>$apply<br>有时候我们需要执行与Angular无关的方法（比如window.setInerval），但是这些方法改变了作用域中的数据，我们希望监听到这些变化，这时候我们需要通过$apply传入方法。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Scope.prototype.$apply=functin (fn) &#123;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.$<span class="built_in">eval</span>(fn);</div><div class="line">	&#125; <span class="keyword">finally</span> &#123;</div><div class="line">		<span class="comment">//$digest的执行放在finally中，以确保即使报错也会执行</span></div><div class="line">		<span class="keyword">this</span>.$digest();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>延迟执行的函数<br>在angular中我们可以用$apply传递一个计时器（setInterval）来实现延迟执行函数，也可以调用内部的$interval和$timeout。Angular中还有一种延迟执行的方法$evalAsync。</p>
-</li>
-</ol>
-<p>$evalAsync会将一个函数推入计划中。这个函数会在这次$digest或者下次$digest之前执行。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//在Scope中定义任务队列</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Scope</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$watchers=[];</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue=[];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//定义$evalAsync,传入需要延迟执行的函数</span></div><div class="line">Scope.prototype.$evalAsync=<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</div><div class="line">	<span class="keyword">this</span>.$$asyncQueue.push(&#123;<span class="attr">scope</span>:<span class="keyword">this</span>,<span class="attr">expression</span>:fn&#125;);</div><div class="line">&#125; </div><div class="line"></div><div class="line">Scope.prototype.$digest=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> time=<span class="number">10</span>;</div><div class="line">	<span class="keyword">var</span> dirty;</div><div class="line">	<span class="keyword">do</span> &#123;</div><div class="line">		<span class="keyword">while</span> (<span class="keyword">this</span>.$$asyncQueue.length) &#123;</div><div class="line">			<span class="keyword">var</span> task=<span class="keyword">this</span>.$$asyncQueue.shift();</div><div class="line">			<span class="keyword">this</span>.$<span class="built_in">eval</span>(task.expression);</div><div class="line">		&#125;</div><div class="line">		dirty=<span class="keyword">this</span>.$$digestOnce();</div><div class="line">		<span class="keyword">if</span> (dirty &amp;&amp;!(time--)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="string">'已到10次脏值查询'</span></div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">while</span> (dirty);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/27/Angular源码解析3——深度比较、深度克隆/" itemprop="url">
-                  Angular源码解析3——深度比较、深度克隆
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-27T12:29:56+08:00" content="2016-09-27">
-              2016-09-27
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="为什么需要深度比较、深度克隆"><a href="#为什么需要深度比较、深度克隆" class="headerlink" title="为什么需要深度比较、深度克隆"></a>为什么需要深度比较、深度克隆</h2><p>详细内容见上一篇。简单的说是为了比较引用类型值（对象、数组）内部数据的变化以触发脏值查询。</p>
-<p>##深度比较 源码实现<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">equals</span>(<span class="params">o1, o2</span>) </span>&#123;</div><div class="line">	<span class="comment">//对基本类型值的比较</span></div><div class="line">  <span class="keyword">if</span> (o1 === o2) <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">  <span class="keyword">if</span> (o1 === <span class="literal">null</span> || o2 === <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  <span class="comment">//对NaN特殊处理，使得NaN === NaN</span></div><div class="line">  <span class="keyword">if</span> (o1 !== o1 &amp;&amp; o2 !== o2) <span class="keyword">return</span> <span class="literal">true</span>; </div><div class="line"></div><div class="line">  <span class="keyword">var</span> t1 = <span class="keyword">typeof</span> o1, t2 = <span class="keyword">typeof</span> o2, length, key, keySet;</div><div class="line">  <span class="comment">//如果比较的值都是对象</span></div><div class="line">  <span class="keyword">if</span> (t1 == t2 &amp;&amp; t1 == <span class="string">'object'</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (isArray(o1)) &#123;</div><div class="line">      <span class="keyword">if</span> (!isArray(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      <span class="comment">//都是数组，遍历数组每一项</span></div><div class="line">      <span class="keyword">if</span> ((length = o1.length) == o2.length) &#123;</div><div class="line">        <span class="keyword">for</span> (key = <span class="number">0</span>; key &lt; length; key++) &#123;</div><div class="line">          <span class="keyword">if</span> (!equals(o1[key], o2[key])) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isDate(o1)) &#123;</div><div class="line">      <span class="keyword">if</span> (!isDate(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      <span class="keyword">return</span> equals(o1.getTime(), o2.getTime());</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isRegExp(o1)) &#123;</div><div class="line">      <span class="keyword">if</span> (!isRegExp(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      <span class="keyword">return</span> o1.toString() == o2.toString();</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">if</span> (isScope(o1) || isScope(o2) || isWindow(o1) || isWindow(o2) ||</div><div class="line">        isArray(o2) || isDate(o2) || isRegExp(o2)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      keySet = createMap();</div><div class="line">      <span class="keyword">for</span> (key <span class="keyword">in</span> o1) &#123;</div><div class="line">        <span class="keyword">if</span> (key.charAt(<span class="number">0</span>) === <span class="string">'$'</span> || isFunction(o1[key])) <span class="keyword">continue</span>;</div><div class="line">        <span class="keyword">if</span> (!equals(o1[key], o2[key])) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        keySet[key] = <span class="literal">true</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">for</span> (key <span class="keyword">in</span> o2) &#123;</div><div class="line">        <span class="keyword">if</span> (!(key <span class="keyword">in</span> keySet) &amp;&amp;</div><div class="line">            key.charAt(<span class="number">0</span>) !== <span class="string">'$'</span> &amp;&amp;</div><div class="line">            isDefined(o2[key]) &amp;&amp;</div><div class="line">            !isFunction(o2[key])) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="深度克隆-源码实现"><a href="#深度克隆-源码实现" class="headerlink" title="深度克隆 源码实现"></a>深度克隆 源码实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">clone</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> buf;</div><div class="line">	<span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="built_in">Array</span>) &#123;</div><div class="line">		buf=[];</div><div class="line">		<span class="keyword">var</span> i=obj.length;</div><div class="line">		<span class="keyword">while</span> (i--) &#123;</div><div class="line">			buf[i]=clone(obj[i]);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> buf;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="built_in">Object</span>) &#123;</div><div class="line">		buf=&#123;&#125;;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> obj) &#123;</div><div class="line">			buf[k]=clone(obj[k]);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> buf;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">return</span> obj;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1276,7 +1278,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">48</span>
+              <span class="site-state-item-count">50</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
